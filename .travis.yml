@@ -11,6 +11,8 @@ install:
   - git clone https://github.com/benEnsta/ibex-lib.git
   - cd ./ibex-lib && ./waf configure --enable-shared && sudo ./waf install -j4 && cd  ../
   - export PKG_CONFIG_PATH=/usr/local/share/pkgconfig/
+  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+  - sudo ldconfig
   - ./build.sh
 #  - sudo ./waf install
 #  - cd tests/ && make && cd ..

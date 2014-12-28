@@ -9,7 +9,7 @@ before_install:
 # command to install dependencies
 install: 
   - git clone https://github.com/benEnsta/ibex-lib.git
-  - cd ./ibex-lib && ./waf configure && ./waf install -j4 && cd  ../
+  - cd ./ibex-lib && ./waf configure && sudo ./waf install -j4 && cd  ../
   - export PKG_CONFIG_PATH=/usr/local/share/pkgconfig/
   - ./build.sh
 #  - sudo ./waf install

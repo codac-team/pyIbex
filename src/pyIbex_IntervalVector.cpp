@@ -1,58 +1,52 @@
-#include <string>
-#include <sstream>
+//============================================================================
+//                                  I B E X
+// File        : pyIbex_IntervalVector.cpp
+// Author      : Benoit Desrochers
+// Copyright   : Ecole des Mines de Nantes (France)
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
+
 
 #include "ibex_IntervalVector.h"
-// #include <numpy/arrayobject.h>
 #include <boost/shared_ptr.hpp>
-// #include <boost/numpy.hpp>
 #include <stdexcept>
-
-// #include "NumPyArrayData.h"
-// namespace bp = boost::python;
-// namespace np = boost::numpy;
 #include <boost/python.hpp>
 #include <boost/python/stl_iterator.hpp>
-#include "pyIbex_to_python_converter.h"
 
 using namespace boost;
 using namespace boost::python;
 using namespace ibex;
-
 namespace py = boost::python;
 
 boost::shared_ptr<ibex::IntervalVector> CreateWithList(const py::list & lst)
 {
-    // construct with a list here
-
+// construct with a list here
   extract<double> get_double(lst[0]);
   if (get_double.check()){
       std::vector<double> v = to_std_vector<double>(lst);
       return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( Vector(v.size(), &v[0])));
-} else {
-    double (*tmp)[2] = new double[len(lst)][2];
-    for(uint i = 0; i < len(lst); i++){
-      extract<list> get_list(lst[i]);
-      if (get_list.check()){
-            assert(len(lst[i]) == 2);
-            for(uint j = 0; j < 2;j++){
-                  tmp[i][j] = extract<double>(lst[i][j]);
+  } else {
+        double (*tmp)[2] = new double[len(lst)][2];
+        for(uint i = 0; i < len(lst); i++){
+            extract<list> get_list(lst[i]);
+            if (get_list.check()){
+                assert(len(lst[i]) == 2);
+                for(uint j = 0; j < 2;j++){
+                    tmp[i][j] = extract<double>(lst[i][j]);
+                }
             }
-      }
+        }
+        boost::shared_ptr<ibex::IntervalVector> ptr =  shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( len(lst), tmp));
+        delete[] tmp;
+        return ptr;
     }
-    boost::shared_ptr<ibex::IntervalVector> ptr =  shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( len(lst), tmp));
-    delete[] tmp;
-    return ptr;
-
-}
-
-
 }
 
 boost::shared_ptr<ibex::IntervalVector> CreateWithTuple(const py::tuple & tup)
 {
     // construct with a list here
     std::vector<double> v = to_std_vector<double>(tup);
-
     return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( Vector(v.size(), &v[0])));
 }
 

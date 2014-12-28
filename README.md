@@ -32,12 +32,29 @@ option :
 Alternatively, run the provided `build.sh` script.
 
 --------------------------
+Feature
+--------------------------
+Binding for :
+	- Interval
+	- IntervalVector
+	- Bsc
+	- LargestFirst
+	- Function (only text constructors)
+	- Ctc
+	- CtcFwdBwd
+	- CtcUnion
+	- CtcCompo
+	- CtcFwdBwd
+	- CtcIn
+	- CtcNotIn
+
+--------------------------
 TODO
 --------------------------
 - Add numpy array support for interval Vector class
-
+- Add IntervalMatrix support
 Function
 	- add Matric evaluation support
 	- add Jacobian and gradient
-Ctc
+
 	

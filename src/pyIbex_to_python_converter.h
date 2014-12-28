@@ -1,4 +1,12 @@
-// pyIbex_to_python_converter.h
+//============================================================================
+//                                  I B E X
+// File        : pyIbex_to_python_converter.h
+// Author      : Benoit Desrochers
+// Copyright   : Ecole des Mines de Nantes (France)
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
+
 
 #ifndef __PYIBEX_TO_PYTHON_CONVERTER_H__
 #define __PYIBEX_TO_PYTHON_CONVERTER_H__

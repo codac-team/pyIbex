@@ -1,5 +1,11 @@
-#include <string>
-#include <sstream>
+//============================================================================
+//                                  I B E X
+// File        : pyIbex_Ctc.cpp
+// Author      : Benoit Desrochers
+// Copyright   : Ecole des Mines de Nantes (France)
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
 
 #include <ibex_Ctc.h>
 #include <ibex_CtcFwdBwd.h>

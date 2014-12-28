@@ -1,11 +1,18 @@
-#include <string>
-#include <sstream>
+//============================================================================
+//                                  I B E X
+// File        : pyIbex_Function.cpp
+// Author      : Benoit Desrochers
+// Copyright   : Ecole des Mines de Nantes (France)
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
 
 #include "ibex_Function.h"
 #include "ibex_SyntaxError.h"
 
 #include <boost/python.hpp>
 #include <boost/shared_ptr.hpp>
+
 using namespace boost::python;
 using namespace ibex;
 
@@ -13,15 +20,9 @@ boost::shared_ptr<ibex::Function>  Function_1(const char* x1, const char* y){
 	return boost::shared_ptr<ibex::Function>(new Function(x1, y));
 }
 boost::shared_ptr<ibex::Function>  Function_2(const char* x1, const char* x2, const char* y){
-
-    try{
-        boost::shared_ptr<ibex::Function> f(new Function( x1, x2, y));
-	    return f;
-    } catch (ibex::SyntaxError& e){
-        throw e;
-        return boost::shared_ptr<ibex::Function>();
-    }
+    return boost::shared_ptr<ibex::Function> f(new Function( x1, x2, y));
 }
+
 boost::shared_ptr<ibex::Function>  Function_3(const char* x1, const char* x2, const char* x3, const char* y){
 	return boost::shared_ptr<ibex::Function>(new Function( x1, x2, x3, y));
 }

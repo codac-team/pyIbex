@@ -1,11 +1,16 @@
-#include <string>
-#include <sstream>
+//============================================================================
+//                                  I B E X
+// File        : pyIbex_Interval.cpp
+// Author      : Benoit Desrochers
+// Copyright   : Ecole des Mines de Nantes (France)
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
+
 
 #include "ibex_Interval.h"
-
 #include <boost/python.hpp>
 using namespace boost::python;
-
 using namespace ibex;
 
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 0,1)

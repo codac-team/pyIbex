@@ -1,3 +1,12 @@
+//============================================================================
+//                                  I B E X
+// File        : pyIbex.h
+// Author      : Benoit Desrochers
+// Copyright   : Ecole des Mines de Nantes (France)
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
+
 #include <string>
 #include <sstream>
 

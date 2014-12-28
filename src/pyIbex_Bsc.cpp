@@ -1,13 +1,17 @@
-#include <string>
-#include <sstream>
+//============================================================================
+//                                  I B E X
+// File        : pyIbex_Bsc.cpp
+// Author      : Benoit Desrochers
+// Copyright   : Ecole des Mines de Nantes (France)
+// License     : See the LICENSE file
+// Created     : Oct 31, 2014
+//============================================================================
 
 #include <ibex_Bsc.h>
 #include <ibex_LargestFirst.h>
 
 #include <boost/shared_ptr.hpp>
-#include <stdexcept>
 #include <boost/python.hpp>
-#include "pyIbex_to_python_converter.h"
 
 using namespace boost;
 using namespace boost::python;
@@ -37,10 +41,11 @@ struct BscWrap : Bsc, wrapper<Bsc> {
 
 
 void export_Bsc(){
-
+	// Overloading bisection Function
 	typedef std::pair<IntervalVector,IntervalVector> (Bsc::*bisect_1) (const IntervalVector&);
 	typedef std::pair<IntervalVector,IntervalVector> (Bsc::*bisect_2) (Cell&);
 
+	// Bsc Class binding
 	class_<BscWrap, boost::noncopyable>("Bsc", no_init)
 		.def("bisect", pure_virtual(bisect_1(&Bsc::bisect) ))
     	.def("bisect", bisect_2(&Bsc::bisect),  &BscWrap::default_bisect)
@@ -51,10 +56,9 @@ void export_Bsc(){
 		.def( "too_small", &Bsc::too_small )
     ;
 
+    // LargestFirst Bisector binding
     class_<LargestFirst, bases<Bsc> >("LargestFirst", init<optional<double, double> >())
     	.def(init<Vector&, optional< double> >())
     	.def("bisect", &LargestFirst::bisect)
     	;
-
-
 }

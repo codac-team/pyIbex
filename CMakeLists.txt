@@ -15,9 +15,9 @@ find_package(PkgConfig)
 pkg_check_modules(PC_IBEX REQUIRED ibex)
 add_definitions(${PC_IBEX_CFLAGS_OTHER})
 include_directories(${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${PC_IBEX_INCLUDES})
-set(LIBS ${LIBS} -L/home/biop/programmation/devel/lib ${PC_IBEX_LIB_DIRS} ${PC_IBEX_LIBRARIES})
-
-set(PACKAGE_VERSION "0.0.1")
+set(LIBS ${LIBS} -L${PC_IBEX_LIBDIR} ${PC_IBEX_LIB_DIRS} ${PC_IBEX_LIBRARIES})
+message(STATUS ${LIBS})
+set(PACKAGE_VERSION "0.9.0")
 
 EXECUTE_PROCESS(COMMAND
 					${PYTHON_EXECUTABLE} -c "import distutils.sysconfig, sys; sys.stdout.write(distutils.sysconfig.get_python_lib(1,0,\"\"))"

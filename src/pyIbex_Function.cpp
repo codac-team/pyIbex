@@ -20,7 +20,7 @@ boost::shared_ptr<ibex::Function>  Function_1(const char* x1, const char* y){
 	return boost::shared_ptr<ibex::Function>(new Function(x1, y));
 }
 boost::shared_ptr<ibex::Function>  Function_2(const char* x1, const char* x2, const char* y){
-    return boost::shared_ptr<ibex::Function> f(new Function( x1, x2, y));
+    return boost::shared_ptr<ibex::Function>(new Function( x1, x2, y));
 }
 
 boost::shared_ptr<ibex::Function>  Function_3(const char* x1, const char* x2, const char* x3, const char* y){

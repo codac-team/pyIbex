@@ -13,6 +13,7 @@
 #include <stdexcept>
 #include <boost/python.hpp>
 #include <boost/python/stl_iterator.hpp>
+#include "pyIbex_to_python_converter.h"
 
 using namespace boost;
 using namespace boost::python;

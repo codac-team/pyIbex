@@ -32,21 +32,21 @@ option :
 Alternatively, run the provided `build.sh` script.
 
 --------------------------
-Feature
+Features
 --------------------------
 Binding for :
-	- Interval
-	- IntervalVector
-	- Bsc
-	- LargestFirst
-	- Function (only text constructors)
-	- Ctc
-	- CtcFwdBwd
-	- CtcUnion
-	- CtcCompo
-	- CtcFwdBwd
-	- CtcIn
-	- CtcNotIn
+- Interval
+- IntervalVector
+- Bsc
+- LargestFirst
+- Function (only text constructors)
+- Ctc
+- CtcFwdBwd
+- CtcUnion
+- CtcCompo
+- CtcFwdBwd
+- CtcIn
+- CtcNotIn
 
 --------------------------
 TODO

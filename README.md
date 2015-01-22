@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/benEnsta/pyIbex.svg?branch=master)](https://travis-ci.org/benEnsta/pyIbex)
+
 ==========================
 Ibex python binding
 ==========================

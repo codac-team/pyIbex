@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 
+# option declaration
 option(BUILD_TESTS "Build tests" ON)
+
 
 FIND_PACKAGE(PythonInterp)
 FIND_PACKAGE(PythonLibs)
@@ -10,7 +12,7 @@ ENABLE_TESTING()
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES}) # Deprecated but so convenient!
 
-
+# Find Ibex libs
 find_package(PkgConfig)
 pkg_check_modules(PC_IBEX REQUIRED ibex)
 add_definitions(${PC_IBEX_CFLAGS_OTHER})
@@ -19,6 +21,7 @@ set(LIBS ${LIBS} -L${PC_IBEX_LIBDIR} ${PC_IBEX_LIB_DIRS} ${PC_IBEX_LIBRARIES})
 message(STATUS ${LIBS})
 set(PACKAGE_VERSION "0.9.0")
 
+# Find python install path
 EXECUTE_PROCESS(COMMAND
 					${PYTHON_EXECUTABLE} -c "import distutils.sysconfig, sys; sys.stdout.write(distutils.sysconfig.get_python_lib(1,0,\"\"))"
 					OUTPUT_VARIABLE PYTHON_INSTALL
@@ -33,8 +36,6 @@ if(WIN32)
 endif(WIN32)
 MESSAGE(STATUS "will install python files in ${PYTHON_INSTDIR}")
 
-#add_executable(titi test.cpp)
-#target_link_libraries(titi ${LIBS})
 add_subdirectory(src)
 
 if (BUILD_TESTS)
@@ -42,14 +43,3 @@ if (BUILD_TESTS)
 	MESSAGE(STATUS ${CTEST_ENVIRONMENT})
 	add_subdirectory(tests)
 endif(BUILD_TESTS)
-
-
-#FILE(COPY ./tests/test_Interval.py DESTINATION .)
-#FILE(COPY ./tests/test_IntervalVector.py DESTINATION .)
-#FILE(COPY ./tests/test_Bsc.py DESTINATION .)
-#FILE(COPY ./tests/test_Function.py DESTINATION .)
-#FILE(COPY ./tests/test_SIVIA.py DESTINATION .)
-#ADD_TEST(pyIbex_Interval test_Interval.py)
-#ADD_TEST(pyIbex_IntervalVector test_IntervalVector.py)
-#ADD_TEST(pyIbex_Bsc test_Bsc.py)
-#ADD_TEST(pyIbex_Function test_Function.py)

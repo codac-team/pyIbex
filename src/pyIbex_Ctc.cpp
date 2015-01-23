@@ -139,7 +139,6 @@ void export_Ctc(){
     	.def("__init__", make_constructor(CtcFwdBwd_2))
     	.def("__init__", make_constructor(CtcFwdBwd_3))
         .def("contract", &CtcFwdBwd::contract)
-		.def_readonly("ctr", &CtcFwdBwd::ctr)
     	;
 
     class_<CtcIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcIn> >("CtcIn", no_init)

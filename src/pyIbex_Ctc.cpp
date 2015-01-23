@@ -11,7 +11,7 @@
 #include <ibex_CtcFwdBwd.h>
 #include <ibex_CtcUnion.h>
 #include <ibex_CtcCompo.h>
-#include <ibex_CtcIn.h>
+// #include <ibex_CtcIn.h>
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 
@@ -55,15 +55,15 @@ typedef boost::shared_ptr<ibex::CtcCompo> CtcCompoPtr;
 
 
 // Contructor CtcIn
-boost::shared_ptr<ibex::CtcIn>  CtcIn_Interval(Function &f, const Interval& y){
-	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
-}
-boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalVector(Function &f, const IntervalVector& y ){
-	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
-}
-boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalMatrix(Function &f, const IntervalMatrix& y ){
-	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
-}
+// boost::shared_ptr<ibex::CtcIn>  CtcIn_Interval(Function &f, const Interval& y){
+// 	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
+// }
+// boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalVector(Function &f, const IntervalVector& y ){
+// 	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
+// }
+// boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalMatrix(Function &f, const IntervalMatrix& y ){
+// 	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
+// }
 
 // Constructor CtcNotIn
 boost::shared_ptr<ibex::CtcNotIn>  CtcNotIn_Interval(Function &f, const Interval& y ){
@@ -139,14 +139,13 @@ void export_Ctc(){
     	.def("__init__", make_constructor(CtcFwdBwd_2))
     	.def("__init__", make_constructor(CtcFwdBwd_3))
         .def("contract", &CtcFwdBwd::contract)
-		.def_readonly("ctr", &CtcFwdBwd::ctr)
     	;
 
-    class_<CtcIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcIn> >("CtcIn", no_init)
-    	.def("__init__", make_constructor(CtcIn_Interval))
-    	.def("__init__", make_constructor(CtcIn_IntervalVector))
-    	.def("__init__", make_constructor(CtcIn_IntervalMatrix))
-    	.def("contract", &CtcIn::contract);
+    // class_<CtcIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcIn> >("CtcIn", no_init)
+    // 	.def("__init__", make_constructor(CtcIn_Interval))
+    // 	.def("__init__", make_constructor(CtcIn_IntervalVector))
+    // 	.def("__init__", make_constructor(CtcIn_IntervalMatrix))
+    // 	.def("contract", &CtcIn::contract);
 
     class_<CtcNotIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcNotIn> >("CtcNotIn", no_init)
     	.def("__init__", make_constructor(CtcNotIn_Interval))

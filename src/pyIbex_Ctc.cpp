@@ -55,15 +55,15 @@ typedef boost::shared_ptr<ibex::CtcCompo> CtcCompoPtr;
 
 
 // Contructor CtcIn
-boost::shared_ptr<ibex::CtcIn>  CtcIn_Interval(Function &f, const Interval& y){
-	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
-}
-boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalVector(Function &f, const IntervalVector& y ){
-	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
-}
-boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalMatrix(Function &f, const IntervalMatrix& y ){
-	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
-}
+// boost::shared_ptr<ibex::CtcIn>  CtcIn_Interval(Function &f, const Interval& y){
+// 	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
+// }
+// boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalVector(Function &f, const IntervalVector& y ){
+// 	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
+// }
+// boost::shared_ptr<ibex::CtcIn>  CtcIn_IntervalMatrix(Function &f, const IntervalMatrix& y ){
+// 	return boost::shared_ptr<ibex::CtcIn>(new CtcIn(f, y));
+// }
 
 // Constructor CtcNotIn
 boost::shared_ptr<ibex::CtcNotIn>  CtcNotIn_Interval(Function &f, const Interval& y ){

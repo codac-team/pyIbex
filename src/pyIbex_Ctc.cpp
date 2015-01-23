@@ -141,11 +141,11 @@ void export_Ctc(){
         .def("contract", &CtcFwdBwd::contract)
     	;
 
-    class_<CtcIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcIn> >("CtcIn", no_init)
-    	.def("__init__", make_constructor(CtcIn_Interval))
-    	.def("__init__", make_constructor(CtcIn_IntervalVector))
-    	.def("__init__", make_constructor(CtcIn_IntervalMatrix))
-    	.def("contract", &CtcIn::contract);
+    // class_<CtcIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcIn> >("CtcIn", no_init)
+    // 	.def("__init__", make_constructor(CtcIn_Interval))
+    // 	.def("__init__", make_constructor(CtcIn_IntervalVector))
+    // 	.def("__init__", make_constructor(CtcIn_IntervalMatrix))
+    // 	.def("contract", &CtcIn::contract);
 
     class_<CtcNotIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcNotIn> >("CtcNotIn", no_init)
     	.def("__init__", make_constructor(CtcNotIn_Interval))

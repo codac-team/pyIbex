@@ -110,6 +110,7 @@ void export_Ctc(){
     	.def( "__and__", &__and)
     ;
 
+    // Export comparaison constant
     enum_<CmpOp>("CmpOp")
     .value( "LT", 	ibex::LT) 
     .value( "LEQ", 	ibex::LEQ)
@@ -118,6 +119,7 @@ void export_Ctc(){
     .value( "GT", 	ibex::GT)
     ;
 
+    // Export computation mode
     enum_<FwdMode>("FwdMode") 
     .value( "INTERVAL_MODE", ibex::INTERVAL_MODE)
     .value( "AFFINE2_MODE",  ibex::AFFINE2_MODE)

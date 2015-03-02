@@ -28,6 +28,7 @@ void export_IntervalVector();
 void export_Bsc();
 void export_Ctc();
 void export_Function();
+void export_Separators();
 
 using namespace ibex;
 
@@ -87,6 +88,7 @@ BOOST_PYTHON_MODULE(pyIbex)
     export_Bsc();
     export_Ctc();
     export_Function();
+    export_Separators();
 }
 
 

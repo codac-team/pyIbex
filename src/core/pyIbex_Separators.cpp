@@ -16,6 +16,10 @@
 #include "ibex_SepCtcPair.h"
 #include "ibex_SepFwdBwd.h"
 #include "ibex_SepBoundaryCtc.h"
+#include "ibex_SepInverse.h"
+#include "ibex_SepTransform.h"
+
+#include "ibex_SepPolygon.h"
 
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
@@ -69,6 +73,28 @@ boost::shared_ptr<SepType> ctcFromList(const py::list & lst)
 }
 
 
+
+boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
+    // check if the list contains two sub-list [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]   
+
+    boost::python::ssize_t n = boost::python::len(lst);
+    if(n != 2){
+        std::cout << "Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]\n";
+        throw;
+    }
+    std::vector<double> lx = to_std_vector<double>(lst[0]);
+    std::vector<double> ly = to_std_vector<double>(lst[1]);
+    n = lx.size();
+    std::vector<double> ax(n), ay(n),bx(n),by(n);
+    for(int i = 0; i < n; i++){
+        ax[i] = lx[i];
+        ay[i] = ly[i];
+        bx[i] = lx[ (i+1)%n ];
+        by[i] = ly[ (i+1)%n ];
+    }
+    return boost::shared_ptr<SepPolygon>(new SepPolygon(ax, ay, bx, by));
+}
+
 void export_Separators(){
 
     typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
@@ -106,5 +132,19 @@ void export_Separators(){
     class_<SepNot, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepNot> >("SepNot", no_init)
         .def(init<Sep&>())
     	.def("separate", &SepNot::separate);
+
+    class_<SepInverse, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepInverse> >("SepInverse", no_init)
+        .def(init<Sep&, Function& >())
+        .def("separate", &SepInverse::separate);
+
+    class_<SepTransform, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransform> >("SepTransform", no_init)
+        .def(init<Sep&, Function& , Function& >())
+        .def("separate", &SepTransform::separate);
+
+    class_<SepPolygon, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolygon> >("SepPolygon", no_init)
+        .def("__init__", make_constructor(initFromList))
+        .def("separate", &SepPolygon::separate);
+
+
 
 }

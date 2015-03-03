@@ -3,12 +3,20 @@ cmake_minimum_required(VERSION 2.8.3)
 # option declaration
 option(BUILD_TESTS "Build tests" ON)
 
-
 FIND_PACKAGE(PythonInterp)
 FIND_PACKAGE(PythonLibs)
 FIND_PACKAGE(Boost COMPONENTS python)
 
-ENABLE_TESTING()
+
+#option(USE_OPENCV OFF)
+#option(USE_GDAL OFF)
+#option(USE_PYTHON3 OFF)
+option(WITH_VIBES "Include Vibes output" OFF)
+if(WITH_VIBES)
+	set(_PYIBEX_WITH_VIBES_ 1)
+endif(WITH_VIBES)
+
+
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
 LINK_LIBRARIES(${Boost_LIBRARIES}) # Deprecated but so convenient!
 
@@ -39,6 +47,7 @@ MESSAGE(STATUS "will install python files in ${PYTHON_INSTDIR}")
 add_subdirectory(src)
 
 if (BUILD_TESTS)
+	ENABLE_TESTING()
 	include( CTest )
 	MESSAGE(STATUS ${CTEST_ENVIRONMENT})
 	add_subdirectory(tests)

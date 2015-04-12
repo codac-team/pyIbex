@@ -14,6 +14,7 @@
 // #include <ibex_CtcIn.h>
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
+#include <ibex_CtcInverse.h>
 
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
@@ -43,6 +44,13 @@ CtcFwdBwdPtr  CtcFwdBwd_3(Function &f ){
 	return CtcFwdBwdPtr(new CtcFwdBwd(f));
 }
 
+CtcFwdBwdPtr  CtcFwdBwd_4(Function &f, Interval &y ){
+    return CtcFwdBwdPtr(new CtcFwdBwd(f, y));
+}
+
+CtcFwdBwdPtr  CtcFwdBwd_5(Function &f, IntervalVector &y ){
+    return CtcFwdBwdPtr(new CtcFwdBwd(f, y));
+}
 // Constructor CtcUnion
 typedef boost::shared_ptr<ibex::CtcUnion> CtcUnionPtr;
 // CtcUnionPtr  CtcUnion_1(Ctc &c1, Ctc& c2 ){ return CtcUnionPtr(new CtcUnion(c1, c2)); }
@@ -140,9 +148,16 @@ void export_Ctc(){
     	.def("__init__", make_constructor(CtcFwdBwd_1))
     	.def("__init__", make_constructor(CtcFwdBwd_2))
     	.def("__init__", make_constructor(CtcFwdBwd_3))
+        .def("__init__", make_constructor(CtcFwdBwd_4))
+        .def("__init__", make_constructor(CtcFwdBwd_5))
         .def("contract", &CtcFwdBwd::contract)
     	;
 
+    class_<CtcInverse, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcInverse> >("CtcInverse", no_init)
+        .def(init<Ctc&, Function&>())
+        .def("contract", &CtcInverse::contract);
+
+    
     // class_<CtcIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcIn> >("CtcIn", no_init)
     // 	.def("__init__", make_constructor(CtcIn_Interval))
     // 	.def("__init__", make_constructor(CtcIn_IntervalVector))

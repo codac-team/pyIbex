@@ -8,6 +8,12 @@ class SimplisticTest(unittest.TestCase):
 		Interval.__str__ = interval_str
 		self.a = Interval(-2,3)
 
+	def test_Interal2array(self):
+		self.assertEqual(self.a[0], -2)
+		self.assertEqual(self.a[1], 3)
+		# self.assertEqual(self.a[4], np.nan)
+
+
 	def test_constructor(self):
 		c1 = Interval()
 		c2 = Interval(-2)

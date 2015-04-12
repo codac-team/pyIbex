@@ -13,6 +13,15 @@
 using namespace boost::python;
 using namespace ibex;
 
+double getitem(Interval& X, int i){
+    if(i == 0)
+        return X.lb();
+    else if (i == 1)
+        return X.ub();
+    else 
+        return IBEX_NAN;
+}
+
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 0,1)
 
     void export_Interval(){
@@ -94,7 +103,8 @@ using namespace ibex;
         .def_readonly("POS_REALS", &Interval::POS_REALS)
         .def_readonly("NEG_REALS", &Interval::NEG_REALS)    
         .def( "bisect", &Interval::bisect, bisect_overloads())
-
+        .def<double(Interval&, int)> ("__getitem__", getitem)
+            
         ;
 
         // External functions
@@ -158,7 +168,6 @@ using namespace ibex;
         def( "bwd_sign",    &ibex::bwd_sign );
         def( "bwd_chi",     &ibex::bwd_chi );
         def( "bwd_integer", &ibex::bwd_integer );
-
         
     };
 

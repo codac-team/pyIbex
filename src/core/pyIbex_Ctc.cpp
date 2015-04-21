@@ -15,6 +15,7 @@
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
+#include <ibex_CtcPolar.h>
 
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
@@ -157,15 +158,13 @@ void export_Ctc(){
         .def(init<Ctc&, Function&>())
         .def("contract", &CtcInverse::contract);
 
-    
-    // class_<CtcIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcIn> >("CtcIn", no_init)
-    // 	.def("__init__", make_constructor(CtcIn_Interval))
-    // 	.def("__init__", make_constructor(CtcIn_IntervalVector))
-    // 	.def("__init__", make_constructor(CtcIn_IntervalMatrix))
-    // 	.def("contract", &CtcIn::contract);
-
     class_<CtcNotIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcNotIn> >("CtcNotIn", no_init)
     	.def("__init__", make_constructor(CtcNotIn_Interval))
     	.def("contract", &CtcNotIn::contract);
 
+    void (CtcPolar::*contract_ctcPolar_1) (IntervalVector&) = &CtcPolar::contract;
+    void (CtcPolar::*contract_ctcPolar_2) (Interval&, Interval&, Interval&, Interval&)  = &CtcPolar::contract;
+    class_<CtcPolar, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcPolar> >("CtcPolar")
+        .def("contract", contract_ctcPolar_1)
+        .def("contract", contract_ctcPolar_2);
 }

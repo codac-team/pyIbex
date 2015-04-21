@@ -52,7 +52,7 @@ boost::shared_ptr<ibex::IntervalVector> CreateWithTuple(const py::tuple & tup)
 }
 
 
-Interval& getitem(IntervalVector& X, int i){
+const Interval& getitem(IntervalVector& X, int i){
       return X[i];
 }
 
@@ -106,7 +106,7 @@ void export_IntervalVector(){
             // .def("__init__", make_constructor(&CreateWithPyArrayObject))
             // .def( "__getitem__", &IntervalVector::getitem, return_value_policy<copy_const_reference>()  )
             // .def( "__setitem__", &IntervalVector::setitem)
-            .def<Interval&(IntervalVector&, int)> ("__getitem__", getitem,return_value_policy<copy_non_const_reference>())
+            .def<const Interval&(IntervalVector&, int)> ("__getitem__", getitem,return_value_policy<copy_const_reference>())
             .def<void(IntervalVector&, int, Interval&)> ("__setitem__", setitem)
 
 

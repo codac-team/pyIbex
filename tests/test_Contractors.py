@@ -3,6 +3,7 @@ import unittest
 import pyIbex
 from pyIbex import *
 import sys
+import math
 class SimplisticTest(unittest.TestCase):
 	def test_Function(self):
 		# generate memory leak !!!
@@ -66,6 +67,11 @@ class SimplisticTest(unittest.TestCase):
  		ctc.contract(a)
  		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
 
+ 	def test_CtcPolar(self):
+ 		ctc = CtcPolar()
+		x, y, rho, theta = Interval(3,4), Interval(3,6), Interval(2,6), Interval(0, math.pi/4.0)
+		ctc.contract(x,y,rho, theta)
+		# [3, 4], [3, 4], [4.24264, 5.65685], [0.643501, 0.785398]
 
 if __name__ == '__main__':
 	

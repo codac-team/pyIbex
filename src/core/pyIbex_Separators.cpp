@@ -18,6 +18,7 @@
 #include "ibex_SepBoundaryCtc.h"
 #include "ibex_SepInverse.h"
 #include "ibex_SepTransform.h"
+#include "ibex_SepQInter.h"
 
 #include "ibex_SepPolygon.h"
 
@@ -97,6 +98,24 @@ boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
     return boost::shared_ptr<SepPolygon>(new SepPolygon(ax, ay, bx, by));
 }
 
+namespace ibex {
+class SepTransforWrapper : public SepTransform {
+public:
+    SepTransforWrapper(SepPtr sep, boost::shared_ptr<Function> f1, boost::shared_ptr<Function> f2):
+        SepTransform(*sep, *f1, *f2)
+    {
+        this->sep = sep;
+        this->f1 = f1;
+        this->f2 = f2;
+    }
+private:
+    SepPtr sep;
+    boost::shared_ptr<Function> f1;
+    boost::shared_ptr<Function> f2;
+
+};
+
+}
 void export_Separators(){
 
     typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
@@ -116,6 +135,13 @@ void export_Separators(){
     	.def("__init__", make_constructor(ctcFromList<SepInter>), "SepInter from list of separators\n Usage : SepInter([s1, s2, ...])")
     	.def("separate", &SepInter::separate)
     	;
+
+    class_<SepQInterProjF, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepQInterProjF> >
+        ("SepQInterProjF", no_init)
+        .def("__init__", make_constructor(ctcFromList<SepQInterProjF>), "SepQInterProjF from list of separators\n Usage : SepQInterProjF([s1, s2, ...])")
+        .def("separate", &SepQInterProjF::separate)
+        .add_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)
+        ;
 
     class_<SepCtcPair, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepCtcPair> >
             ("SepCtcPair", init< Ctc&, Ctc& >())
@@ -139,9 +165,14 @@ void export_Separators(){
         .def(init<Sep&, Function& >())
         .def("separate", &SepInverse::separate);
 
-    class_<SepTransform, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransform> >("SepTransform", no_init)
-        .def(init<Sep&, Function& , Function& >())
-        .def("separate", &SepTransform::separate);
+    // class_<SepTransform, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransform> >("SepTransform", no_init)
+    //     .def(init<Sep&, Function& , Function& >())
+    //     .def("separate", &SepTransform::separate);
+
+    class_<SepTransforWrapper, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransforWrapper> >("SepTransform", no_init)
+        .def(init<SepPtr, boost::shared_ptr<Function> , boost::shared_ptr<Function> >())
+        .def("separate", &SepTransforWrapper::separate);
+        
 
     class_<SepPolygon, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolygon> >("SepPolygon", no_init)
         .def("__init__", make_constructor(initFromList))

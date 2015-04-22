@@ -21,6 +21,8 @@
 
 #include "ibex_SepPolygon.h"
 
+#include "ibex_SepPolarXY.h"
+
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <boost/python.hpp>
@@ -145,6 +147,10 @@ void export_Separators(){
         .def("__init__", make_constructor(initFromList))
         .def("separate", &SepPolygon::separate);
 
+
+    class_<SepPolarXY, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolarXY> >("SepPolarXY", no_init)
+        .def(init<Interval, Interval>())
+        .def("separate", &SepPolarXY::separate);
 
 
 }

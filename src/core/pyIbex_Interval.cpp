@@ -168,6 +168,7 @@ double getitem(Interval& X, int i){
         def( "bwd_sign",    &ibex::bwd_sign );
         def( "bwd_chi",     &ibex::bwd_chi );
         def( "bwd_integer", &ibex::bwd_integer );
+        def( "bwd_imod",    &ibex::bwd_imod );
         
     };
 

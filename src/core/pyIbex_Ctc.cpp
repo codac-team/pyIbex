@@ -16,6 +16,9 @@
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
 #include <ibex_CtcPolar.h>
+#include <ibex_CtcSegment.h>
+#include <ibex_CtcQInter.h>
+
 
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
@@ -91,6 +94,25 @@ CtcCompoPtr __and(Ctc& c1, Ctc& c2){
 	return CtcCompoPtr(new CtcCompo(lst));
 }
 
+
+boost::shared_ptr<CtcQInterProjF> CtcQInterProjFFromList(const py::list & lst, int q)
+{
+    // construct with a list here
+    ibex::Array<Ctc> list(len(lst));
+    for(uint i = 0; i < len(lst); i++){
+        extract<Ctc> get_Ctc(lst[i]);
+        if (get_Ctc.check()){
+            Ctc* C = extract<Ctc*>(lst[i]);
+            list.set_ref(i, *C);
+        } else {
+            std::cout << "Extraction Error \n";
+            return boost::shared_ptr<CtcQInterProjF>();
+        }
+    }
+    return boost::shared_ptr<CtcQInterProjF>(new CtcQInterProjF(list, q));
+}
+
+
 template<typename CtcType>
 boost::shared_ptr<CtcType> ctcFromList(const py::list & lst)
 {
@@ -108,6 +130,8 @@ boost::shared_ptr<CtcType> ctcFromList(const py::list & lst)
     }
     return boost::shared_ptr<CtcType>(new CtcType(list));
 }
+
+
 
 void export_Ctc(){
 
@@ -167,4 +191,12 @@ void export_Ctc(){
     class_<CtcPolar, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcPolar> >("CtcPolar")
         .def("contract", contract_ctcPolar_1)
         .def("contract", contract_ctcPolar_2);
-}
+
+    class_<CtcSegment, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcSegment> >("CtcSegment", no_init)
+        .def(init<double, double,double,double>())
+        .def("contract", &CtcSegment::contract);
+
+    class_<CtcQInterProjF, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcQInterProjF> >("CtcQInterProjF", no_init)
+        .def("__init__", make_constructor(CtcQInterProjFFromList))
+        .def("contract", &CtcQInterProjF::contract);
+    }

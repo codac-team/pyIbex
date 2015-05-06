@@ -13,10 +13,13 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/python.hpp>
 
+#include <boost/python/stl_iterator.hpp>
+#include "pyIbex_to_python_converter.h"
+
 using namespace boost;
 using namespace boost::python;
 using namespace ibex;
-
+namespace py = boost::python;
 
 
 struct BscWrap : Bsc, wrapper<Bsc> {
@@ -39,6 +42,10 @@ struct BscWrap : Bsc, wrapper<Bsc> {
 };
 
 
+boost::shared_ptr<LargestFirst> largestFirstFromList(const py::list& lst){
+    std::vector<double> prec_v = to_std_vector<double>(lst);
+    return boost::shared_ptr<LargestFirst>(new LargestFirst(Vector(prec_v.size(), &prec_v[0]), Bsc::default_ratio()));
+}
 
 void export_Bsc(){
 	// Overloading bisection Function
@@ -59,6 +66,7 @@ void export_Bsc(){
     // LargestFirst Bisector binding
     class_<LargestFirst, bases<Bsc> >("LargestFirst", init<optional<double, double> >())
     	.def(init<Vector&, optional< double> >())
+    	.def("__init__", make_constructor(largestFirstFromList))
     	.def("bisect", &LargestFirst::bisect)
     	;
 }

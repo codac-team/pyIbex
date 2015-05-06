@@ -3,7 +3,7 @@ import unittest
 import pyIbex
 from pyIbex import *
 import sys
-
+import math
 class SeparatorsTest(unittest.TestCase):
 
 	def test_SepCtcPair(self):
@@ -64,7 +64,7 @@ class SeparatorsTest(unittest.TestCase):
 		xout = IntervalVector(b1)
 		sep.separate(xin, xout)
 		self.assertFalse(xout.is_empty())
-		print(xin)
+		# print(xin)
 		self.assertTrue(xin.is_empty())
 		
 	def test_SepFwdBwd_IntervalVector(self):
@@ -84,7 +84,7 @@ class SeparatorsTest(unittest.TestCase):
 		xout = IntervalVector(b1)
 		sep.separate(xin, xout)
 		self.assertFalse(xout.is_empty())
-		print(xin)
+		# print(xin)
 		self.assertTrue(xin.is_empty())
 
 
@@ -132,6 +132,18 @@ class SeparatorsTest(unittest.TestCase):
 		sepU.separate(b00, b01)
 		sepI.separate(b10, b11)
 
+
+	def test_SepProj(self):
+		f = Function('x', 'y', 'x^2 + y^2 - 4')
+		sep = SepFwdBwd(f,CmpOp.LEQ)
+		y_init = IntervalVector(1, Interval(1/math.sqrt(2), 0.9))
+		sep2 = SepProj(sep, y_init, 0.1, 10)
+
+		Xin = IntervalVector([[-10,0]])
+		Xout = IntervalVector([[-10,0]])
+		sep2.separate(Xin, Xout)
+		print(Xin, Xout)
+		
 
 
 	# def test_Function_vector(self):

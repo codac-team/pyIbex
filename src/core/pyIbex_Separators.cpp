@@ -25,11 +25,16 @@
 #include "ibex_SepPolarXY.h"
 #include "ibex_SepPolarXYT.h"
 
+
+#include "ibex_SepProj.h"
+
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <boost/python.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include "pyIbex_to_python_converter.h"
+
+#include "ibex_SepCtcPairProj.h"
 
 using namespace boost;
 using namespace boost::python;
@@ -77,7 +82,6 @@ boost::shared_ptr<SepType> ctcFromList(const py::list & lst)
 }
 
 
-
 boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
     // check if the list contains two sub-list [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]   
 
@@ -99,22 +103,48 @@ boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
     return boost::shared_ptr<SepPolygon>(new SepPolygon(ax, ay, bx, by));
 }
 
-namespace ibex {
-class SepTransforWrapper : public SepTransform {
-public:
-    SepTransforWrapper(SepPtr sep, boost::shared_ptr<Function> f1, boost::shared_ptr<Function> f2):
-        SepTransform(*sep, *f1, *f2)
-    {
-        this->sep = sep;
-        this->f1 = f1;
-        this->f2 = f2;
-    }
-private:
-    SepPtr sep;
-    boost::shared_ptr<Function> f1;
-    boost::shared_ptr<Function> f2;
+//boost::shared_ptr<SepProj> sepProjFromList(Sep& sep, const py::list& lst, double prec){
+//    return boost::shared_ptr<SepProj>(new SepProj(sep, to_std_vector<bool>(lst),prec));
+//}
 
-};
+
+#define GEN_CLASS_WITH_SAVED_ARGUMENTS(class_name,new_class_name,  arg1, arg2, arg3)           \
+    class new_class_name: public class_name {                          \
+    public:                                                                     \
+        new_class_name(boost::shared_ptr<arg1> ptr_arg1,                \
+                             boost::shared_ptr<arg2> ptr_arg2,                \
+                             boost::shared_ptr<arg3> ptr_arg3):               \
+        class_name(*ptr_arg1, *ptr_arg2, *ptr_arg3),                          \
+        ptr_arg1(ptr_arg1), ptr_arg2(ptr_arg2), ptr_arg3(ptr_arg3){}           \
+                                                                                \
+    private:                                                                    \
+        boost::shared_ptr<arg1> ptr_arg1;                                       \
+        boost::shared_ptr<arg2> ptr_arg2;                                       \
+        boost::shared_ptr<arg3> ptr_arg3;                                       \
+    };\
+
+
+
+
+namespace ibex {
+
+GEN_CLASS_WITH_SAVED_ARGUMENTS(SepTransform,SepTransforWrapper, Sep, Function, Function)
+
+//class SepTransforWrapper : public SepTransform {
+//public:
+//    SepTransforWrapper(SepPtr sep, boost::shared_ptr<Function> f1, boost::shared_ptr<Function> f2):
+//        SepTransform(*sep, *f1, *f2),
+//        sep(sep), f1(f1), f2(f2){}
+
+//private:
+//    SepPtr sep;
+//    boost::shared_ptr<Function> f1;
+//    boost::shared_ptr<Function> f2;
+
+//};
+
+
+
 
 }
 void export_Separators(){
@@ -187,5 +217,13 @@ void export_Separators(){
     class_<SepPolarXYT, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolarXYT> >("SepPolarXYT", no_init)
         .def(init<Interval, Interval, double , double>())
         .def("separate", &SepPolarXYT::separate);
+
+    class_<SepProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepProj> >("SepProj", no_init)
+        .def(init<Sep&, const IntervalVector&, double, int>())
+        .def("separate", &SepProj::separate);
+
+    class_<SepCtcPairProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairProj> >("SepCtcPairProj", no_init)
+        .def(init<Ctc&, Ctc&, const IntervalVector&, double>())
+        .def("separate", &SepCtcPairProj::separate);
 
 }

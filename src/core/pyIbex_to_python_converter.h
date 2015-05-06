@@ -26,6 +26,7 @@ std::vector< T > to_std_vector( const py::object& iterable )
                              py::stl_input_iterator< T >( ) );
 }
 
+
 // Converts a std::pair instance to a Python tuple.
 template <typename T1, typename T2>
 struct std_pair_to_tuple

@@ -82,15 +82,6 @@ py::list diff_wrapper(IntervalVector& X, IntervalVector& Y){
     return l;
 }
 
-// boost::shared_ptr<ibex::IntervalVector> CreateWithPyArrayObject(const np::ndarray& arr)
-// {
-//     return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector(1));
-// }
-
-// // Example function returning a std::pair.
-// std::pair<int, int>
-// foo() { return std::pair<int, int>(3, 5); }
-
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 1,2);
 
 void export_IntervalVector(){

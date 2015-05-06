@@ -1,24 +1,46 @@
 cmake_minimum_required(VERSION 2.8.3)
 
+# build type
+IF(NOT CMAKE_BUILD_TYPE)
+	SET(CMAKE_BUILD_TYPE "DEBUG")
+	#SET(CMAKE_BUILD_TYPE "RELEASE")
+	#SET(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
+	#SET(CMAKE_BUILD_TYPE "MINSIZEREL")
+ENDIF()
+
 # option declaration
 option(BUILD_TESTS "Build tests" ON)
+option(BUILD_EXAMPLE "Build example" ON)
 
-FIND_PACKAGE(PythonInterp)
-FIND_PACKAGE(PythonLibs)
+# option(USE_PYTHON3 OFF)
+
+
+
+FIND_PACKAGE(PythonInterp 2.7 REQUIRED)
+FIND_PACKAGE(PythonLibs 2.7 REQUIRED)
+IF(PYTHONLIBS_FOUND)
+	INCLUDE_DIRECTORIES("${PYTHON_INCLUDE_DIRS}")
+ELSE()
+	MESSAGE(FATAL_ERROR "Unable to find PythonLibs.")
+ENDIF()
+
 FIND_PACKAGE(Boost COMPONENTS python)
+IF(Boost_FOUND)
+  INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
+  SET(Boost_USE_STATIC_LIBS     OFF)
+  SET(Boost_USE_MULTITHREADED    ON)
+  SET(Boost_USE_STATIC_RUNTIME     OFF)
+  FIND_PACKAGE(Boost  ${BOOST_VERSION} COMPONENTS python) 
+  SET(LIBS ${LIBS} ${Boost_LIBRARIES})
+ELSEIF(NOT Boost_FOUND)
+  MESSAGE(FATAL_ERROR "Unable to find Boost.")
+ENDIF()
 
-
-#option(USE_OPENCV OFF)
-#option(USE_GDAL OFF)
-#option(USE_PYTHON3 OFF)
-option(WITH_VIBES "Include Vibes output" OFF)
+option(WITH_VIBES "Include Vibes output" ON)
 if(WITH_VIBES)
 	set(_PYIBEX_WITH_VIBES_ 1)
 endif(WITH_VIBES)
 
-
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
-LINK_LIBRARIES(${Boost_LIBRARIES}) # Deprecated but so convenient!
 
 # Find Ibex libs
 find_package(PkgConfig)
@@ -29,7 +51,7 @@ set(LIBS ${LIBS} -L${PC_IBEX_LIBDIR} ${PC_IBEX_LIB_DIRS} ${PC_IBEX_LIBRARIES})
 message(STATUS ${LIBS})
 set(PACKAGE_VERSION "0.9.0")
 
-# Find python install path
+# Find python install path (from morse install script)
 EXECUTE_PROCESS(COMMAND
 					${PYTHON_EXECUTABLE} -c "import distutils.sysconfig, sys; sys.stdout.write(distutils.sysconfig.get_python_lib(1,0,\"\"))"
 					OUTPUT_VARIABLE PYTHON_INSTALL
@@ -52,3 +74,7 @@ if (BUILD_TESTS)
 	MESSAGE(STATUS ${CTEST_ENVIRONMENT})
 	add_subdirectory(tests)
 endif(BUILD_TESTS)
+
+if (BUILD_EXAMPLE)
+	add_subdirectory(examples)
+endif(BUILD_EXAMPLE)

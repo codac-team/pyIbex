@@ -1,14 +1,5 @@
-#include <ibex_IntervalVector.h>
-#include <ibex_LargestFirst.h>
-#include <ibex_Ctc.h>
-#include <ibex_Sep.h>
-#include <stack>
-#include <string>
-
-#include "vibes.h"
-
-#include <boost/python.hpp>
-using namespace boost::python;
+#include "SIVIA.h"
+#include <sys/time.h>
 using namespace std;
 using namespace ibex;
 
@@ -23,6 +14,7 @@ void drawBoxDiff(IntervalVector &X0, IntervalVector& X, const string& color) {
     }
     delete[] rest;
 }
+
 void contract_and_draw(Ctc& c, IntervalVector& X, const string& color) {
     IntervalVector X0=X;       // get a copy
     try {
@@ -38,8 +30,8 @@ void separate_and_draw(Sep &sep,IntervalVector &Xin, IntervalVector &Xout,
     IntervalVector box = Xin & Xout;
     try {
         sep.separate(Xin,Xout);
+//        drawBoxDiff(box,Xout,colorOut);
         drawBoxDiff(box,Xin,colorIn);
-        drawBoxDiff(box,Xout,colorOut);
     } catch(EmptyBoxException&) {
 
     }
@@ -70,6 +62,7 @@ int SiviaC(IntervalVector& X0, Ctc& ctc, double eps, std::string figureName, str
             s.push(boxes.second);
         }
     }
+
     cerr << "Test " << k << " boxes\n";
     vibes::endDrawing();
 }
@@ -78,12 +71,17 @@ int SiviaC(IntervalVector& X0, Ctc& ctc, double eps, std::string figureName, str
 
 void SiviaS(IntervalVector& X0, Sep& sep, double eps, std::string figureName,
                string fillOut, string fillIn, string fillBorder ){
+
+    struct timeval tbegin,tend;
+    double texec=0.;
+    gettimeofday(&tbegin, NULL);
+
     vibes::beginDrawing();
     vibes::newFigure(figureName);
     LargestFirst lf(eps);
     stack<IntervalVector> s;
     int k = 0;
-    s.push(X0);
+    s.push(X0);    
     while (!s.empty()) {
         IntervalVector box=s.top();
         s.pop();
@@ -102,27 +100,12 @@ void SiviaS(IntervalVector& X0, Sep& sep, double eps, std::string figureName,
                 s.push(boxes.second);
             }
 //            if (k == 1) break;
-
+//    break;
     }
-
-    std::cerr << "nombre de bisetion " << k;
+    gettimeofday(&tend, NULL);
+    std::cerr << "nombre de bisetion " << k << "\n";
+    texec=((double)(1000*(tend.tv_sec-tbegin.tv_sec)+((tend.tv_usec-tbegin.tv_usec)/1000)))/1000.;
+    std::cerr << "paving " << texec << std::endl;
 }
 
-
-
-};
-namespace python = boost::python;
-void export_algorithms(){
-    
-    def("SIVIA", &ibex::SiviaC, (python::arg("X0"), python::arg("ctc"), python::arg("eps")=0.1,
-                                python::arg("figureName")=string("default"),
-                                python::arg("fillOut")=string("[b]"),
-                                python::arg("fillBorder")=string("[y]"))
-        );
-    def("SIVIA", &ibex::SiviaS, (python::arg("X0"), python::arg("Sep"), python::arg("eps")=0.1,
-                                    python::arg("figureName")=string("default"),
-                                    python::arg("fillOut")=string("[b]"),
-                                    python::arg("fillIn")=string("[r]"),
-                                    python::arg("fillBorder")=string("[y]"))
-        );
 }

@@ -32,6 +32,8 @@ option :
 
 Alternatively, run the provided `build.sh` script.
 
+
+
 --------------------------
 Features
 --------------------------
@@ -41,6 +43,18 @@ Binding for :
 - Function (only text constructors)
 - Ctc, CtcFwdBwd, CtcIn, CtcNotIn
 - CtcUnion, CtcCompo
+- CtcInverse
+- CtcPolar
+- CtcSegment (need ibex modification !!!)
+- CtcQInterProjF
+- SepUnion, SepInter
+- SepCtcPair , SepFwdBwd, SepNot (negation of a separator)
+- SepInverse, SepTransform
+- SepPolygon, SepPolarXY, SepPolarXYT
+- SepQInterProjF, SepCtcPairProj, SepProj
+
+
+
 
 --------------------------
 Tutorial
@@ -96,6 +110,7 @@ TODO
 	- [ ] Add Jacobian and gradient
 - [ ] Add iSet support
 - [ ] Add numpy array support for interval Vector class 
+- [ ] Add ratio option for LargestFirst(Vector, double )
 
 	
 

@@ -3,19 +3,18 @@ configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/pyIbex_Setting.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/pyIbex_Setting.h
 )
-include_directories(".")
-include_directories("core")
+add_subdirectory(ibex)
+
+INCLUDE_DIRECTORIES("core")
+INCLUDE_DIRECTORIES("ibex/alg")
+# INCLUDE_DIRECTORIES("ibex/geometrie")
+INCLUDE_DIRECTORIES("ibex/set")
 file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
 
-if(WITH_VIBES)
-	include_directories(alg)
-	set(ALG_SRCS ${ALG_SRCS} alg/vibes.cpp alg/pyIbex_SIVIA.cpp)
-endif(WITH_VIBES)
+# set(CORE_SRCS ${CORE_SRCS} "core/ibex_SepProj.cpp" "core/ibex_SepCtcPairProj.cpp" "core/ibex_SepFixPoint.cpp")
 
-PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS} ${ALG_SRCS})
-target_link_libraries(pyIbex ${LIBS})
-
+PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS})
+target_link_libraries(pyIbex ${LIBS} ibex_extra)
+# set_target_properties(pyIbex PROPERTIES SUFFIX ".pyd")
 install( TARGETS pyIbex DESTINATION ${PYTHON_INSTDIR})
-
-
 

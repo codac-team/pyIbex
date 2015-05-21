@@ -170,9 +170,9 @@ void export_Ctc(){
     	;
 
     class_<CtcFwdBwd, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcFwdBwd> >("CtcFwdBwd", no_init)
-    	.def("__init__", make_constructor(CtcFwdBwd_1))
-    	.def("__init__", make_constructor(CtcFwdBwd_2))
-    	.def("__init__", make_constructor(CtcFwdBwd_3))
+        .def("__init__", make_constructor(CtcFwdBwd_1))
+        .def("__init__", make_constructor(CtcFwdBwd_2))
+        .def("__init__", make_constructor(CtcFwdBwd_3))
         .def("__init__", make_constructor(CtcFwdBwd_4))
         .def("__init__", make_constructor(CtcFwdBwd_5))
         .def("contract", &CtcFwdBwd::contract)

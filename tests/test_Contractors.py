@@ -73,6 +73,22 @@ class SimplisticTest(unittest.TestCase):
 		ctc.contract(x,y,rho, theta)
 		# [3, 4], [3, 4], [4.24264, 5.65685], [0.643501, 0.785398]
 
+	# def test_CtcUnion_withRefereces(self):
+	# 	data = [Interval(3.61, 4.41), Interval(3.61, 4.41)]
+	# 	ctcs = []
+	# 	fs = []
+	# 	for i in data:
+	# 		f = Function('x', 'y', '(x)^2 + (y)^2 - %s'%i)
+	# 		print(f)
+	# 		# fs.append(f)
+	# 		ctcs.append(CtcFwdBwd(f, CmpOp.LEQ))
+
+	# 	ctc = CtcUnion(ctcs)
+	# 	# ctcs = None
+	# 	a = IntervalVector(2, Interval(-20,20))
+ # 		ctc.contract(a)
+ # 		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
+
 if __name__ == '__main__':
 	
 	unittest.main()

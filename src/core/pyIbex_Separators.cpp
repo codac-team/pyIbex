@@ -36,6 +36,10 @@
 
 #include "ibex_SepCtcPairProj.h"
 
+#include <boost/preprocessor/seq/for_each.hpp>
+#include <boost/preprocessor/seq/for_each_i.hpp>
+#include <boost/preprocessor/punctuation/comma_if.hpp>
+
 using namespace boost;
 using namespace boost::python;
 using namespace ibex;
@@ -108,27 +112,29 @@ boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
 //}
 
 
-#define GEN_CLASS_WITH_SAVED_ARGUMENTS(class_name,new_class_name,  arg1, arg2, arg3)           \
+
+#define DEF_CONSTRUCTOR_PARAM(r, data, i, elem ) BOOST_PP_COMMA_IF( i ) boost::shared_ptr<elem> BOOST_PP_CAT(ptr_arg,i)
+#define DEF_CONSTRUCTOR_CLASS_PARAM(r, data, i, elem ) BOOST_PP_COMMA_IF( i ) data BOOST_PP_CAT(ptr_arg,i)
+#define DEF_MEMBER_PARAM(r, data, i, elem ) boost::shared_ptr<elem> BOOST_PP_CAT(ptr_arg,i);
+#define DEF_ASSIGN_CLASS( r, data, i, elem ) BOOST_PP_CAT(this->ptr_arg,i) = BOOST_PP_CAT(ptr_arg,i);
+
+#define GEN_CLASS_WITH_SAVED_ARGUMENTS(class_name, new_class_name, params) \
     class new_class_name: public class_name {                          \
     public:                                                                     \
-        new_class_name(boost::shared_ptr<arg1> ptr_arg1,                \
-                             boost::shared_ptr<arg2> ptr_arg2,                \
-                             boost::shared_ptr<arg3> ptr_arg3):               \
-        class_name(*ptr_arg1, *ptr_arg2, *ptr_arg3),                          \
-        ptr_arg1(ptr_arg1), ptr_arg2(ptr_arg2), ptr_arg3(ptr_arg3){}           \
-                                                                                \
-    private:                                                                    \
-        boost::shared_ptr<arg1> ptr_arg1;                                       \
-        boost::shared_ptr<arg2> ptr_arg2;                                       \
-        boost::shared_ptr<arg3> ptr_arg3;                                       \
-    };\
-
-
-
+        new_class_name( \
+        BOOST_PP_SEQ_FOR_EACH_I( DEF_CONSTRUCTOR_PARAM, boost::shared_ptr<elem>, params) \
+        ) : class_name(BOOST_PP_SEQ_FOR_EACH_I( DEF_CONSTRUCTOR_CLASS_PARAM, *, params )) { \
+            BOOST_PP_SEQ_FOR_EACH_I( DEF_ASSIGN_CLASS,, params) \
+        } \
+    protected:\
+        BOOST_PP_SEQ_FOR_EACH_I( DEF_MEMBER_PARAM,boost::shared_ptr<elem>, params)\
+    };
 
 namespace ibex {
 
-GEN_CLASS_WITH_SAVED_ARGUMENTS(SepTransform,SepTransforWrapper, Sep, Function, Function)
+GEN_CLASS_WITH_SAVED_ARGUMENTS(SepTransform,SepTransforWrapper, (Sep)(Function)(Function));
+GEN_CLASS_WITH_SAVED_ARGUMENTS(SepCtcPair,SepCtcPairWrapper, (Ctc)(Ctc));
+
 
 //class SepTransforWrapper : public SepTransform {
 //public:
@@ -174,9 +180,9 @@ void export_Separators(){
         .add_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)
         ;
 
-    class_<SepCtcPair, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepCtcPair> >
-            ("SepCtcPair", init< Ctc&, Ctc& >())
-            .def("separate", &SepCtcPair::separate)
+    class_<SepCtcPairWrapper, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairWrapper> >
+            ("SepCtcPairWrapper", init< boost::shared_ptr<Ctc>&, boost::shared_ptr<Ctc>& >())
+            .def("separate", &SepCtcPairWrapper::separate)
             ;
 
 

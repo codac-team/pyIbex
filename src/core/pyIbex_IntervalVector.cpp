@@ -20,6 +20,8 @@ using namespace boost::python;
 using namespace ibex;
 namespace py = boost::python;
 
+
+
 boost::shared_ptr<ibex::IntervalVector> CreateWithList(const py::list & lst)
 {
   // construct with a list here
@@ -43,6 +45,15 @@ boost::shared_ptr<ibex::IntervalVector> CreateWithList(const py::list & lst)
         return ptr;
     }
 }
+boost::shared_ptr<ibex::IntervalVector> CreateWithIntAndList(int ndim, const py::list & lst){
+    // construct with a list here
+    extract<double> get_double(lst[0]);
+    if (get_double.check()){
+        std::vector<double> v = to_std_vector<double>(lst);
+        return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector(ndim, Interval(v[0], v[1])));
+    }
+}
+
 
 boost::shared_ptr<ibex::IntervalVector> CreateWithTuple(const py::tuple & tup)
 {
@@ -93,6 +104,7 @@ void export_IntervalVector(){
             .def(init<const IntervalVector&>() )
             .def("__init__", make_constructor(&CreateWithList))
             .def("__init__", make_constructor(&CreateWithTuple))
+            .def("__init__", make_constructor(&CreateWithIntAndList))
 
             // .def("__init__", make_constructor(&CreateWithPyArrayObject))
             // .def( "__getitem__", &IntervalVector::getitem, return_value_policy<copy_const_reference>()  )

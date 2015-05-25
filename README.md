@@ -108,9 +108,15 @@ TODO
 - [ ] Add IntervalMatrix support
 	- [ ] Add IntervalMatrix support
 	- [ ] Add Jacobian and gradient
-- [ ] Add iSet support
 - [ ] Add numpy array support for interval Vector class 
 - [ ] Add ratio option for LargestFirst(Vector, double )
+- [X] Simplify Wrapper interface
+- [ ] Add n_var in separator
+- [ ] fix exception
+- [ ] Improve ItervalVectorinterface
+	- [ ] Initialisation with X = IntervalVector(2, [2,3]) 
+	- [ ] Iterate over dimension of an IntervalVector
+- [ ] add Function / Ctc / Sep Properties ( nb_vars, ...)
 
 	
 

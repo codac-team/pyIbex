@@ -19,6 +19,10 @@ class SimplisticTest(unittest.TestCase):
 		c = IntervalVector([[1,2], [5,6]])
 		self.assertEqual(c[0], Interval(1,2))
 		
+	def test_constructor2(self):
+		c =IntervalVector(3, [1,2])
+		self.assertEqual(c[0], Interval(1,2))
+
 	def test_assignement(self):
 		a = IntervalVector(2)
 		a[1] = Interval(2,1)

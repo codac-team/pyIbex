@@ -91,7 +91,7 @@ class SimplisticTest(unittest.TestCase):
 			f = Function('x', 'y', '(x-%f)^2 + (y-%f)^2 - %s'%(x,y,r))
 			ctcs.append(CtcFwdBwd(f, CmpOp.LEQ))
 		
-		ctc = CtcQInterProjF(ctcs, len(ctcs))
+		ctc = CtcQInterProjF(ctcs, len(ctcs)-1) # Union
 		ctcs = None
 		a = IntervalVector(2, Interval(-20,20))
  		ctc.contract(a)

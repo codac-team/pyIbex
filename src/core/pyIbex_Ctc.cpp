@@ -39,63 +39,9 @@ struct CtcWrap : Ctc, wrapper<Ctc> {
 };
 
 }
-typedef boost::shared_ptr<Ctc> CtcPtr;
-
-// Contructor CtcFwdBwd
-typedef boost::shared_ptr<ibex::CtcFwdBwd> CtcFwdBwdPtr;
-
-// Constructor CtcUnion
-typedef boost::shared_ptr<ibex::CtcUnion> CtcUnionPtr;
-
-// Constructor CtcCompo
-typedef boost::shared_ptr<ibex::CtcCompo> CtcCompoPtr;
-
 
 CtcUnion* __or(Ctc& c1, Ctc& c2){ return (new CtcUnion(c1, c2)); }
 CtcCompo* __and(Ctc& c1, Ctc& c2){ return (new CtcCompo(c1, c2)); }
-
-
-boost::shared_ptr<CtcQInterProjF> CtcQInterProjFFromList(py::list & lst, int q)
-{
-    // construct with a list here
-//    incref(lst);
-    ibex::Array<Ctc> list(len(lst));
-    for(uint i = 0; i < len(lst); i++){
-        extract<Ctc> get_Ctc(lst[i]);
-        if (get_Ctc.check()){
-            Ctc* C = extract<Ctc*>(lst[i]);
-
-            list.set_ref(i, *C);
-        } else {
-            std::cout << "Extraction Error \n";
-            return boost::shared_ptr<CtcQInterProjF>();
-        }
-    }
-    return boost::shared_ptr<CtcQInterProjF>(new CtcQInterProjF(list, q));
-}
-
-
-template<typename CtcType>
-boost::shared_ptr<CtcType> ctcFromList(PyObject* obj_ptr)
-{
-
-    boost::python::list lst(boost::python::handle<>(boost::python::borrowed(obj_ptr)));
-    Py_IncRef(obj_ptr);
-
-    // construct with a list here
-    ibex::Array<Ctc> list(len(lst));
-    for(uint i = 0; i < len(lst); i++){
-        extract<Ctc> get_Ctc(lst[i]);
-        if (get_Ctc.check()){
-            Ctc* C = extract<Ctc*>(lst[i]);
-            list.set_ref(i, *C);
-        } else {
-            std::cout << "Extraction Error \n";
-            return boost::shared_ptr<CtcType>();
-        }
-    }
-    return boost::shared_ptr<CtcType>(new CtcType(list));
-}
 
 void export_Ctc(){
 

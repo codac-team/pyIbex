@@ -55,39 +55,12 @@ struct SepWrap : Sep, wrapper<Sep> {
         this->get_override("separate")(xin, xout);
     }
 };
-typedef boost::shared_ptr<Sep> SepPtr;
-
-SepUnionPtr __or(Sep& c1, Sep& c2){
-    Array<Sep> lst = Array<Sep>(c1,c2);
-    return SepUnionPtr(new SepUnion(lst));
-}
-
-SepInterPtr __and(Sep& c1, Sep& c2){
-    Array<Sep> lst = Array<Sep>(c1,c2);
-    return SepInterPtr(new SepInter(lst));
-}
-
-template<typename SepType>
-boost::shared_ptr<SepType> ctcFromList(const py::list & lst)
-{
-    // construct with a list here
-    ibex::Array<Sep> list(len(lst));
-    for(uint i = 0; i < len(lst); i++){
-        extract<Sep> get_Sep(lst[i]);
-        if (get_Sep.check()){
-            Sep* C = extract<Sep*>(lst[i]);
-            list.set_ref(i, *C);
-        } else {
-            std::cout << "Extraction Error \n";
-            return boost::shared_ptr<SepType>();
-        }
-    }
-    return boost::shared_ptr<SepType>(new SepType(list));
-}
+SepUnion* __or(Sep& s1, Sep& s2) { return (new SepUnion(s1, s2)); }
+SepInter* __and(Sep& s1, Sep& s2){ return (new SepInter(s1, s2)); }
 
 
 boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
-    // check if the list contains two sub-list [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]   
+    // check if the list contains two sub-list [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]
 
     boost::python::ssize_t n = boost::python::len(lst);
     if(n != 2){
@@ -107,33 +80,28 @@ boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
     return boost::shared_ptr<SepPolygon>(new SepPolygon(ax, ay, bx, by));
 }
 
-//boost::shared_ptr<SepProj> sepProjFromList(Sep& sep, const py::list& lst, double prec){
-//    return boost::shared_ptr<SepProj>(new SepProj(sep, to_std_vector<bool>(lst),prec));
-//}
 
+//#define DEF_CONSTRUCTOR_PARAM(r, data, i, elem ) BOOST_PP_COMMA_IF( i ) boost::shared_ptr<elem> BOOST_PP_CAT(ptr_arg,i)
+//#define DEF_CONSTRUCTOR_CLASS_PARAM(r, data, i, elem ) BOOST_PP_COMMA_IF( i ) data BOOST_PP_CAT(ptr_arg,i)
+//#define DEF_MEMBER_PARAM(r, data, i, elem ) boost::shared_ptr<elem> BOOST_PP_CAT(ptr_arg,i);
+//#define DEF_ASSIGN_CLASS( r, data, i, elem ) BOOST_PP_CAT(this->ptr_arg,i) = BOOST_PP_CAT(ptr_arg,i);
 
+//#define GEN_CLASS_WITH_SAVED_ARGUMENTS(class_name, new_class_name, params) \
+//    class new_class_name: public class_name {                          \
+//    public:                                                                     \
+//        new_class_name( \
+//        BOOST_PP_SEQ_FOR_EACH_I( DEF_CONSTRUCTOR_PARAM, boost::shared_ptr<elem>, params) \
+//        ) : class_name(BOOST_PP_SEQ_FOR_EACH_I( DEF_CONSTRUCTOR_CLASS_PARAM, *, params )) { \
+//            BOOST_PP_SEQ_FOR_EACH_I( DEF_ASSIGN_CLASS,, params) \
+//        } \
+//    protected:\
+//        BOOST_PP_SEQ_FOR_EACH_I( DEF_MEMBER_PARAM,boost::shared_ptr<elem>, params)\
+//    };
 
-#define DEF_CONSTRUCTOR_PARAM(r, data, i, elem ) BOOST_PP_COMMA_IF( i ) boost::shared_ptr<elem> BOOST_PP_CAT(ptr_arg,i)
-#define DEF_CONSTRUCTOR_CLASS_PARAM(r, data, i, elem ) BOOST_PP_COMMA_IF( i ) data BOOST_PP_CAT(ptr_arg,i)
-#define DEF_MEMBER_PARAM(r, data, i, elem ) boost::shared_ptr<elem> BOOST_PP_CAT(ptr_arg,i);
-#define DEF_ASSIGN_CLASS( r, data, i, elem ) BOOST_PP_CAT(this->ptr_arg,i) = BOOST_PP_CAT(ptr_arg,i);
+//namespace ibex {
 
-#define GEN_CLASS_WITH_SAVED_ARGUMENTS(class_name, new_class_name, params) \
-    class new_class_name: public class_name {                          \
-    public:                                                                     \
-        new_class_name( \
-        BOOST_PP_SEQ_FOR_EACH_I( DEF_CONSTRUCTOR_PARAM, boost::shared_ptr<elem>, params) \
-        ) : class_name(BOOST_PP_SEQ_FOR_EACH_I( DEF_CONSTRUCTOR_CLASS_PARAM, *, params )) { \
-            BOOST_PP_SEQ_FOR_EACH_I( DEF_ASSIGN_CLASS,, params) \
-        } \
-    protected:\
-        BOOST_PP_SEQ_FOR_EACH_I( DEF_MEMBER_PARAM,boost::shared_ptr<elem>, params)\
-    };
-
-namespace ibex {
-
-GEN_CLASS_WITH_SAVED_ARGUMENTS(SepTransform,SepTransforWrapper, (Sep)(Function)(Function));
-GEN_CLASS_WITH_SAVED_ARGUMENTS(SepCtcPair,SepCtcPairWrapper, (Ctc)(Ctc));
+//GEN_CLASS_WITH_SAVED_ARGUMENTS(SepTransform,SepTransforWrapper, (Sep)(Function)(Function));
+//GEN_CLASS_WITH_SAVED_ARGUMENTS(SepCtcPair,SepCtcPairWrapper, (Ctc)(Ctc));
 
 
 //class SepTransforWrapper : public SepTransform {
@@ -152,84 +120,84 @@ GEN_CLASS_WITH_SAVED_ARGUMENTS(SepCtcPair,SepCtcPairWrapper, (Ctc)(Ctc));
 
 
 
-}
+//}
 void export_Separators(){
 
     typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
     class_<SepWrap, boost::noncopyable>("Sep", no_init)
-        .def("separate", pure_virtual( separate(&Sep::separate)))
-        .def( "__or__", &__or)
-    	.def( "__and__", &__and)
-    ;
+            .def("separate", pure_virtual( separate(&Sep::separate)))
+            .def("__or__", &__or, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >())
+            .def("__and__", &__and, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >());
+            ;
 
     class_<SepUnion, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepUnion> >("SepUnion", no_init)
-    	.def("__init__", make_constructor(ctcFromList<SepUnion>), "SepUnion from list of separators\n Usage : SepUnion([s1, s2, ...])")
-    	.def("separate", &SepUnion::separate)
-		;
+            //    	.def("__init__", make_constructor(ctcFromList<SepUnion>), "SepUnion from list of separators\n Usage : SepUnion([s1, s2, ...])")
+            .def(init<Array<Sep> >()[with_custodian_and_ward<1,2>()])
+            .def("separate", &SepUnion::separate)
+            ;
 
     class_<SepInter, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepInter> >
-        ("SepInter", no_init)
-    	.def("__init__", make_constructor(ctcFromList<SepInter>), "SepInter from list of separators\n Usage : SepInter([s1, s2, ...])")
-    	.def("separate", &SepInter::separate)
-    	;
+            ("SepInter", no_init)
+            .def(init<Array<Sep> >()[with_custodian_and_ward<1,2>()])
+            //        .def("__init__", make_constructor(ctcFromList<SepInter>), "SepInter from list of separators\n Usage : SepInter([s1, s2, ...])")
+            .def("separate", &SepInter::separate)
+            ;
 
     class_<SepQInterProjF, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepQInterProjF> >
-        ("SepQInterProjF", no_init)
-        .def("__init__", make_constructor(ctcFromList<SepQInterProjF>), "SepQInterProjF from list of separators\n Usage : SepQInterProjF([s1, s2, ...])")
-        .def("separate", &SepQInterProjF::separate)
-        .add_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)
-        ;
+            ("SepQInterProjF", no_init)
+            .def(init<Array<Sep>& >()[with_custodian_and_ward<1,2>()])
+            //          .def("__init__", make_constructor(ctcFromList<SepQInterProjF>), "SepQInterProjF from list of separators\n Usage : SepQInterProjF([s1, s2, ...])")
+            .def("separate", &SepQInterProjF::separate)
+            .add_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)
+            ;
 
-    class_<SepCtcPairWrapper, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairWrapper> >
-            ("SepCtcPairWrapper", init< boost::shared_ptr<Ctc>&, boost::shared_ptr<Ctc>& >())
-            .def("separate", &SepCtcPairWrapper::separate)
+    class_<SepCtcPair, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepCtcPair> >
+            ("SepCtcPair", init< Ctc&, Ctc&>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1, 3> >()])
+            .def("separate", &SepCtcPair::separate)
             ;
 
 
-    class_<SepFwdBwd, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepFwdBwd> >
-            ("SepFwdBwd", init< Function&, CmpOp >())
-            .def(init<Function&, Interval& >())
-            .def(init<Function&, IntervalVector& > ())
-//            .def(init<Function&, IntervalMatrix& > ())
+    class_<SepFwdBwd, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepFwdBwd> >("SepFwdBwd", no_init)
+            .def(init< Function&, CmpOp >()[with_custodian_and_ward<1,2>()])
+            .def(init<Function&, Interval& >()[with_custodian_and_ward<1,2>()])
+            .def(init<Function&, IntervalVector& >()[with_custodian_and_ward<1,2>()])
+            //            .def(init<Function&, IntervalMatrix& > ())
             .def("separate", &SepFwdBwd::separate)
             ;
 
     class_<SepNot, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepNot> >("SepNot", no_init)
-        .def(init<Sep&>())
-    	.def("separate", &SepNot::separate);
+            .def(init<Sep&>()[with_custodian_and_ward<1,2>()])
+            .def("separate", &SepNot::separate);
 
     class_<SepInverse, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepInverse> >("SepInverse", no_init)
-        .def(init<Sep&, Function& >())
-        .def("separate", &SepInverse::separate);
+            .def(init<Sep&, Function& >()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3> >()])
+            .def("separate", &SepInverse::separate);
 
-    // class_<SepTransform, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransform> >("SepTransform", no_init)
-    //     .def(init<Sep&, Function& , Function& >())
-    //     .def("separate", &SepTransform::separate);
 
-    class_<SepTransforWrapper, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransforWrapper> >("SepTransform", no_init)
-        .def(init<SepPtr, boost::shared_ptr<Function> , boost::shared_ptr<Function> >())
-        .def("separate", &SepTransforWrapper::separate);
-        
+    class_<SepTransform, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransform> >("SepTransform", no_init)
+            .def(init<Sep&, Function&, Function&>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3, with_custodian_and_ward<1,4> > >()])
+            .def("separate", &SepTransform::separate);
+
 
     class_<SepPolygon, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolygon> >("SepPolygon", no_init)
-        .def("__init__", make_constructor(initFromList))
-        .def("separate", &SepPolygon::separate);
+            .def("__init__", make_constructor(initFromList))
+            .def("separate", &SepPolygon::separate);
 
 
     class_<SepPolarXY, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolarXY> >("SepPolarXY", no_init)
-        .def(init<Interval, Interval>())
-        .def("separate", &SepPolarXY::separate);
+            .def(init<Interval, Interval>())
+            .def("separate", &SepPolarXY::separate);
 
     class_<SepPolarXYT, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolarXYT> >("SepPolarXYT", no_init)
-        .def(init<Interval, Interval, double , double>())
-        .def("separate", &SepPolarXYT::separate);
+            .def(init<Interval, Interval, double , double>())
+            .def("separate", &SepPolarXYT::separate);
 
     class_<SepProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepProj> >("SepProj", no_init)
-        .def(init<Sep&, const IntervalVector&, double, int>())
-        .def("separate", &SepProj::separate);
+            .def(init<Sep&, const IntervalVector&, double, int>()[with_custodian_and_ward<1,2>()])
+            .def("separate", &SepProj::separate);
 
     class_<SepCtcPairProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairProj> >("SepCtcPairProj", no_init)
-        .def(init<Ctc&, Ctc&, const IntervalVector&, double>())
-        .def("separate", &SepCtcPairProj::separate);
+            .def(init<Ctc&, Ctc&, const IntervalVector&, double>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3> >()])
+            .def("separate", &SepCtcPairProj::separate);
 
 }

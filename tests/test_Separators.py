@@ -93,6 +93,7 @@ class SeparatorsTest(unittest.TestCase):
 		f = Function("x", "y", "x^2 + y^2 - 25")
 		sep = SepFwdBwd(f, CmpOp.LEQ)
 		sepN = SepNot(sep)
+		del sep # [optionnal] test for memory manadgment
 		b0 = IntervalVector([[-10, -6],  [-10, 10]])
 		b1 = IntervalVector([[-2, 2], [-2, 2]])
 		
@@ -123,6 +124,9 @@ class SeparatorsTest(unittest.TestCase):
 		sepU = SepUnion([sep1, sep2, sep3])
 		sepI = SepInter([sep1, sep2, sep3])
 
+		# [optionnal] test for memory manadgment
+		del f1, f2, f3, sep1, sep2, sep3 
+
 		b00 = IntervalVector([[-10, -6],  [-10, 10]])
 		b01 = IntervalVector(b00)
 
@@ -138,12 +142,40 @@ class SeparatorsTest(unittest.TestCase):
 		sep = SepFwdBwd(f,CmpOp.LEQ)
 		y_init = IntervalVector(1, Interval(1/math.sqrt(2), 0.9))
 		sep2 = SepProj(sep, y_init, 0.1, 10)
-
+		# [optionnal] test for memory manadgment
+		del sep, f
 		Xin = IntervalVector([[-10,0]])
 		Xout = IntervalVector([[-10,0]])
 		sep2.separate(Xin, Xout)
 		print(Xin, Xout)
 		
+
+	def test_UnionInter_with_array(self):
+		cx = [3, 7,-3]
+		cy = [4, 3, 7]
+		d  = IntervalVector([3, 6, 6]).inflate(0.5)
+		seps = []
+		for i,(x,y) in enumerate(zip(cx,cy)):
+			f = Function('x', 'y', '(x - %f)^2 + (y - %f)^2'%(x,y))
+			seps.append(SepFwdBwd(f, sqr(d[i])))
+
+		sepUnion = SepUnion(seps)
+		sepInter = SepInter(seps)
+		del seps
+
+		
+		Xin = IntervalVector(2, Interval(-10,10))
+		Xout = IntervalVector(2, Interval(-10,10))
+		sepUnion.separate(Xin, Xout)
+		# print(Xin, Xout)
+
+		Xin = IntervalVector(2, Interval(-10,10))
+		Xout = IntervalVector(2, Interval(-10,10))
+		sepInter.separate(Xin, Xout)
+
+		# print(Xin, Xout)
+
+
 
 
 	# def test_Function_vector(self):

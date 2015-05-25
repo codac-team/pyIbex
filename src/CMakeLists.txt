@@ -13,7 +13,7 @@ file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
 
 # set(CORE_SRCS ${CORE_SRCS} "core/ibex_SepProj.cpp" "core/ibex_SepCtcPairProj.cpp" "core/ibex_SepFixPoint.cpp")
 
-PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS})
+PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS} "core/pyIbex_to_python_converter.h")
 target_link_libraries(pyIbex ${LIBS} ibex_extra)
 # set_target_properties(pyIbex PROPERTIES SUFFIX ".pyd")
 install( TARGETS pyIbex DESTINATION ${PYTHON_INSTDIR})

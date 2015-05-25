@@ -22,7 +22,7 @@ namespace py = boost::python;
 
 boost::shared_ptr<ibex::IntervalVector> CreateWithList(const py::list & lst)
 {
-// construct with a list here
+  // construct with a list here
   extract<double> get_double(lst[0]);
   if (get_double.check()){
       std::vector<double> v = to_std_vector<double>(lst);

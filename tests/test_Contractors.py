@@ -33,6 +33,7 @@ class SimplisticTest(unittest.TestCase):
 		f2 = Function("x", "y", "(x-1)^2 + (y-1)^2 - [3.61, 4.41]")
  		ctc2 = CtcFwdBwd(f2, CmpOp.EQ)
  		ctc = CtcUnion([ctc1, ctc2])
+ 		del f, ctc1, f2, ctc2 # delete tmp object
  		a = IntervalVector(2)
  		ctc.contract(a)
  		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
@@ -42,7 +43,8 @@ class SimplisticTest(unittest.TestCase):
  		ctc1 = CtcFwdBwd(f, CmpOp.EQ)
 		f2 = Function("x", "y", "(x-1)^2 + (y-1)^2 - [3.61, 4.41]")
  		ctc2 = CtcFwdBwd(f2, CmpOp.EQ)
- 		ctc = ctc1 | ctc2
+ 		ctc = ctc1 | ctc2 | ctc1
+ 		del ctc2, ctc1 , f, f2 # Test if references are kept by python
  		a = IntervalVector(2)
  		ctc.contract(a)
  		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
@@ -52,7 +54,10 @@ class SimplisticTest(unittest.TestCase):
  		ctc1 = CtcFwdBwd(f, CmpOp.EQ)
 		f2 = Function("x", "y", "(x-1)^2 + (y-1)^2 - [3.61, 4.41]")
  		ctc2 = CtcFwdBwd(f2, CmpOp.EQ)
- 		ctc = ctc1 & ctc2
+ 		f3 = Function("x", "y", "(x-1)^2 + (y-1)^2 - [3.61, 4.41]")
+ 		ctc3 = CtcFwdBwd(f3, CmpOp.EQ)
+ 		ctc = ctc1 & ctc2 & ctc3 
+ 		del ctc1, ctc2, ctc3 # optionnal test if references are kept by python
  		a = IntervalVector(2)
  		ctc.contract(a)
  		self.assertEqual(a, IntervalVector(2, Interval(-1.1000000000000005, 2.1000000000000005)))
@@ -62,7 +67,10 @@ class SimplisticTest(unittest.TestCase):
  		ctc1 = CtcFwdBwd(f, CmpOp.EQ)
 		f2 = Function("x", "y", "(x-1)^2 + (y-1)^2 - [3.61, 4.41]")
  		ctc2 = CtcFwdBwd(f2, CmpOp.EQ)
- 		ctc = CtcUnion( [ctc1, ctc2, ctc2, ctc1,ctc1, ctc2, ctc2, ctc1 ])
+ 		f , f2 = None, None
+ 		lst = [ctc1, ctc2, ctc2, ctc1,ctc1, ctc2, ctc2, ctc1]
+ 		ctc = CtcUnion( lst)
+ 		del lst, ctc1, ctc2
  		a = IntervalVector(2)
  		ctc.contract(a)
  		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
@@ -73,21 +81,24 @@ class SimplisticTest(unittest.TestCase):
 		ctc.contract(x,y,rho, theta)
 		# [3, 4], [3, 4], [4.24264, 5.65685], [0.643501, 0.785398]
 
-	# def test_CtcUnion_withRefereces(self):
-	# 	data = [Interval(3.61, 4.41), Interval(3.61, 4.41)]
-	# 	ctcs = []
-	# 	fs = []
-	# 	for i in data:
-	# 		f = Function('x', 'y', '(x)^2 + (y)^2 - %s'%i)
-	# 		print(f)
-	# 		# fs.append(f)
-	# 		ctcs.append(CtcFwdBwd(f, CmpOp.LEQ))
+	def test_CtcQInter_withRefereces(self):
+		data = [Interval(3.61, 4.41), Interval(3.61, 4.41)]
+		cx = [0, 1]
+		cy = [0, 1]
+		ctcs = []
+		
+		for x, y, r  in zip(cx, cy, data):
+			f = Function('x', 'y', '(x-%f)^2 + (y-%f)^2 - %s'%(x,y,r))
+			ctcs.append(CtcFwdBwd(f, CmpOp.LEQ))
+		
+		ctc = CtcQInterProjF(ctcs, len(ctcs))
+		ctcs = None
+		a = IntervalVector(2, Interval(-20,20))
+ 		ctc.contract(a)
+ 		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
+ 		
+		
 
-	# 	ctc = CtcUnion(ctcs)
-	# 	# ctcs = None
-	# 	a = IntervalVector(2, Interval(-20,20))
- # 		ctc.contract(a)
- # 		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
 
 if __name__ == '__main__':
 	

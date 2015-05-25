@@ -61,11 +61,6 @@ double getitem(Interval& X, int i){
         .def(pow(self,int()))
         .def(pow(self,float()))
 
-
-
-
-
-
         .def( "lb",     &Interval::lb, "return the upper bound")
         .def( "ub",     &Interval::ub, "return the lower bound" )
         .def( "inflate",&Interval::inflate, return_internal_reference<>() )

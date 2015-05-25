@@ -23,6 +23,7 @@ using namespace boost::python;
 #include "ibex_NoBisectableVariableException.h"
 #include "ibex_DimException.h"
 #include "ibex_Exception.h"
+#include "ibex_Ctc.h"
 void export_Interval();
 void export_IntervalVector();
 void export_Bsc();
@@ -77,6 +78,7 @@ BOOST_PYTHON_MODULE(pyIbex)
 	std_pair_to_python_converter<IntervalVector, IntervalVector>();
     boost::python::to_python_converter<ibex::Vector, Vector_to_list>();
     Vector_from_python_list();
+    Array_from_python<Ctc>();
     // register_exception_translator<ibex::Exception>(translateException_IbexException);
     register_exception_translator<SyntaxError>(translateException_SyntaxError);
 	register_exception_translator<UnknownFileException>(translateException_UnknownFileException);

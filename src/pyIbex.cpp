@@ -24,6 +24,7 @@ using namespace boost::python;
 #include "ibex_DimException.h"
 #include "ibex_Exception.h"
 #include "ibex_Ctc.h"
+#include "ibex_Sep.h"
 void export_Interval();
 void export_IntervalVector();
 void export_Bsc();
@@ -79,6 +80,7 @@ BOOST_PYTHON_MODULE(pyIbex)
     boost::python::to_python_converter<ibex::Vector, Vector_to_list>();
     Vector_from_python_list();
     Array_from_python<Ctc>();
+    Array_from_python<Sep>();
     // register_exception_translator<ibex::Exception>(translateException_IbexException);
     register_exception_translator<SyntaxError>(translateException_SyntaxError);
 	register_exception_translator<UnknownFileException>(translateException_UnknownFileException);

@@ -93,6 +93,11 @@ py::list diff_wrapper(IntervalVector& X, IntervalVector& Y){
     return l;
 }
 
+
+void assignItv(IntervalVector& self, const IntervalVector& other){
+    self = other;
+}
+
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 1,2);
 
 void export_IntervalVector(){
@@ -112,7 +117,7 @@ void export_IntervalVector(){
             .def<const Interval&(IntervalVector&, int)> ("__getitem__", getitem,return_value_policy<copy_const_reference>())
             .def<void(IntervalVector&, int, Interval&)> ("__setitem__", setitem)
 
-
+            .def("assign", &assignItv)
             .def( self == self )
             .def( self != self )
             .def( self + self )

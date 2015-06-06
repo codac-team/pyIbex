@@ -24,7 +24,7 @@ namespace py = boost::python;
 
 struct BscWrap : Bsc, wrapper<Bsc> {
 	std::pair<IntervalVector,IntervalVector> bisect(const IntervalVector& box){
-		return this->get_override("bisect")(box);
+		return this->get_override("bisect")(boost::ref(box));
 	}
 	std::pair<IntervalVector,IntervalVector> bisect(Cell& cell){
 		if (override f = this->get_override("bisect"))

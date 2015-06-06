@@ -7,6 +7,7 @@
 // Created     : Mar 02, 2015
 //============================================================================
 
+#include "pyIbex_to_python_converter.h"
 
 #include "ibex_IntervalVector.h"
 #include "ibex_Sep.h"
@@ -32,7 +33,6 @@
 #include <stdexcept>
 #include <boost/python.hpp>
 #include <boost/python/stl_iterator.hpp>
-#include "pyIbex_to_python_converter.h"
 
 #include "ibex_SepCtcPairProj.h"
 
@@ -52,7 +52,7 @@ typedef boost::shared_ptr<ibex::SepInter> SepInterPtr;
 
 struct SepWrap : Sep, wrapper<Sep> {
     void separate(IntervalVector& xin, IntervalVector& xout){
-        this->get_override("separate")(xin, xout);
+        this->get_override("separate")(boost::ref(xin), boost::ref(xout));
     }
 };
 SepUnion* __or(Sep& s1, Sep& s2) { return (new SepUnion(s1, s2)); }
@@ -124,7 +124,7 @@ boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
 void export_Separators(){
 
     typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
-    class_<SepWrap, boost::noncopyable>("Sep", no_init)
+    class_<SepWrap, boost::noncopyable>("Sep", init<>())
             .def("separate", pure_virtual( separate(&Sep::separate)))
             .def("__or__", &__or, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >())
             .def("__and__", &__and, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >());
@@ -143,9 +143,8 @@ void export_Separators(){
             .def("separate", &SepInter::separate)
             ;
 
-    class_<SepQInterProjF, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepQInterProjF> >
-            ("SepQInterProjF", no_init)
-            .def(init<Array<Sep>& >()[with_custodian_and_ward<1,2>()])
+    class_<SepQInterProjF, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepQInterProjF> >("SepQInterProjF", no_init)
+            .def(init<Array<Sep> >()[with_custodian_and_ward<1,2>()])
             //          .def("__init__", make_constructor(ctcFromList<SepQInterProjF>), "SepQInterProjF from list of separators\n Usage : SepQInterProjF([s1, s2, ...])")
             .def("separate", &SepQInterProjF::separate)
             .add_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)

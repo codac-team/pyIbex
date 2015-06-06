@@ -33,8 +33,9 @@ namespace  ibex {
 
 
 struct CtcWrap : Ctc, wrapper<Ctc> {
+    CtcWrap(int nb_var) : Ctc(nb_var) {}
     void contract(IntervalVector& box){
-        this->get_override("contract")(box);
+        this->get_override("contract")(boost::ref(box));
     }
 };
 
@@ -47,6 +48,7 @@ void export_Ctc(){
 
     typedef void (Ctc::*contract_1) (IntervalVector&);
     class_<CtcWrap, boost::noncopyable, boost::shared_ptr<CtcWrap> >("Ctc", no_init)
+            .def(init<int>())
             .def("contract", pure_virtual( contract_1(&Ctc::contract)))
             .def_readonly("nb_var", &Ctc::nb_var)
             .def("__or__", &__or, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >())
@@ -106,6 +108,7 @@ void export_Ctc(){
     void (CtcPolar::*contract_ctcPolar_1) (IntervalVector&) = &CtcPolar::contract;
     void (CtcPolar::*contract_ctcPolar_2) (Interval&, Interval&, Interval&, Interval&)  = &CtcPolar::contract;
     class_<CtcPolar, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcPolar> >("CtcPolar")
+            .def(init<>())
             .def("contract", contract_ctcPolar_1)
             .def("contract", contract_ctcPolar_2);
 

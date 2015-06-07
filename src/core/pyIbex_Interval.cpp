@@ -13,14 +13,14 @@
 using namespace boost::python;
 using namespace ibex;
 
-double getitem(Interval& X, int i){
-    if(i == 0)
-        return X.lb();
-    else if (i == 1)
-        return X.ub();
-    else 
-        return IBEX_NAN;
-}
+// double getitem(Interval& X, int i){
+//     if(i == 0)
+//         return X.lb();
+//     else if (i == 1)
+//         return X.ub();
+//     else 
+//         return IBEX_NAN;
+// }
 
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 0,1)
 
@@ -57,9 +57,9 @@ double getitem(Interval& X, int i){
 
         .def(repr(self))
         .def(abs(self))
-        .def(pow(self,self))
-        .def(pow(self,int()))
-        .def(pow(self,float()))
+        // .def(pow(self,self))
+        // .def(pow(self,int()))
+        // .def(pow(self,float()))
 
         .def( "lb",     &Interval::lb, "return the upper bound")
         .def( "ub",     &Interval::ub, "return the lower bound" )
@@ -98,7 +98,7 @@ double getitem(Interval& X, int i){
         .def_readonly("POS_REALS", &Interval::POS_REALS)
         .def_readonly("NEG_REALS", &Interval::NEG_REALS)    
         .def( "bisect", &Interval::bisect, bisect_overloads())
-        .def<double(Interval&, int)> ("__getitem__", getitem)
+        // .def<double(Interval&, int)> ("__getitem__", getitem)
             
         ;
 
@@ -126,7 +126,17 @@ double getitem(Interval& X, int i){
         def( "min",     &ibex::min  );  
         def( "sign",    &ibex::sign );   
         def( "chi",     &ibex::chi  );  
-        def( "integer", &ibex::integer  );   
+        def( "integer", &ibex::integer  );
+
+        // Attention en python l'argument est passé en double par defaut et pas en int.
+        // Bug possible dans pow_2
+        Interval (*pow_1)(const Interval& x, int n) = &ibex::pow;
+        // Interval (*pow_2)(const Interval& x, double d)  = &ibex::pow;
+        // Interval (*pow_3)(const Interval &x, const Interval &y) = &ibex::pow;
+        def( "ipow", pow_1);
+        // def( "ipow", pow_2);
+        // def( "ipow", pow_3);
+
 
         // pwd projection
         def( "bwd_add",     &ibex::bwd_add );

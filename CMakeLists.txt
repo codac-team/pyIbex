@@ -67,6 +67,7 @@ endif(WIN32)
 MESSAGE(STATUS "will install python files in ${PYTHON_INSTDIR}")
 
 add_subdirectory(src)
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
 
 if (BUILD_TESTS)
 	ENABLE_TESTING()
@@ -78,3 +79,8 @@ endif(BUILD_TESTS)
 if (BUILD_EXAMPLE)
 	add_subdirectory(examples)
 endif(BUILD_EXAMPLE)
+
+SET(CPACK_GENERATOR "DEB")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Benoit Desrochers") #required
+ 
+INCLUDE(CPack)

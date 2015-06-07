@@ -3,5 +3,6 @@
 #define PYIBEXSETTING_H_INCLUDED
 
 #cmakedefine _PYIBEX_WITH_VIBES_	@_PYIBEX_WITH_VIBES_@
+#cmakedefine _PYIBEX_WITH_CUSTOM_	@_PYIBEX_WITH_VIBES_@
 
 #endif

@@ -137,17 +137,17 @@ class SeparatorsTest(unittest.TestCase):
 		sepI.separate(b10, b11)
 
 
-	def test_SepProj(self):
-		f = Function('x', 'y', 'x^2 + y^2 - 4')
-		sep = SepFwdBwd(f,CmpOp.LEQ)
-		y_init = IntervalVector(1, Interval(1/math.sqrt(2), 0.9))
-		sep2 = SepProj(sep, y_init, 0.1, 10)
-		# [optionnal] test for memory manadgment
-		del sep, f
-		Xin = IntervalVector([[-10,0]])
-		Xout = IntervalVector([[-10,0]])
-		sep2.separate(Xin, Xout)
-		print(Xin, Xout)
+	# def test_SepProj(self):
+	# 	f = Function('x', 'y', 'x^2 + y^2 - 4')
+	# 	sep = SepFwdBwd(f,CmpOp.LEQ)
+	# 	y_init = IntervalVector(1, Interval(1/math.sqrt(2), 0.9))
+	# 	sep2 = SepProj(sep, y_init, 0.1, 10)
+	# 	# [optionnal] test for memory manadgment
+	# 	del sep, f
+	# 	Xin = IntervalVector([[-10,0]])
+	# 	Xout = IntervalVector([[-10,0]])
+	# 	sep2.separate(Xin, Xout)
+	# 	print(Xin, Xout)
 		
 
 	def test_UnionInter_with_array(self):

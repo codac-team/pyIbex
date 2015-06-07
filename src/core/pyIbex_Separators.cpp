@@ -17,24 +17,24 @@
 #include "ibex_SepCtcPair.h"
 #include "ibex_SepFwdBwd.h"
 #include "ibex_SepBoundaryCtc.h"
+#include "ibex_SepPolygon.h"
+
+
+#ifdef _PYIBEX_WITH_CUSTOM_
 #include "ibex_SepInverse.h"
 #include "ibex_SepTransform.h"
 #include "ibex_SepQInter.h"
-
-#include "ibex_SepPolygon.h"
-
 #include "ibex_SepPolarXY.h"
 #include "ibex_SepPolarXYT.h"
-
-
 #include "ibex_SepProj.h"
+#include "ibex_SepCtcPairProj.h"
+#endif
 
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <boost/python.hpp>
 #include <boost/python/stl_iterator.hpp>
 
-#include "ibex_SepCtcPairProj.h"
 
 #include <boost/preprocessor/seq/for_each.hpp>
 #include <boost/preprocessor/seq/for_each_i.hpp>
@@ -143,12 +143,6 @@ void export_Separators(){
             .def("separate", &SepInter::separate)
             ;
 
-    class_<SepQInterProjF, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepQInterProjF> >("SepQInterProjF", no_init)
-            .def(init<Array<Sep> >()[with_custodian_and_ward<1,2>()])
-            //          .def("__init__", make_constructor(ctcFromList<SepQInterProjF>), "SepQInterProjF from list of separators\n Usage : SepQInterProjF([s1, s2, ...])")
-            .def("separate", &SepQInterProjF::separate)
-            .add_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)
-            ;
 
     class_<SepCtcPair, bases<Sep>,  boost::noncopyable, boost::shared_ptr<ibex::SepCtcPair> >
             ("SepCtcPair", init< Ctc&, Ctc&>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1, 3> >()])
@@ -168,6 +162,18 @@ void export_Separators(){
             .def(init<Sep&>()[with_custodian_and_ward<1,2>()])
             .def("separate", &SepNot::separate);
 
+    class_<SepPolygon, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolygon> >("SepPolygon", no_init)
+            .def("__init__", make_constructor(initFromList))
+            .def("separate", &SepPolygon::separate);
+
+#ifdef _PYIBEX_WITH_CUSTOM_
+    class_<SepQInterProjF, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepQInterProjF> >("SepQInterProjF", no_init)
+            .def(init<Array<Sep> >()[with_custodian_and_ward<1,2>()])
+            //          .def("__init__", make_constructor(ctcFromList<SepQInterProjF>), "SepQInterProjF from list of separators\n Usage : SepQInterProjF([s1, s2, ...])")
+            .def("separate", &SepQInterProjF::separate)
+            .add_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)
+            ;
+
     class_<SepInverse, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepInverse> >("SepInverse", no_init)
             .def(init<Sep&, Function& >()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3> >()])
             .def("separate", &SepInverse::separate);
@@ -176,12 +182,6 @@ void export_Separators(){
     class_<SepTransform, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepTransform> >("SepTransform", no_init)
             .def(init<Sep&, Function&, Function&>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3, with_custodian_and_ward<1,4> > >()])
             .def("separate", &SepTransform::separate);
-
-
-    class_<SepPolygon, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolygon> >("SepPolygon", no_init)
-            .def("__init__", make_constructor(initFromList))
-            .def("separate", &SepPolygon::separate);
-
 
     class_<SepPolarXY, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolarXY> >("SepPolarXY", no_init)
             .def(init<Interval, Interval>())
@@ -198,5 +198,5 @@ void export_Separators(){
     class_<SepCtcPairProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairProj> >("SepCtcPairProj", no_init)
             .def(init<Ctc&, Ctc&, const IntervalVector&, double>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3> >()])
             .def("separate", &SepCtcPairProj::separate);
-
+#endif
 }

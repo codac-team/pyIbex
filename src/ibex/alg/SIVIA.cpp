@@ -1,5 +1,6 @@
 #include "SIVIA.h"
 #include <sys/time.h>
+#include <iostream>
 using namespace std;
 using namespace ibex;
 
@@ -30,7 +31,7 @@ void separate_and_draw(Sep &sep,IntervalVector &Xin, IntervalVector &Xout,
     IntervalVector box = Xin & Xout;
     try {
         sep.separate(Xin,Xout);
-//        drawBoxDiff(box,Xout,colorOut);
+        drawBoxDiff(box,Xout,colorOut);
         drawBoxDiff(box,Xin,colorIn);
     } catch(EmptyBoxException&) {
 

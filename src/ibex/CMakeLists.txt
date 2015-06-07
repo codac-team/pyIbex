@@ -1,6 +1,7 @@
 
-set( DIR_LIST "geometry" 
-	"set" 
+set( DIR_LIST 
+	# "geometry" 
+	# "set" 
 	"alg"
 	)
 
@@ -16,9 +17,10 @@ foreach( dir ${DIR_LIST})
 	set(IBEX_ADDON_HEADERS ${IBEX_ADDON_HEADERS} ${dir_headers})
 endforeach(dir)
 
-add_library(ibex_extra SHARED ${IBEX_ADDON_SRCS} ${IBEX_ADDON_HEADERS})
-target_link_libraries( ibex_extra ${LIBS})
-install( TARGETS ibex_extra DESTINATION lib)
+set(IBEX_ADDON_SRCS ${IBEX_ADDON_SRCS} PARENT_SCOPE)
+# add_library(ibex_extra SHARED ${IBEX_ADDON_SRCS} ${IBEX_ADDON_HEADERS})
+# target_link_libraries( ibex_extra ${LIBS})
+# install( TARGETS ibex_extra DESTINATION lib)
 
 
 

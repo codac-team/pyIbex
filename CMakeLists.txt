@@ -10,7 +10,7 @@ ENDIF()
 
 # option declaration
 option(BUILD_TESTS "Build tests" ON)
-option(BUILD_EXAMPLE "Build example" ON)
+option(BUILD_EXAMPLE "Build example" OFF)
 
 option(USE_PYTHON3 OFF)
 if(USE_PYTHON3)

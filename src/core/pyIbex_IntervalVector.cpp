@@ -1,8 +1,8 @@
 //============================================================================
-//                                  I B E X
+//                                P Y I B E X
 // File        : pyIbex_IntervalVector.cpp
 // Author      : Benoit Desrochers
-// Copyright   : Ecole des Mines de Nantes (France)
+// Copyright   : ENSTA Bretagne
 // License     : See the LICENSE file
 // Created     : Dec 28, 2014
 //============================================================================

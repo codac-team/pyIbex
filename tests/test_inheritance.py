@@ -1,10 +1,16 @@
 #!/usr/bin/env python
+#============================================================================
+#                                P Y I B E X
+# File        : test_inheritance.cpp
+# Author      : Benoit Desrochers
+# Copyright   : Ensta Bretagne
+# License     : See the LICENSE file
+# Created     : Dec 28, 2014
+#============================================================================
+
 import unittest
 import pyIbex
 from pyIbex import *
-import sys
-import math
-import ctypes
 
 class myCtc(pyIbex.Ctc):
 	def __init__(self, x=0, y=0, R=2):

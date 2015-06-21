@@ -1,8 +1,8 @@
 //============================================================================
-//                                  I B E X
+//                               P Y I B E X
 // File        : pyIbex_Separator.cpp
 // Author      : Benoit Desrochers
-// Copyright   : Ecole des Mines de Nantes (France)
+// Copyright   : ENSTA Bretagne
 // License     : See the LICENSE file
 // Created     : Mar 02, 2015
 //============================================================================

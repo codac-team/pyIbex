@@ -1,3 +1,12 @@
+//============================================================================
+//                                P Y I B E X
+// File        : SIVIA.h
+// Author      : Benoit Desrochers
+// Copyright   : Ensta Bretagne
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
+
 #include <ibex_IntervalVector.h>
 #include <ibex_LargestFirst.h>
 #include <ibex_Ctc.h>

@@ -1,3 +1,12 @@
+//============================================================================
+//                                P Y I B E X
+// File        : SIVIA.cpp
+// Author      : Benoit Desrochers
+// Copyright   : Ensta Bretagne
+// License     : See the LICENSE file
+// Created     : Dec 28, 2014
+//============================================================================
+
 #include "SIVIA.h"
 #include <sys/time.h>
 #include <iostream>

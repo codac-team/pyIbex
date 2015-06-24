@@ -1,7 +1,7 @@
 
 set( DIR_LIST 
-	# "geometry" 
-	# "set" 
+	"geometry" 
+	"set" 
 	"alg"
 	)
 

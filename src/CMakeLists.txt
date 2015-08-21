@@ -7,7 +7,7 @@ configure_file(
 add_subdirectory(ibex)
 INCLUDE_DIRECTORIES("core")
 INCLUDE_DIRECTORIES("ibex/alg")
-INCLUDE_DIRECTORIES("ibex/geometrie")
+INCLUDE_DIRECTORIES("ibex/geometry")
 INCLUDE_DIRECTORIES("ibex/set")
 file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
 

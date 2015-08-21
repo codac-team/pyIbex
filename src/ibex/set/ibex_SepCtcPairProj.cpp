@@ -10,7 +10,7 @@
 
 #include "vibes.h"
 #include "ibex_NoBisectableVariableException.h"
-#include "ibex_EmptyBoxException.h"
+
 using namespace std;
 
 namespace ibex {
@@ -40,17 +40,9 @@ void SepCtcPairProj::separate(IntervalVector &x_in, IntervalVector &x_out)
 
     assert(x_in==x_out);
 
-    try {
-        ctcExist->contract(x_out);
-    } catch (EmptyBoxException&) {
-
-    }
-    try {
-        ctcForAll->contract(x_in);
-    } catch (EmptyBoxException&) {
-
-    }
-
+    ctcExist->contract(x_out);
+    ctcForAll->contract(x_in);
+    
 }
 
 

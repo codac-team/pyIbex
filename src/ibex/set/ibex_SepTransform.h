@@ -13,7 +13,7 @@
 
 #include "ibex_Sep.h"
 #include "ibex_Function.h"
-#include "ibex_EmptyBoxException.h"
+
 
 namespace ibex {
 /**

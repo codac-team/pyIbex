@@ -10,7 +10,7 @@
 
 #include "ibex_SepQInter.h"
 #include "ibex_QInter.h"
-#include "ibex_EmptyBoxException.h"
+
 namespace ibex {
 
 SepQInterProjF::SepQInterProjF(const Array<Sep>& list) : Sep(), list(list), q(0) { }
@@ -28,21 +28,18 @@ void SepQInterProjF::separate(IntervalVector& xin, IntervalVector& xout) {
 
 
 	for (int i=0; i<list.size(); i++) {
-		try {
-			boxes_in[i]=xin;
-			boxes_out[i]=xout;
+		boxes_in[i]=xin;
+		boxes_out[i]=xout;
 
-			list[i].separate(boxes_in[i], boxes_out[i]);
-		} catch(EmptyBoxException&) {
-			assert(boxes_in[i].is_empty() && boxes_out[i].is_empty());
-		}
+		list[i].separate(boxes_in[i], boxes_out[i]);
+
 		refs_in.set_ref(i,boxes_in[i]);
 		refs_out.set_ref(i,boxes_out[i]);
 	}
-	// cout << "Q :" << this->q << " " << list.size() - q - 1 << "\n";
-    xin &= qinter_projf(refs_in,q+1);
+	
+	xin &= qinter_projf(refs_in,q+1);
     xout &= qinter_projf(refs_out, list.size() - q);
-	// if (box.is_empty()) throw EmptyBoxException();
+	
 }
 
 

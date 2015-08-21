@@ -15,7 +15,6 @@ namespace ibex {
 SepInverse::SepInverse(Sep& s, Function& f) : s(s), f(f), yin(f.image_dim()), yout(f.image_dim()) {
 	const ExprSymbol& y=ExprSymbol::new_(f.expr().dim);
 	id = new Function(y,y);
-	//id = new Function("x","x");
 }
 
 SepInverse::~SepInverse() {
@@ -32,13 +31,8 @@ void SepInverse::separate(IntervalVector& xin, IntervalVector& xout){
 	yout.init(Interval::ALL_REALS);
 	id->backward(tmp, yin);
 	id->backward(tmp, yout);
-	// Domain fxout=fxin;
 
-	try {
-		s.separate(yin, yout);
-	} catch(EmptyBoxException& e) {
-		throw e;
-	}
+	s.separate(yin, yout);
 
 	if( yin.is_empty())
 		xin.set_empty();

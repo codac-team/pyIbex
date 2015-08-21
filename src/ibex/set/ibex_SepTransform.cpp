@@ -13,13 +13,10 @@
 namespace ibex {
 
 SepTransform::SepTransform(Sep& s, Function& t, Function& tinv) : s(s), t(t), tinv(tinv), yin(t.image_dim()), yout(t.image_dim()) {
-	// const ExprSymbol& y=ExprSymbol::new_(f.expr().dim);
-	// id = new Function(y,y);
-	//id = new Function("x","x");
 }
 
 SepTransform::~SepTransform() {
-	// delete id;
+	
 }
 void SepTransform::separate(IntervalVector& xin, IntervalVector& xout){
 
@@ -30,18 +27,14 @@ void SepTransform::separate(IntervalVector& xin, IntervalVector& xout){
 	yin = t.eval_vector(xin);
 	yout = yin;
 
-	try {
-		s.separate(yin, yout);
-	} catch(EmptyBoxException& e) {
-		throw e;
-	}
-
-	if( yin.is_empty())
+	s.separate(yin, yout);
+	
+	if( yin.is_empty() )
 		xin.set_empty();
 	else
 		xin &= tinv.eval_vector(yin);
 
-	if( yout.is_empty())
+	if( yout.is_empty() )
 		xout.set_empty();
 	else
 		xout &= tinv.eval_vector(yout);

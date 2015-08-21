@@ -57,13 +57,30 @@ boost::shared_ptr<ibex::IntervalVector> CreateWithIntAndList(int ndim, const py:
 
 boost::shared_ptr<ibex::IntervalVector> CreateWithTuple(const py::tuple & tup)
 {
-    // construct with a list here
-    std::vector<double> v = to_std_vector<double>(tup);
-    return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( Vector(v.size(), &v[0])));
+    extract<double> get_double(tup[0]);
+    if(get_double.check()){
+        // construct with a list here
+        std::vector<double> v = to_std_vector<double>(tup);
+        return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( Vector(v.size(), &v[0])));  
+
+    } else {
+        extract<Interval> get_interval(tup[0]);
+        if(get_interval.check()){
+        // construct with a list here
+            std::vector<Interval> v = to_std_vector<Interval>(tup);
+            shared_ptr<ibex::IntervalVector> itv(new ibex::IntervalVector( v.size()));
+            for(int i = 0 ; i < v.size(); i++){
+                (*itv)[i] = v[i];
+            }    
+            return itv;
+        } else {
+            throw('erreur');
+        }
+    }
 }
 
 
-const Interval& getitem(IntervalVector& X, int i){
+Interval& getitem(IntervalVector& X, int i){
       return X[i];
 }
 
@@ -114,7 +131,7 @@ void export_IntervalVector(){
             // .def("__init__", make_constructor(&CreateWithPyArrayObject))
             // .def( "__getitem__", &IntervalVector::getitem, return_value_policy<copy_const_reference>()  )
             // .def( "__setitem__", &IntervalVector::setitem)
-            .def<const Interval&(IntervalVector&, int)> ("__getitem__", getitem,return_value_policy<copy_const_reference>())
+            .def<Interval&(IntervalVector&, int)> ("__getitem__", getitem, return_internal_reference<>()) //return_value_policy<copy_non_const_reference>())
             .def<void(IntervalVector&, int, Interval&)> ("__setitem__", setitem)
 
             .def("assign", &assignItv)

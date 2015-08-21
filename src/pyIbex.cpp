@@ -2,7 +2,7 @@
 //                                  I B E X
 // File        : pyIbex.h
 // Author      : Benoit Desrochers
-// Copyright   : Ecole des Mines de Nantes (France)
+// Copyright   : Benoit Desrochers
 // License     : See the LICENSE file
 // Created     : Dec 28, 2014
 //============================================================================
@@ -19,7 +19,7 @@ using namespace boost::python;
 #include "ibex_IntervalVector.h"
 #include "ibex_UnknownFileException.h"
 #include "ibex_SyntaxError.h"
-#include "ibex_EmptyBoxException.h"
+// #include "ibex_EmptyBoxException.h"
 #include "ibex_NoBisectableVariableException.h"
 #include "ibex_DimException.h"
 #include "ibex_Exception.h"
@@ -63,9 +63,9 @@ void translateException_NoBisectableVariableException( const NoBisectableVariabl
 	PyErr_SetString(PyExc_UserWarning, "NoBisectableVariableException raised");
 };
 
-void translateException_EmptyBoxException( const EmptyBoxException& x) {
-	PyErr_SetString(PyExc_UserWarning, "EmptyBoxException raised");
-};
+// void translateException_EmptyBoxException( const EmptyBoxException& x) {
+// 	PyErr_SetString(PyExc_UserWarning, "EmptyBoxException raised");
+// };
 
 void translateException_InvalidIntervalVectorOp( const InvalidIntervalVectorOp& x){
 	PyErr_SetString(PyExc_UserWarning, "InvalidIntervalVectorOp [need to modify DimException.h to get the message] ");	
@@ -86,7 +86,7 @@ BOOST_PYTHON_MODULE(pyIbex)
 	register_exception_translator<UnknownFileException>(translateException_UnknownFileException);
 	register_exception_translator<DimException>(translateException_DimException);
 	register_exception_translator<NoBisectableVariableException>(translateException_NoBisectableVariableException);
-	register_exception_translator<EmptyBoxException>(translateException_EmptyBoxException);
+	// register_exception_translator<EmptyBoxException>(translateException_EmptyBoxException);
 	register_exception_translator<InvalidIntervalVectorOp>(translateException_InvalidIntervalVectorOp);
 
     export_Interval();

@@ -2,7 +2,7 @@
 //                               P Y I B E X
 // File        : pyIbex_Separator.cpp
 // Author      : Benoit Desrochers
-// Copyright   : ENSTA Bretagne
+// Copyright   : Benoit Desrochers
 // License     : See the LICENSE file
 // Created     : Mar 02, 2015
 //============================================================================
@@ -19,7 +19,7 @@
 #include "ibex_SepBoundaryCtc.h"
 #include "ibex_SepPolygon.h"
 
-
+#define _PYIBEX_WITH_CUSTOM_ 
 #ifdef _PYIBEX_WITH_CUSTOM_
 #include "ibex_SepInverse.h"
 #include "ibex_SepTransform.h"

@@ -2,7 +2,7 @@
 //                                P Y I B E X
 // File        : pyIbex_Bsc.cpp
 // Author      : Benoit Desrochers
-// Copyright   : ENSTA Bretagne
+// Copyright   : Benoit Desrochers
 // License     : See the LICENSE file
 // Created     : Oct 31, 2014
 //============================================================================

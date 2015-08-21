@@ -11,7 +11,7 @@
 #include <ibex_LargestFirst.h>
 #include <ibex_Ctc.h>
 #include <ibex_Sep.h>
-#include <ibex_EmptyBoxException.h>
+
 #include <stack>
 #include <string>
 #include "vibes.h"

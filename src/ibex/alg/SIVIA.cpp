@@ -27,10 +27,10 @@ void drawBoxDiff(IntervalVector &X0, IntervalVector& X, const string& color) {
 
 void contract_and_draw(Ctc& c, IntervalVector& X, const string& color) {
     IntervalVector X0=X;       // get a copy
-    try {
-        c.contract(X);
+    c.contract(X);
+    if(!X.is_empty()){
         drawBoxDiff(X0, X, color);
-    } catch(EmptyBoxException&) {
+    } else {
         vibes::drawBox(X0, color);
     }
 }
@@ -38,13 +38,11 @@ void contract_and_draw(Ctc& c, IntervalVector& X, const string& color) {
 void separate_and_draw(Sep &sep,IntervalVector &Xin, IntervalVector &Xout,
                               const string& colorIn, const string& colorOut){
     IntervalVector box = Xin & Xout;
-    try {
-        sep.separate(Xin,Xout);
-        drawBoxDiff(box,Xout,colorOut);
-        drawBoxDiff(box,Xin,colorIn);
-    } catch(EmptyBoxException&) {
-
-    }
+    
+    sep.separate(Xin,Xout);
+    drawBoxDiff(box,Xout,colorOut);
+    drawBoxDiff(box,Xin,colorIn);
+    
 }
 
 int SiviaC(IntervalVector& X0, Ctc& ctc, double eps, std::string figureName, string fillOut, string fillBorder ){
@@ -59,9 +57,8 @@ int SiviaC(IntervalVector& X0, Ctc& ctc, double eps, std::string figureName, str
         k++;
         IntervalVector box=s.top();
         s.pop();
-        try{
-            contract_and_draw(ctc, box, fillOut);
-        } catch(EmptyBoxException &e) {}
+        contract_and_draw(ctc, box, fillOut);
+        
         if (box.is_empty()) { continue; }
 
         if (box.max_diam()<eps) {
@@ -109,8 +106,6 @@ void SiviaS(IntervalVector& X0, Sep& sep, double eps, std::string figureName,
                 s.push(boxes.first);
                 s.push(boxes.second);
             }
-//            if (k == 1) break;
-//    break;
     }
     gettimeofday(&tend, NULL);
     std::cerr << "nombre de bisetion " << k << "\n";

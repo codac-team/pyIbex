@@ -22,6 +22,11 @@ double getitem(Interval& X, int i){
         return IBEX_NAN;
 }
 
+
+void assignItv(Interval& self, const Interval& other){
+    self = other;
+}
+
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 0,1)
 
     void export_Interval(){
@@ -29,6 +34,7 @@ double getitem(Interval& X, int i){
         .def(init<double, double>())
         .def(init<double>())
         .def(init<Interval>())
+        .def("assign", &assignItv)
         .def( self == self )
         .def( self + self )
         .def( self - self ) 

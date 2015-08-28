@@ -3,7 +3,7 @@
 #                                P Y I B E X
 # File        : test_Bsc.cpp
 # Author      : Benoit Desrochers
-# Copyright   : Ensta Bretagne
+# Copyright   : Benoit Desrochers
 # License     : See the LICENSE file
 # Created     : Dec 28, 2014
 #============================================================================

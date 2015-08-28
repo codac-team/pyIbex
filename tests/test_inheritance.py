@@ -3,7 +3,7 @@
 #                                P Y I B E X
 # File        : test_inheritance.cpp
 # Author      : Benoit Desrochers
-# Copyright   : Ensta Bretagne
+# Copyright   : Benoit Desrochers
 # License     : See the LICENSE file
 # Created     : Dec 28, 2014
 #============================================================================
@@ -19,9 +19,9 @@ class myCtc(pyIbex.Ctc):
 		self.ctc = CtcFwdBwd(self.f, CmpOp.LEQ)
 
 	def contract(self, box):
-		tmp = IntervalVector(box)
-		self.ctc.contract(tmp)
-		box.assign(tmp)
+		# tmp = IntervalVector(box)
+		self.ctc.contract(box)
+		# box.assign(tmp)
 
 class mySep(pyIbex.Sep):
 	def __init__(self, x=0, y=0, R=2):
@@ -30,11 +30,11 @@ class mySep(pyIbex.Sep):
 		self.sep = SepFwdBwd(self.f, CmpOp.LEQ)
 
 	def separate(self, xin, xout):
-		tmp_in= IntervalVector(xin)
-		tmp_out = IntervalVector(xout)
-		self.sep.separate(tmp_in, tmp_out)
-		xin.assign(tmp_in)
-		xout.assign(tmp_out)
+		# tmp_in= IntervalVector(xin)
+		# tmp_out = IntervalVector(xout)
+		self.sep.separate(xin, xout)
+		# xin.assign(tmp_in)
+		# xout.assign(tmp_out)
 		
 class SimplisticTest(unittest.TestCase):
 

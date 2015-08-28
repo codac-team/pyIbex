@@ -33,6 +33,34 @@ class SimplisticTest(unittest.TestCase):
 		c =IntervalVector(3, [1,2])
 		self.assertEqual(c[0], Interval(1,2))
 
+	def test_constructor3(self):
+		c = IntervalVector( (Interval(1, 3), Interval(float('inf'), 4)))
+		self.assertEqual(c[0], Interval(1, 3))
+		self.assertEqual(c[1], Interval(float('inf'), 4))
+
+	def test_gettiem1(self):
+		"""
+		check if gettiem returns a non constant reference on an Interval
+		"""
+		c = IntervalVector((1,2,3))
+		b = c[1]
+		self.assertEqual(b, Interval(2))
+		b.assign(Interval(-1, 2))
+		self.assertEqual(b, Interval(-1, 2))
+		self.assertEqual(c[1], Interval(-1, 2))
+
+	def test_gettiem2(self):
+		"""
+		check if gettiem returns a non constant reference on an Interval
+		"""
+		c = IntervalVector((1,2,3))
+		b = c[1]
+		self.assertEqual(b, Interval(2))
+		c[1] = Interval(-1, 2)
+		self.assertEqual(c[1], Interval(-1, 2))
+		self.assertEqual(b, Interval(-1, 2))
+
+
 	def test_assignement(self):
 		a = IntervalVector(2)
 		a[1] = Interval(2,1)
@@ -72,7 +100,7 @@ class SimplisticTest(unittest.TestCase):
 		self.assertEqual(a.size(),1000)
 
 	def test_subvector(self):
-		a = IntervalVector(range(0,10))
+		a = IntervalVector(list(range(0,10)))
 		self.assertEqual(len(a), 10)
 		b = a.subvector(3,6)
 		self.assertEqual(len(b), 4)
@@ -80,7 +108,7 @@ class SimplisticTest(unittest.TestCase):
 		self.assertEqual(b[0], Interval(-2,3))
 
 	def test_put(self):
-		a = IntervalVector(range(0,10))
+		a = IntervalVector(list(range(0,10)))
 		self.assertEqual(len(a), 10)
 		a.put(3, IntervalVector([1,2,3]))
 		self.assertEqual(a[3], Interval(1))
@@ -90,38 +118,38 @@ class SimplisticTest(unittest.TestCase):
 		
 		
 	def test_size(self):
-		a = IntervalVector(range(0,10))
+		a = IntervalVector(list(range(0,10)))
 		self.assertTrue(a.size() == 10)
 
 	def test_lb(self):
-		a = IntervalVector(range(0,7)).inflate(1)
+		a = IntervalVector(list(range(0,7))).inflate(1)
 		test = [-1,0,1,2,3,4,5]
 		self.assertEqual(test, a.lb())
 		# self.assertTrue(False)
 
 	def test_ub(self):
-		a = IntervalVector(range(0,7)).inflate(1)
+		a = IntervalVector(list(range(0,7))).inflate(1)
 		test = [1,2,3,4,5,6,7]
 		self.assertEqual(test, a.ub())
 
 	def test_mid(self):
-		a = IntervalVector(range(0,7)).inflate(1)
-		test = range(0,7)
+		a = IntervalVector(list(range(0,7))).inflate(1)
+		test = list(range(0,7))
 		self.assertEqual(test, a.mid())
 	
 	def test_mig(self):
-		a = IntervalVector(range(0,7)).inflate(1)
+		a = IntervalVector(list(range(0,7))).inflate(1)
 		self.assertEqual([0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0], a.mig())
 		
 	def test_mag(self):
-		a = IntervalVector(range(0,7)).inflate(1)
+		a = IntervalVector(list(range(0,7))).inflate(1)
 		self.assertEqual([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0], a.mag())
 
 	# def test_is_empty(self):
 	# 	self.assertTrue(False)
 
 	def test_is_flat(self):
-		a = IntervalVector(range(1,5))
+		a = IntervalVector(list(range(1,5)))
 		self.assertTrue(a.is_flat())
 
 	def test_is_unbounded(self):
@@ -166,16 +194,16 @@ class SimplisticTest(unittest.TestCase):
 
 
 	def test_contains(self):
-		a = IntervalVector(range(0,7)).inflate(1)
-		self.assertTrue(a.contains(range(0,7)))
+		a = IntervalVector(list(range(0,7))).inflate(1)
+		self.assertTrue(a.contains(list(range(0,7))))
 
 	def test_interior_contains(self):
-		a = IntervalVector(range(0,7)).inflate(1)
-		self.assertTrue(a.contains(range(0,7)))
+		a = IntervalVector(list(range(0,7))).inflate(1)
+		self.assertTrue(a.contains(list(range(0,7))))
 
 	def test_intersects(self):
-		a = IntervalVector(range(0,7)).inflate(2)
-		b = IntervalVector(range(0,7)).inflate(1)
+		a = IntervalVector(list(range(0,7))).inflate(2)
+		b = IntervalVector(list(range(0,7))).inflate(1)
 		self.assertTrue(a.intersects(b))
 
 	def test_overlaps(self):
@@ -192,7 +220,7 @@ class SimplisticTest(unittest.TestCase):
 
 
 	def test_is_zero(self):
-		a = IntervalVector(range(0,3))
+		a = IntervalVector(list(range(0,3)))
 		self.assertFalse(a.is_zero())
 		a = IntervalVector([0,0,0])
 		self.assertTrue(a.is_zero())
@@ -210,20 +238,20 @@ class SimplisticTest(unittest.TestCase):
 		
 		
 	def test_rad(self):
-		a = IntervalVector(range(0,3)).inflate(1)
+		a = IntervalVector(list(range(0,3))).inflate(1)
 		self.assertEqual(a.rad(),[1,1,1])
 
 	def test_diam(self):
-		a = IntervalVector(range(0,3)).inflate(1)
+		a = IntervalVector(list(range(0,3))).inflate(1)
 		self.assertEqual(a.rad(),[1,1,1])
 
 
 	# def test_sort_indices(self):
-	# 	a = IntervalVector(range(0,3)).inflate(1)
+	# 	a = IntervalVector(list(range(0,3))).inflate(1)
 	# 	a.sort_indices()
 
 	def test_min_max_diam(self):
-		a = IntervalVector(range(0,3)).inflate(1)
+		a = IntervalVector(list(range(0,3))).inflate(1)
 		a[1] = a[1].inflate(0.2)
 		a[2] = a[2].inflate(0.5)
 		self.assertEqual(a.max_diam(),3)
@@ -232,22 +260,22 @@ class SimplisticTest(unittest.TestCase):
 
 	
 	def test_volume(self):
-		a = IntervalVector(range(0,3)).inflate(1)
+		a = IntervalVector(list(range(0,3))).inflate(1)
 		self.assertEqual(round(a.volume()), 8)
 
 	def test_perimeter(self):
-		a = IntervalVector(range(0,3)).inflate(1)
+		a = IntervalVector(list(range(0,3))).inflate(1)
 		self.assertEqual(a.perimeter(), 6.0)
 
 
 	def test_rel_distance(self):
-		a = IntervalVector(range(0,3)).inflate(1)
-		b = IntervalVector(range(0,3))
+		a = IntervalVector(list(range(0,3))).inflate(1)
+		b = IntervalVector(list(range(0,3)))
 		self.assertEqual(a.rel_distance(b), 0.5)
 
 	def test_diff(self):
 		a = IntervalVector([[-1,1], [0,2], [1, 5]])
-		b = IntervalVector(range(0,3)).inflate(1)
+		b = IntervalVector(list(range(0,3))).inflate(1)
 		l = a.diff(b)
 		self.assertEqual(len(l), 1)
 		self.assertEqual(l[0], IntervalVector([[-1,1], [0,2], [3, 5]]))
@@ -256,21 +284,21 @@ class SimplisticTest(unittest.TestCase):
 		a = IntervalVector([[-1,1], [0,2], [1, 5]])
 		b = IntervalVector(a)
 		l = a.diff(b)
-		self.assertEqual(len(l), 1)
-		self.assertEqual(l[0], IntervalVector.empty(3))
+		self.assertEqual(len(l), 0)
+		#self.assertEqual(l[0], IntervalVector.empty(3))
 		
 		# self.assertEqual(l[0], IntervalVector([[-1,1], [0,2], [3, 5]]))
 
 
 	def test_complementary(self):
-		a = IntervalVector(range(0,1)).inflate(1)
+		a = IntervalVector(list(range(0,1))).inflate(1)
 		l = a.complementary()
 		self.assertEqual(l[0], IntervalVector(1, Interval(float("-inf"), -1)))
 		self.assertEqual(l[1], IntervalVector(1, Interval(1, float("inf"))))
 		
 
 	def test_bisect(self):
-		a = IntervalVector(range(0,3)).inflate(1)
+		a = IntervalVector(list(range(0,3))).inflate(1)
 		(c,d) = a.bisect(2)
 
 		

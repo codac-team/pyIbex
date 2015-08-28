@@ -25,10 +25,10 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/config/)
 
 find_package(PkgConfig REQUIRED)
 
-set(PythonInterp_FIND_VERSION ${PYTHON_MIN_VERSION})
+set(PythonInterp_FIND_VERSION "${PYTHON_MIN_VERSION}")
 find_package(PythonInterp REQUIRED)
 
-set(PythonLibs_FIND_VERSION "${PYTHON_MIN_VERSION})
+set(PythonLibs_FIND_VERSION "${PYTHON_MIN_VERSION}")
 find_package(PythonLibs REQUIRED)
 
 IF(PYTHONLIBS_FOUND)

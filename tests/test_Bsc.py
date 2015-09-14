@@ -12,7 +12,7 @@ import unittest
 import pyIbex
 from pyIbex import *
 
-class SimplisticTest(unittest.TestCase):
+class TestBsc(unittest.TestCase):
 	def test_LargestFirst(self):
 
 		bsc = LargestFirst(0.1)

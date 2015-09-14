@@ -16,5 +16,9 @@ file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
 PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS} "core/pyIbex_to_python_converter.h" ${IBEX_ADDON_SRCS})
 target_link_libraries(pyIbex ${LIBS})
 # set_target_properties(pyIbex PROPERTIES SUFFIX ".pyd")
-install( TARGETS pyIbex DESTINATION ${PYTHON_INSTDIR})
+install( TARGETS pyIbex DESTINATION "${PYTHON_INSTDIR}/pyIbex")
+install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/pyIbex" DESTINATION "${PYTHON_INSTDIR}")
+
+#install( FILE "pySIVIA.py" DESTINATION ${PYTHON_INSTDIR}/pyIbex)
+
 

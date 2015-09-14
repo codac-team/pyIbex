@@ -12,7 +12,7 @@ import pyIbex
 from pyIbex import *
 import sys
 import math
-class SimplisticTest(unittest.TestCase):
+class TestContractors(unittest.TestCase):
 	def test_Function(self):
 		# generate memory leak !!!
 		try:

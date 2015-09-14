@@ -3,7 +3,7 @@
 #                                P Y I B E X
 # File        : test_IntervalVector.cpp
 # Author      : Benoit Desrochers
-# Copyright   : Ensta Bretagne
+# Copyright   : Benoit Desrochers
 # License     : See the LICENSE file
 # Created     : Dec 28, 2014
 #============================================================================
@@ -13,7 +13,7 @@ import unittest
 import pyIbex
 from pyIbex import IntervalVector, Interval
 
-class SimplisticTest(unittest.TestCase):
+class TestIntervalVector(unittest.TestCase):
 
 
 	def test_constructor(self):

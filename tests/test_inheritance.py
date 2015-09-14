@@ -36,14 +36,14 @@ class mySep(pyIbex.Sep):
 		# xin.assign(tmp_in)
 		# xout.assign(tmp_out)
 		
-class SimplisticTest(unittest.TestCase):
+class TestInheritance(unittest.TestCase):
 
 	def test_myCtc(self):
 		ctc1 = myCtc()
 		ctc2 = myCtc(1,1)
 		ctc = CtcUnion([ctc1, ctc2])
 		x = IntervalVector(2, [-10,10])
-		SIVIA(x, ctc, 1)
+		# SIVIA(x, ctc, 1)
 
 	def test_mySep(self):
 
@@ -51,7 +51,7 @@ class SimplisticTest(unittest.TestCase):
 		sep2 = mySep(1,1)
 		sep = SepUnion([sep1, sep2])
 		x = IntervalVector(2, [-10,10])
-		SIVIA(x, sep, 1)
+		# SIVIA(x, sep, 1)
 		
 
 if __name__ == '__main__':

@@ -10,9 +10,6 @@
 #include <string>
 #include <sstream>
 
-// #include "ibex_Interval.h"
-
-
 #include <boost/python.hpp>
 using namespace boost::python;
 #include "pyIbex_to_python_converter.h"
@@ -81,7 +78,8 @@ BOOST_PYTHON_MODULE(pyIbex)
     Vector_from_python_list();
     Array_from_python<Ctc>();
     Array_from_python<Sep>();
-    // register_exception_translator<ibex::Exception>(translateException_IbexException);
+
+    
     register_exception_translator<SyntaxError>(translateException_SyntaxError);
 	register_exception_translator<UnknownFileException>(translateException_UnknownFileException);
 	register_exception_translator<DimException>(translateException_DimException);

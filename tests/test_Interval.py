@@ -3,14 +3,14 @@
 #                                P Y I B E X
 # File        : test_Interval.cpp
 # Author      : Benoit Desrochers
-# Copyright   : Ensta Bretagne
+# Copyright   : Benoit Desrochers
 # License     : See the LICENSE file
 # Created     : Dec 28, 2014
 #============================================================================
 import unittest
 import pyIbex
 from pyIbex import Interval
-class SimplisticTest(unittest.TestCase):
+class TestInterval(unittest.TestCase):
 
 	def setUp(self):
 		Interval.__str__ = interval_str

@@ -3,7 +3,7 @@
 #                                P Y I B E X
 # File        : test_Separators.cpp
 # Author      : Benoit Desrochers
-# Copyright   : Ensta Bretagne
+# Copyright   : Benoit Desrochersss
 # License     : See the LICENSE file
 # Created     : Dec 28, 2014
 #============================================================================
@@ -14,7 +14,7 @@ import pyIbex
 from pyIbex import *
 import sys
 import math
-class SeparatorsTest(unittest.TestCase):
+class TestSeparator(unittest.TestCase):
 
 	def test_SepCtcPair(self):
 		f = Function("x", "y", "x^2 + y^2 - 25")

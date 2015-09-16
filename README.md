@@ -29,8 +29,13 @@ Building
 option : 
 	- use -DCMAKE_INSTALL_PREFIX= to change the install destination
 	- use -DCMAKE_BUILD_TYPE=DEBUG | RELEASE to change the compilation mode
-
 Alternatively, run the provided `build.sh` script.
+
++ Build boost
+```bash
+./b2 --with-python -q -d 2 include="/usr/include/python3.4m" variant=release link=static,shared threading=multi --prefix=${DEVEL_BASE} install
+```
+
 
 
 
@@ -111,10 +116,10 @@ TODO
 - [ ] Add numpy array support for interval Vector class 
 - [ ] Add ratio option for LargestFirst(Vector, double )
 - [X] Simplify Wrapper interface
-- [ ] Add n_var in separator
+- [X] Add n_var in separator
 - [ ] fix exceptions
 - [ ] Improve ItervalVectorinterface
-	- [ ] Initialisation with X = IntervalVector(2, [2,3]) 
+	- [X] Initialisation with X = IntervalVector(2, [2,3]) 
 	- [ ] Iterate over dimension of an IntervalVector
 - [ ] add Function / Ctc / Sep Properties ( nb_vars, ...)
 - [X] inheritance with python objects

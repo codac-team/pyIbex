@@ -25,7 +25,7 @@ class myCtc(pyIbex.Ctc):
 
 class mySep(pyIbex.Sep):
 	def __init__(self, x=0, y=0, R=2):
-		pyIbex.Sep.__init__(self)
+		pyIbex.Sep.__init__(self, 2)
 		self.f = Function('x', 'y', '(x-%f)^2+(y-%f)^2-%f'%(x,y,R**2))
 		self.sep = SepFwdBwd(self.f, CmpOp.LEQ)
 

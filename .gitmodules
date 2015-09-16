@@ -1,3 +1,0 @@
-[submodule "external/ibex-lib"]
-	path = external/ibex-lib
-	url = https://github.com/benEnsta/ibex-lib.git

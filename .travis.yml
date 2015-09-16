@@ -4,7 +4,7 @@ python:
 # 
 before_install:
   #- sudo apt-get update -q
-  - sudo apt-get install -y --force-yes python2.7 flex bison gcc g++ coinor-libclp-dev libcpptest-dev pkg-config
+  - sudo apt-get install -y --force-yes python3.4 flex bison gcc g++ coinor-libclp-dev libcpptest-dev pkg-config
   - sudo apt-get install libboost-dev libboost-python-dev
 # command to install dependencies
 install: 

@@ -18,6 +18,10 @@ option(USE_PYTHON3 ON "use python3")
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/check_dependancies.cmake)
+
+
+
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
 set(PACKAGE_VERSION "0.9.0")
 
@@ -38,7 +42,9 @@ if(WIN32)
 endif(WIN32)
 MESSAGE(STATUS "will install python files in ${PYTHON_INSTDIR}")
 
+add_subdirectory(external/ibex-lib)
 add_subdirectory(src)
+add_dependencies(pyIbex ibex)
 
 if (BUILD_TESTS)
 	ENABLE_TESTING()

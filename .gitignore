@@ -50,7 +50,7 @@ CMakeLists.txt.user
 # hidden sources
 *._cpp
 *._h
-
+*._py
 *~
-
+__pycache__
 

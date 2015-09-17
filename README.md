@@ -29,15 +29,41 @@ Building
 option : 
 	- use -DCMAKE_INSTALL_PREFIX= to change the install destination
 	- use -DCMAKE_BUILD_TYPE=DEBUG | RELEASE to change the compilation mode
+	- use -DCPPTEST_DIR= if libcpptest is installed in a non-standard directory
+	- use -DIBEX_ROOT= if ibex is installed in a non-standard directory
 Alternatively, run the provided `build.sh` script.
 
-+ Build boost
+For Windows Users
+-----------------
++ build boost
 ```bash
 ./b2 --with-python -q -d 2 include="/usr/include/python3.4m" variant=release link=static,shared threading=multi --prefix=${DEVEL_BASE} install
 ```
 
++ Build boost
+./bjam --with-python variant=release link=static,shared address-model=64 
 
+user-config.jam
 
+using python
+	: 3.4
+	: E:\pyzo2015a\python.exe
+	: E:\pyzo2015a\include
+	: E:\pyzo2015a\libs
+
+E:\pyIbex\build>cmake -G "Visual Studio 12 2013 Win64" -DBOOST_ROOT=E:\boost_1_58_0 -DIBEX_ROOT="C:\Program Files\ibex-lib" -DCMAKE_INSTALL_PREFIX=E:\ -DPYTHON_EXECUTABLE=E:\pyzo2015a\python.exe -DUSE_PYTHON3=ON ../
+
++build ibex
++open Developer COmmand Prompt for VS2013
+```bash
+cmake -G "Visual Studio 12 2013 Win64" -DCMAKE_BUILD_TYPE=Release -DCPPTEST_DIR=E:\add ../
+msbuild /P:Configuration=Release PACKAGE.vcxproj
+```bash
++Build pyIbex
+```bash
+cmake -G "Visual Studio 12 2013 Win64" -DBOOST_ROOT=$$$$$$$$ -DIBEX_ROOT=$$$$$$$$ -DPYTHON_EXECUTABLE=$$$$$$$$ ../
+msbuild /P:Configuration=Release INSTALL.vcxproj
+```bash
 
 --------------------------
 Features

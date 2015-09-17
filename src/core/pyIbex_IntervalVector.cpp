@@ -31,11 +31,11 @@ boost::shared_ptr<ibex::IntervalVector> CreateWithList(const py::list & lst)
       return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( Vector(v.size(), &v[0])));
   } else {
         double (*tmp)[2] = new double[len(lst)][2];
-        for(uint i = 0; i < len(lst); i++){
+        for(int i = 0; i < len(lst); i++){
             extract<list> get_list(lst[i]);
             if (get_list.check()){
                 assert(len(lst[i]) == 2);
-                for(uint j = 0; j < 2;j++){
+                for(int j = 0; j < 2;j++){
                     tmp[i][j] = extract<double>(lst[i][j]);
                 }
             }
@@ -74,7 +74,7 @@ boost::shared_ptr<ibex::IntervalVector> CreateWithTuple(const py::tuple & tup)
             }    
             return itv;
         } else {
-            throw('erreur');
+
         }
     }
 }
@@ -92,7 +92,7 @@ py::list complementary_wrapper(IntervalVector& X){
       IntervalVector* result;
       int n = X.complementary(result);
       py::list l;
-      for(uint i = 0 ; i < n ; i++){
+      for(int i = 0 ; i < n ; i++){
             l.append(result[i]);
       }
       delete[] result;
@@ -103,7 +103,7 @@ py::list diff_wrapper(IntervalVector& X, IntervalVector& Y){
       IntervalVector* result;
       int n = X.diff(Y, result);
       py::list l;
-      for(uint i = 0 ; i < n ; i++){
+      for(int i = 0 ; i < n ; i++){
                 l.append(result[i]);
       }
       delete[] result;

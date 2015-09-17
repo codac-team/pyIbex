@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 
+set(PACKAGE_VERSION "0.9.0")
 
 # build type
 IF(NOT CMAKE_BUILD_TYPE)
-	SET(CMAKE_BUILD_TYPE "RELEASE")
+	SET(CMAKE_BUILD_TYPE "Release")
 	#SET(CMAKE_BUILD_TYPE "DEBUG")
 	#SET(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
 	#SET(CMAKE_BUILD_TYPE "MINSIZEREL")
@@ -13,15 +14,13 @@ ENDIF()
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLE "Build example" OFF)
 option(BUILD_STATIC "make standalone lib" ON)
-option(USE_PYTHON3 ON "use python3")
+option(USE_PYTHON3 "use python3" ON)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/check_dependancies.cmake)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
-set(PACKAGE_VERSION "0.9.0")
 
-
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
 
 # Find python install path (from morse install script)
 EXECUTE_PROCESS(COMMAND
@@ -58,6 +57,18 @@ configure_file("${CMAKE_HOME_DIRECTORY}/CMakeModules/cmake_uninstall.cmake.in" "
 add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake_uninstall.cmake")
 
 
-SET(CPACK_GENERATOR "DEB")
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Benoit Desrochers") #required
- INCLUDE(CPack)
+#########################################################################
+### Package configuration ###
+#########################################################################
+
+
+set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
+set(CPACK_PACKAGE_VENDOR "B. Desrochers")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Python wrapper for Ibex Library")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "pyIbex")
+
+INCLUDE(CPack)

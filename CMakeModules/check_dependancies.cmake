@@ -14,22 +14,24 @@ else (USE_PYTHON3)
   find_package(PythonInterp REQUIRED)
   find_package(PythonLibs REQUIRED)
 endif(USE_PYTHON3)
-
-
-find_package(PkgConfig REQUIRED)
-
-
 IF(PYTHONLIBS_FOUND)
 	INCLUDE_DIRECTORIES("${PYTHON_INCLUDE_DIRS}")
 ELSE()
 	MESSAGE(FATAL_ERROR "Unable to find PythonLibs.")
 ENDIF()
 
+# To statically ling boost with pyIbex on Windows
+if(WIN32)
+  message(STATUS "ICI !! !")
+  SET(Boost_USE_STATIC_LIBS     ON)
+  add_definitions(-DBOOST_PYTHON_STATIC_LIB)
+else()  
+  SET(Boost_USE_STATIC_LIBS     OFF)
+endif()
 
 FIND_PACKAGE(Boost COMPONENTS python)
 IF(Boost_FOUND)
   INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
-  SET(Boost_USE_STATIC_LIBS     OFF)
   SET(Boost_USE_MULTITHREADED    ON)
   SET(Boost_USE_STATIC_RUNTIME     ON)
   FIND_PACKAGE(Boost  ${BOOST_VERSION} COMPONENTS python) 
@@ -42,16 +44,10 @@ ELSEIF(NOT Boost_FOUND)
   MESSAGE(FATAL_ERROR "Unable to find Boost.")
 ENDIF()
 
-#option(WITH_VIBES "Include Vibes output" ON)
-#if(WITH_VIBES)
-#	set(_PYIBEX_WITH_VIBES_ 1)
-#endif(WITH_VIBES)
-
-
-# Find Ibex libs
-find_package(PkgConfig)
-pkg_check_modules(PC_IBEX REQUIRED ibex)
-add_definitions(${PC_IBEX_CFLAGS_OTHER})
-include_directories(${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${PC_IBEX_INCLUDES})
-set(LIBS ${LIBS} -L${PC_IBEX_LIBDIR} ${PC_IBEX_LIB_DIRS} ${PC_IBEX_LIBRARIES})
-message(STATUS ${LIBS})
+FIND_PACKAGE(IbexLib)
+if(IBEX_FOUND)
+  INCLUDE_DIRECTORIES(${IBEX_INCLUDE_DIRS})
+  SET(LIBS ${LIBS} ${IBEX_LIBRARIES})
+else()
+  MESSAGE(FATAL_ERROR "Unable to find IbexLib. Need to set IBEX_ROOT ${IBEX_ROOT}")
+endif()

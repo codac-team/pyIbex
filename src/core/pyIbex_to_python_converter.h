@@ -63,7 +63,7 @@ struct Vector_to_list
     static PyObject* convert(const ibex::Vector& container)
     {
         py::list result;
-        for(uint i = 0; i < container.size(); i++){
+        for(int i = 0; i < container.size(); i++){
             result.append(container[i]);
         }
         return py::incref(result.ptr());
@@ -116,7 +116,7 @@ struct Array_from_python{
         ibex::Array<T> & array = *(new (storage) ibex::Array<T>(0) );
 
         // Fill the new array
-        for(uint i = 0; i < py::len(*lst); i++){
+        for(int i = 0; i < py::len(*lst); i++){
             py::extract<T*> get_item(lst[i]);
             if (get_item.check()){
                 T* item = (py::extract<T*>(lst[i]) );

@@ -41,7 +41,7 @@ For Windows Users
 ```
 
 + Build boost
-./bjam --with-python variant=release link=static,shared address-model=64 
+./bjam --with-python variant=release link=static address-model=64 runtime-link=static
 
 user-config.jam
 
@@ -57,7 +57,7 @@ E:\pyIbex\build>cmake -G "Visual Studio 12 2013 Win64" -DBOOST_ROOT=E:\boost_1_5
 +open Developer COmmand Prompt for VS2013
 ```bash
 cmake -G "Visual Studio 12 2013 Win64" -DCMAKE_BUILD_TYPE=Release -DCPPTEST_DIR=E:\add ../
-msbuild /P:Configuration=Release PACKAGE.vcxproj
+msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease PACKAGE.vcxproj
 ```bash
 +Build pyIbex
 ```bash

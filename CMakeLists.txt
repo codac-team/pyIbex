@@ -37,6 +37,20 @@ if(WIN32)
 endif(WIN32)
 MESSAGE(STATUS "will install python files in ${PYTHON_INSTDIR}")
 
+if(WIN32)
+	set(CompilerFlags
+        CMAKE_CXX_FLAGS
+        CMAKE_CXX_FLAGS_DEBUG
+        CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_C_FLAGS
+        CMAKE_C_FLAGS_DEBUG
+        CMAKE_C_FLAGS_RELEASE
+        )
+foreach(CompilerFlag ${CompilerFlags})
+  string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+endforeach()
+endif()
+
 add_subdirectory(src)
 
 if (BUILD_TESTS)

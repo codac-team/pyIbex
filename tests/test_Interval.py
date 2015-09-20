@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #============================================================================
 #                                P Y I B E X
-# File        : test_Interval.cpp
+# File        : test_Interval.py
 # Author      : Benoit Desrochers
 # Copyright   : Benoit Desrochers
 # License     : See the LICENSE file

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #============================================================================
 #                                P Y I B E X
-# File        : test_SepPolygon.cpp
+# File        : test_SepPolygon.py
 # Author      : Benoit Desrochers
 # Copyright   : Benoit Desrochers
 # License     : See the LICENSE file

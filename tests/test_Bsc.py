@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #============================================================================
 #                                P Y I B E X
-# File        : test_Bsc.cpp
+# File        : test_Bsc.py
 # Author      : Benoit Desrochers
 # Copyright   : Benoit Desrochers
 # License     : See the LICENSE file

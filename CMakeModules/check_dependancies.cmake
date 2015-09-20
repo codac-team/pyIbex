@@ -21,13 +21,12 @@ ELSE()
 ENDIF()
 
 # To statically ling boost with pyIbex on Windows
-if(WIN32)
-  message(STATUS "ICI !! !")
+#if(WIN32)
   SET(Boost_USE_STATIC_LIBS     ON)
   add_definitions(-DBOOST_PYTHON_STATIC_LIB)
-else()  
-  SET(Boost_USE_STATIC_LIBS     OFF)
-endif()
+#else()  
+#  SET(Boost_USE_STATIC_LIBS     OFF)
+#endif()
 
 FIND_PACKAGE(Boost COMPONENTS python)
 IF(Boost_FOUND)

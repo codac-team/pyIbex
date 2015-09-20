@@ -28,6 +28,8 @@ void export_Bsc();
 void export_Ctc();
 void export_Function();
 void export_Separators();
+void export_Predicate();
+void export_Set();
 //void export_algorithms();
 
 
@@ -93,6 +95,8 @@ BOOST_PYTHON_MODULE(pyIbex)
     export_Ctc();
     export_Function();
     export_Separators();
+    export_Predicate();
+    export_Set();
     //export_algorithms();
     
 }

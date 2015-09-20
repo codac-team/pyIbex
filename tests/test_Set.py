@@ -22,7 +22,7 @@ class ToConsole(SetVisitor):
 	def __init__(self):
 		SetVisitor.__init__(self)
 
-	def visit_leaf(box, status):
+	def visit_leaf(self, box, status):
 
 		output =  str(box) + " : "
 
@@ -109,9 +109,9 @@ class TestSet(unittest.TestCase):
 	
 	def test_Set4(self):
 		pass
-		# set = Set("set-example");
-		# to_console = ToConsole()
-		# set.visit(to_console);
+		set = Set("set-example");
+		to_console = ToConsole()
+		set.visit(to_console);
 	 
 
 

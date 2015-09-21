@@ -65,6 +65,7 @@ cmake -G "Visual Studio 12 2013 Win64" -DBOOST_ROOT=$$$$$$$$ -DIBEX_ROOT=$$$$$$$
 msbuild /P:Configuration=Release INSTALL.vcxproj
 ```bash
 
+
 --------------------------
 Features
 --------------------------
@@ -150,5 +151,10 @@ TODO
 - [ ] add Function / Ctc / Sep Properties ( nb_vars, ...)
 - [X] inheritance with python objects
 	
+--------------------------
+Change Log
+--------------------------
+20/09/2015 : Add Set interface, add contract method with set for Sep
+
 
 	

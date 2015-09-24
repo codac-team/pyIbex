@@ -22,6 +22,9 @@ double getitem(Interval& X, int i){
         return IBEX_NAN;
 }
 
+Interval my_copy(Interval& itv){
+    return Interval(itv);
+}
 
 void assignItv(Interval& self, const Interval& other){
     self = other;
@@ -51,6 +54,7 @@ void assignItv(Interval& self, const Interval& other){
         .def( self |= self)
 
         .def( self + double())
+        .def( self += double())
         .def( other<double>() + self)
         .def( self - double())
         .def( double() - self)
@@ -105,7 +109,7 @@ void assignItv(Interval& self, const Interval& other){
         .def_readonly("NEG_REALS", &Interval::NEG_REALS)    
         .def( "bisect", &Interval::bisect, bisect_overloads())
         .def<double(Interval&, int)> ("__getitem__", getitem)
-            
+        .def( "copy", &my_copy)
         ;
 
         // External functions

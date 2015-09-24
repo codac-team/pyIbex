@@ -115,6 +115,10 @@ void assignItv(IntervalVector& self, const IntervalVector& other){
     self = other;
 }
 
+IntervalVector my_copy(IntervalVector& itv){
+    return IntervalVector(itv);
+}
+
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 1,2);
 
 void export_IntervalVector(){
@@ -188,6 +192,7 @@ void export_IntervalVector(){
             // .def( self + double())
 
             .def(repr(self))
+            .def("copy", &my_copy)
             .def("__len__", &IntervalVector::size )
             .def("size", &IntervalVector::size )
             .def( "empty", &IntervalVector::empty ).staticmethod("empty")

@@ -24,6 +24,9 @@
 #include "ibex_SepQInter.h"
 #include "ibex_SepCtcPairProj.h"
 
+#include "ibex_Set.h"
+#include "ibex_SetInterval.h"
+
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <boost/python.hpp>
@@ -74,8 +77,12 @@ boost::shared_ptr<SepPolygon> initFromList(const py::list& lst){
 void export_Separators(){
 
     typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
+    typedef void (Sep::*contract_1) (Set& , double);
+    typedef void (Sep::*contract_2) (SetInterval& , double);
     class_<SepWrap, boost::noncopyable>("Sep", init<int >())
             .def("separate", pure_virtual( separate(&Sep::separate)))
+            .def("contract", contract_1(&Sep::contract))
+            .def("contract", contract_2(&Sep::contract))
             .def("__or__", &__or, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >())
             .def("__and__", &__and, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >());
             ;

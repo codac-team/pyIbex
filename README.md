@@ -21,6 +21,7 @@ Prerequisites
 + a C++ compiler for your platform, e.g. [GCC](http://gcc.gnu.org "GCC home"), [MSVS 13](https://www.visualstudio.com "Visual Studio 2013"), [llvm](http://llvm.org "llvm")
 
 
+
 --------------------------
 Features
 --------------------------
@@ -195,5 +196,10 @@ TODO
 - [ ] add Function / Ctc / Sep Properties ( nb_vars, ...)
 - [X] inheritance with python objects
 	
+--------------------------
+Change Log
+--------------------------
+20/09/2015 : Add Set interface, add contract method with set for Sep
+
 
 	

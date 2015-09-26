@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #============================================================================
 #                                P Y I B E X
-# File        : test_Separators.cpp
+# File        : test_Separators.py
 # Author      : Benoit Desrochers
 # Copyright   : Benoit Desrochersss
 # License     : See the LICENSE file

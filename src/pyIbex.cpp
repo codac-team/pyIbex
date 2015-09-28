@@ -30,6 +30,7 @@ void export_Function();
 void export_Separators();
 void export_Predicate();
 void export_Set();
+void export_Paving();
 //void export_algorithms();
 
 
@@ -97,8 +98,8 @@ BOOST_PYTHON_MODULE(pyIbex)
     export_Separators();
     export_Predicate();
     export_Set();
+    export_Paving();
     //export_algorithms();
-    
 }
 
 

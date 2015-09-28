@@ -6,8 +6,10 @@ configure_file(
 
 INCLUDE_DIRECTORIES("core")
 file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
-
-
+INCLUDE_DIRECTORIES("Paving")
+set( CORE_SRCS ${CORE_SRCS} ./Paving/paving.cpp ./Paving/pyIbex_Paving.cpp)
+#add_subdirectory(Paving)
+#set(LIBS ${LIBS} Paving)
 
 PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS} )
 

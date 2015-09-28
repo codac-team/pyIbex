@@ -22,6 +22,8 @@ using namespace boost::python;
 #include "ibex_Exception.h"
 #include "ibex_Ctc.h"
 #include "ibex_Sep.h"
+#include "ibex_Pdc.h"
+
 void export_Interval();
 void export_IntervalVector();
 void export_Bsc();
@@ -31,6 +33,7 @@ void export_Separators();
 void export_Predicate();
 void export_Set();
 void export_Paving();
+void export_BoolInterval();
 //void export_algorithms();
 
 
@@ -81,6 +84,8 @@ BOOST_PYTHON_MODULE(pyIbex)
     Vector_from_python_list();
     Array_from_python<Ctc>();
     Array_from_python<Sep>();
+    Array_from_python<Pdc>();
+
 
     
     register_exception_translator<SyntaxError>(translateException_SyntaxError);
@@ -91,12 +96,13 @@ BOOST_PYTHON_MODULE(pyIbex)
 	register_exception_translator<InvalidIntervalVectorOp>(translateException_InvalidIntervalVectorOp);
 
     export_Interval();
+    export_BoolInterval();
     export_IntervalVector();    
     export_Bsc();
-    export_Ctc();
     export_Function();
-    export_Separators();
     export_Predicate();
+    export_Ctc();
+    export_Separators();
     export_Set();
     export_Paving();
     //export_algorithms();

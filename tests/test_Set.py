@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #============================================================================
 #                                P Y I B E X
 # File        : test_Set.py
@@ -32,8 +32,6 @@ class ToConsole(SetVisitor):
 			output += 'out'
 		elif status == MAYBE:
 			output += '?'
-		else:
-			exit(-1)
 		print(output)      
 
 class ToVibes(SetVisitor):

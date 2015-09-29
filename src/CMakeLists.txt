@@ -5,8 +5,10 @@ configure_file(
 
 
 INCLUDE_DIRECTORIES("core")
-INCLUDE_DIRECTORIES("E:\\pyzo2015a\\Lib\\site-packages\\numpy\\core\\include")
+#INCLUDE_DIRECTORIES("E:\\pyzo2015a\\Lib\\site-packages\\numpy\\core\\include")
 file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
+INCLUDE_DIRECTORIES("Paving")
+set( CORE_SRCS ${CORE_SRCS} ./Paving/paving.cpp ./Paving/pyIbex_Paving.cpp)
 
 find_package(NumPy REQUIRED)
 

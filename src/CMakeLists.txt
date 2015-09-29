@@ -8,10 +8,11 @@ INCLUDE_DIRECTORIES("core")
 file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
 
 
+find_package(NumPy REQUIRED)
 
 PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS} )
 
-target_link_libraries(pyIbex ${LIBS})
+target_link_libraries(pyIbex ${LIBS} ${PYTHON_LIBRARIES})
 
 install( TARGETS pyIbex DESTINATION "${PYTHON_INSTDIR}/pyIbex")
 install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/pyIbex" DESTINATION "${PYTHON_INSTDIR}")

@@ -18,6 +18,7 @@
 #include <ibex_CtcPolar.h>
 #include <ibex_CtcSegment.h>
 #include <ibex_CtcQInter.h>
+#include <ibex_CtcPixelMap.h>
 
 
 #include <boost/shared_ptr.hpp>
@@ -119,7 +120,12 @@ void export_Ctc(){
 
     // Export CtcQInterProjF
     class_<CtcQInterProjF, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcQInterProjF> >("CtcQInterProjF", no_init)
-//            .def("__init__", make_constructor(CtcQInterProjFFromList))
             .def(init<Array<Ctc>, int>()[with_custodian_and_ward<1,2>()])
             .def("contract", &CtcQInterProjF::contract);
+
+    // Export CtcQInterProjF
+    typedef void (CtcPixelMap::*contract_map) (IntervalVector&);
+    class_<CtcPixelMap, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcPixelMap> >("CtcPixelMap", no_init)
+            .def(init<PixelMap&>()[with_custodian_and_ward<1,2>()])
+            .def("contract", contract_map(&CtcPixelMap::contract));
 }

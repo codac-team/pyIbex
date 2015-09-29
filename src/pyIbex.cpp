@@ -9,9 +9,10 @@
 
 #include <string>
 #include <sstream>
-
 #include <boost/python.hpp>
 using namespace boost::python;
+#include <numpy/arrayobject.h>
+
 #include "pyIbex_to_python_converter.h"
 #include "ibex_IntervalVector.h"
 #include "ibex_UnknownFileException.h"
@@ -30,6 +31,7 @@ void export_Function();
 void export_Separators();
 void export_Predicate();
 void export_Set();
+int export_PixelMap();
 //void export_algorithms();
 
 
@@ -73,6 +75,7 @@ void translateException_InvalidIntervalVectorOp( const InvalidIntervalVectorOp& 
 
 BOOST_PYTHON_MODULE(pyIbex)
 {
+
 	// register converter
 	std_pair_to_python_converter<Interval, Interval>();
 	std_pair_to_python_converter<IntervalVector, IntervalVector>();
@@ -97,6 +100,7 @@ BOOST_PYTHON_MODULE(pyIbex)
     export_Separators();
     export_Predicate();
     export_Set();
+    export_PixelMap();
     //export_algorithms();
     
 }

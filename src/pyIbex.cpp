@@ -9,19 +9,19 @@
 
 #include <string>
 #include <sstream>
-#include <boost/python.hpp>
-using namespace boost::python;
 
+#include <boost/python.hpp>
 #include "pyIbex_to_python_converter.h"
+
 #include "ibex_IntervalVector.h"
 #include "ibex_UnknownFileException.h"
 #include "ibex_SyntaxError.h"
-// #include "ibex_EmptyBoxException.h"
 #include "ibex_NoBisectableVariableException.h"
 #include "ibex_DimException.h"
 #include "ibex_Exception.h"
 #include "ibex_Ctc.h"
 #include "ibex_Sep.h"
+#include "ibex_Pdc.h"
 void export_Interval();
 void export_IntervalVector();
 void export_Bsc();
@@ -30,10 +30,13 @@ void export_Function();
 void export_Separators();
 void export_Predicate();
 void export_Set();
+void export_Paving();
+void export_BoolInterval();
 int export_PixelMap();
 //void export_algorithms();
 
 
+using namespace boost::python;
 using namespace ibex;
 
 
@@ -74,7 +77,6 @@ void translateException_InvalidIntervalVectorOp( const InvalidIntervalVectorOp& 
 
 BOOST_PYTHON_MODULE(pyIbex)
 {
-
 	// register converter
 	std_pair_to_python_converter<Interval, Interval>();
 	std_pair_to_python_converter<IntervalVector, IntervalVector>();
@@ -82,6 +84,8 @@ BOOST_PYTHON_MODULE(pyIbex)
     Vector_from_python_list();
     Array_from_python<Ctc>();
     Array_from_python<Sep>();
+    Array_from_python<Pdc>();
+
 
     
     register_exception_translator<SyntaxError>(translateException_SyntaxError);
@@ -99,6 +103,7 @@ BOOST_PYTHON_MODULE(pyIbex)
     export_Separators();
     export_Predicate();
     export_Set();
+    export_Paving();
     export_PixelMap();
     //export_algorithms();
     

@@ -17,8 +17,10 @@ class TestPixelMap(unittest.TestCase):
 
 	def test_1(self):
 		a = np.ones((3, 4), np.uint64)
-		a = np.flipud(a.cumsum(axis=0).cumsum(axis=1))
+		a = np.flipud(a)
 		p = PixelMap2D(a, 0,0, 1, 1)
+		p.compute_integral_image()
+		p.print()
 		ctc = CtcPixelMap(p)
 		X0 = IntervalVector(2, [1, 2])
 		X1 = X0.copy()

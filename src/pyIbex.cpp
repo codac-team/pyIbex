@@ -11,7 +11,6 @@
 #include <sstream>
 #include <boost/python.hpp>
 using namespace boost::python;
-#include <numpy/arrayobject.h>
 
 #include "pyIbex_to_python_converter.h"
 #include "ibex_IntervalVector.h"

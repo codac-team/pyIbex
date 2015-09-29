@@ -34,7 +34,7 @@ namespace  ibex {
 struct SetVisitorWrap : SetVisitor, wrapper<SetVisitor> {
     SetVisitorWrap() : SetVisitor() {};
     void visit_leaf(const IntervalVector& box, BoolInterval status){
-        this->get_override("visit_leaf")(box, status);
+        this->get_override("visit_leaf")(box, boost::ref(status));
     }
 };
 

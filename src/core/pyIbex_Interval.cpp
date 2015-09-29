@@ -32,6 +32,9 @@ void assignItv(Interval& self, const Interval& other){
 
     BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 0,1)
 
+
+    Interval (*pow__)(const Interval& x, int n) = &ibex::pow;
+
     void export_Interval(){
         class_<Interval, boost::shared_ptr<ibex::Interval> >("Interval")
         .def(init<double, double>())
@@ -110,6 +113,7 @@ void assignItv(Interval& self, const Interval& other){
         .def( "bisect", &Interval::bisect, bisect_overloads())
         .def<double(Interval&, int)> ("__getitem__", getitem)
         .def( "copy", &my_copy)
+        .def( "__pow__", pow__)
         ;
 
         // External functions
@@ -144,6 +148,7 @@ void assignItv(Interval& self, const Interval& other){
         // Interval (*pow_2)(const Interval& x, double d)  = &ibex::pow;
         // Interval (*pow_3)(const Interval &x, const Interval &y) = &ibex::pow;
         def( "ipow", pow_1);
+        // def( "__pow__", pow_1);
         // def( "ipow", pow_2);
         // def( "ipow", pow_3);
 

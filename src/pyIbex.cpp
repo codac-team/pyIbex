@@ -97,6 +97,7 @@ BOOST_PYTHON_MODULE(pyIbex)
 
     export_Interval();
     export_IntervalVector();    
+		export_BoolInterval();
     export_Bsc();
     export_Ctc();
     export_Function();

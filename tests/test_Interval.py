@@ -285,6 +285,9 @@ class TestInterval(unittest.TestCase):
 		c = Interval(-2,4)
 		pyIbex.integer(c)
 
+	def test_pow(self):
+		a = Interval(2, 3)
+		self.assertEqual(a**2, Interval(4, 9))
 
 	def test_bwd_add(self):
 		c = Interval(-2,4)

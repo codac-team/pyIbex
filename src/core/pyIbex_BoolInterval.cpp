@@ -27,10 +27,11 @@ void export_BoolInterval(){
         .value( "EMPTY",  ibex::EMPTY)
         .export_values()
         ;
-    class_<BoolInterval, boost::shared_ptr<ibex::BoolInterval>  >("BoolInterval", init<>())
+    class_<BoolInterval, boost::noncopyable, boost::shared_ptr<ibex::BoolInterval>  >("BoolInterval", init<>())
             .def(init<bool>())
             .def(init<IBOOLEAN>() )
             .def(init<BoolInterval>())
+            .def(init<BoolInterval&>())
             .def(self & self)
             .def(self | self)
             .def(self &= self)

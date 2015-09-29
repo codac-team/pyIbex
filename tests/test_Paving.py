@@ -52,7 +52,7 @@ class myPdc(Pdc):
 		Pdc.__init__(self, 2)
 
 	def test(self, X):
-		a = X[0]^2 + X[1]^2
+		a = X[0]**2 + X[1]**2
 		R = Interval(0, 4)
 		if (a & R).is_empty():
 			return NO
@@ -67,12 +67,12 @@ class TestSet(unittest.TestCase):
 		X0 = IntervalVector(2, [-10, 10])
 		mypdc = myPdc()
 		
-		set1 = Paving(X0, YES);
+		set1 = Paving(X0, BoolInterval(YES));
 		set2 = Paving(X0, mypdc, 0.1)
-		set3 = Paving(X0) 
+		set3 = Paving(X0, BoolInterval(MAYBE)) 
 
 		op_binaire(set3, set2, set1, op_Xor)
-		set3.visit(ToVibes())
+		set3.visit(ToVibes(10))
 		
 
 	# def test_Set2(self):

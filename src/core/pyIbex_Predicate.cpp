@@ -29,7 +29,7 @@ using namespace ibex;
 struct PdcWrap : Pdc, wrapper<Pdc> {
     PdcWrap(int nb_var) : Pdc(nb_var) {}
     ibex::BoolInterval test(const IntervalVector& box){
-        this->get_override("test")( ::ref(box));
+        return this->get_override("test")( ::ref(box));
     }
 };
 

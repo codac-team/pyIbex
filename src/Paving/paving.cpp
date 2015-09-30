@@ -269,6 +269,7 @@ Paving& Paving::Sivia(ibex::Pdc &pdc, BOOLEAN_OP op, double eps)
     while (!L.empty())
     { int i=L.front();    L.pop_front();
         BoolInterval testBi=pdc.test(B[i]);
+        std::cerr << "pdc.test : " << testBi << std::endl;
         BoolInterval vali = op(val[i],testBi);
         if (vali!=MAYBE)
         { Remove_sons(i);  }

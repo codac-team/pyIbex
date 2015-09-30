@@ -36,13 +36,15 @@ class ToVibes(SetVisitor):
 		#  - NO (means "outside") is in red
 		#  - MAYBE (means "boundary") is in blue.
 	  
-
 		if status == YES:
+			print('YES')
 			color="r"
 		elif status == NO:
 			color="b"
+			print('NO')
 		else :
 			color="g"
+			print('MAYBE')
 	  
 		# Plot the box with Vibes
 		vibes.drawBox(framebox[0].lb(), framebox[0].ub(), framebox[1].lb(), framebox[1].ub(), color);
@@ -55,26 +57,40 @@ class myPdc(Pdc):
 		a = X[0]**2 + X[1]**2
 		R = Interval(0, 4)
 		if (a & R).is_empty():
-			return NO
+			return (NO)
 		elif a.is_subset(R):
-			return YES
+			return (YES)
 		return MAYBE
 
 class TestSet(unittest.TestCase):
 	def test_Paving1(self):
-
+		pass
 		# create the two-dimensional set (-oo,+oo)x(-oo,+oo)
-		X0 = IntervalVector(2, [-10, 10])
-		mypdc = myPdc()
+		# X0 = IntervalVector(2, [-10, 10])
+		# mypdc = myPdc()
 		
-		set1 = Paving(X0, BoolInterval(YES));
-		set2 = Paving(X0, mypdc, 0.1)
-		set3 = Paving(X0, BoolInterval(MAYBE)) 
+		# set1 = Paving(X0, BoolInterval(YES));
+		# set2 = Paving(X0, mypdc, 0.1)
+		# set3 = Paving(X0, BoolInterval(MAYBE)) 
 
-		op_binaire(set3, set2, set1, op_Xor)
-		set3.visit(ToVibes(10))
-		
+		# op_binaire(set3, set2, set1, op_Xor)
+		# vibes.beginDrawing()
+		# set3.visit(ToVibes(10))
+		# vibes.endDrawing()
 
+	def test_Paving2(self):
+		P = IntervalVector(2, [-4, 4])
+		A = Paving(P,YES);
+		# B = Paving(P,BoolInterval(YES));
+		f = Function("x", "y", "x^2 + y^2 - 4")
+		# pdc = PdcFwdBwd(f, CmpOp.LEQ)
+		pdc = myPdc()
+
+		A.Sivia(pdc,op_And,0.3);
+		vibes.beginDrawing()
+		vibes.newFigure('Test')
+		A.visit(ToVibes(10))
+		vibes.endDrawing()
 	# def test_Set2(self):
 
 	# 	vibes.beginDrawing ();

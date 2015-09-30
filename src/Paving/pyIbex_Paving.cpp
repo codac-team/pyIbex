@@ -66,9 +66,9 @@ void  op_unaire_wrapper(Paving& Z,Paving& X,BoolOp bool_op){
     }
 }
 
-Paving& Sivia_wrapper(Paving& X, Pdc& pdc,BoolOp bool_op,double eps){
+void Sivia_wrapper(Paving& X, Pdc& pdc,BoolOp bool_op,double eps){
     BOOLEAN_OP bin_op = switch_BoolOpBinaire(bool_op);
-    return X.Sivia(pdc, bin_op, eps);
+    X.Sivia(pdc, bin_op, eps);
 }
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(visit_overload, visit, 1,2)
@@ -96,7 +96,8 @@ void export_Paving(){
         .def( "Clean", &Paving::Clean, return_value_policy<copy_non_const_reference>())
         .def( "Reunite", &Paving::Reunite, return_value_policy<copy_non_const_reference>())
         .def( "contains", &Paving::contains)
-        .def( "Sivia", &Sivia_wrapper, return_value_policy<copy_non_const_reference>())
+        // .def( "Sivia", &Sivia_wrapper, return_value_policy<copy_non_const_reference>())
+        .def( "Sivia", &Sivia_wrapper)
         .def( "Clear", &Paving::Clear, return_value_policy<copy_non_const_reference>())
         .def( "visit", &Paving::visit, visit_overload())
         .def( "change", &Paving::change)

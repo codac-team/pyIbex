@@ -40,7 +40,7 @@ Paving::Paving(ibex::IntervalVector &v, ibex::Pdc &pdc, double eps)
     right.push_back(-1);
     val.push_back(YES);
     Sivia(pdc, And, eps);
-//    Reunite();
+    Reunite();
     Clean();
 
 };
@@ -74,12 +74,18 @@ Paving& Paving::Clear(BoolInterval b)        // After Clear(), the Paving contai
 
 void Paving::visit(ibex::SetVisitor &visitor, int k)
 {
+    if(k == 0){
+        visitor.pre_visit();
+    }
     visitor.visit_node(B[k]);
     if(left[k] == -1 || right[k] == -1){
         visitor.visit_leaf(B[k], val[k]);
     } else {
         visit(visitor, left[k]);
         visit(visitor, right[k]);
+    }
+    if(k == 0){
+        visitor.post_visit();
     }
 }
 
@@ -164,29 +170,52 @@ Paving& Paving::Expand(int i){
 
 
 //----------------------------------------------------------------------
-BoolInterval  Inside(Paving& Z, const IntervalVector& X,int k=0)   // returns 0, if outside, 1 if inside, EMPTY if X is EMPTY, and MAYBE otherwize
-{
-    if (X.is_empty())
-        return ibex::EMPTY; // A cause de l'Union ci-dessous
-//    if (!X.is_subset(Z.B[k]))
-//        return MAYBE; // n'arrive jamais, sauf pour k=0
-    if (Z.val[k]!=MAYBE) return Z.val[k];
-    int kleft=Z.left[k];
-    int kright=Z.right[k];
-    if ((kleft!=-1)||(kright!=-1))
-    { IntervalVector Xleft =X & Z.B[kleft];
-        IntervalVector Xright=X & Z.B[kright];
-        BoolInterval I1= Inside(Z,Xleft,kleft);
-        BoolInterval I2= Inside(Z,Xright,kright);
+// BoolInterval  Inside(Paving& Z, const IntervalVector& X,int k=0)   // returns 0, if outside, 1 if inside, EMPTY if X is EMPTY, and MAYBE otherwize
+// {
+//     if (X.is_empty())
+//         return ibex::EMPTY; // A cause de l'Union ci-dessous
+// //    if (!X.is_subset(Z.B[k]))
+// //        return MAYBE; // n'arrive jamais, sauf pour k=0
+//     if (Z.val[k]!=MAYBE) return Z.val[k];
+//     int kleft=Z.left[k];
+//     int kright=Z.right[k];
+//     if ((kleft!=-1)||(kright!=-1))
+//     { IntervalVector Xleft =X & Z.B[kleft];
+//         IntervalVector Xright=X & Z.B[kright];
+//         BoolInterval I1= Inside(Z,Xleft,kleft);
+//         BoolInterval I2= Inside(Z,Xright,kright);
 
-        return(ibex::Union(I1 ,I2));
-    }
-    return (MAYBE);
+//         return(ibex::Union(I1 ,I2));
+//     }
+//     return (MAYBE);
+// }
+
+//Afin de traiter un problème du type f-1(A) subset A, A in B
+//faire un algo récursif du type  (A Verfier l'algo)
+//Pour le Tester, inverser tout d'abord un pavage.
+BoolInterval  Inside(Paving& Z, const IntervalVector& X,int k=0)   // returns 0, if outside, 1 if inside, empty if X is empty, and iperhaps otherwize
+{  if (X.is_empty())
+        return EMPTY; // A cause de l'Union ci-dessous
+   if (!X.is_subset(Z.B[k]))
+      return MAYBE; // n'arrive jamais, sauf pour k=0
+   if (Z.val[k]!=MAYBE) return Z.val[k];
+   int kleft=Z.left[k];
+   int kright=Z.right[k];
+   if ((kleft!=-1)||(kright!=-1))
+   { IntervalVector Xleft =X & Z.B[kleft];
+     IntervalVector Xright=X & Z.B[kright];
+     BoolInterval I1= Inside(Z,Xleft,kleft);
+     BoolInterval I2= Inside(Z,Xright,kright);
+
+     return(Union(I1,I2));
+   }
+   return (MAYBE);
 }
+
 //----------------------------------------------------------------------
 ibex::BoolInterval Paving::contains(const ibex::IntervalVector &box)
 {
-    return Inside(*this, box);
+    return Inside(*this, box, 0);
 }
 //----------------------------------------------------------------------
 // void Contract_distance_gt_Paving(Paving& A, double z, IntervalVector& X,int k) //Contract X with respect to distance to a subPaving lower than z.
@@ -239,7 +268,7 @@ void  op_binaire(Paving& Z, Paving& X,Paving& Y, BOOLEAN_OP op,int k,int i,int j
         op_binaire(Z,X,Y,op,Z.left[k],ileft,jleft);
         op_binaire(Z,X,Y,op,Z.right[k],iright,jright);
     }
-//    if (k==0) {Z.Clean();Z.Reunite();};
+   if (k==0) {Z.Clean();Z.Reunite();};
     return;
 }
 //----------------------------------------------------------------------
@@ -256,7 +285,7 @@ void  op_unaire(Paving& Z, Paving& X, BOOLEAN_OP_UN op,int k,int i)
         op_unaire(Z,X,op,Z.left[k],ileft);
         op_unaire(Z,X,op,Z.right[k],iright);
     }
-//    if (k==0) {Z.Clean();Z.Reunite();};
+   if (k==0) {Z.Clean();Z.Reunite();};
     return;
 }
 
@@ -269,7 +298,6 @@ Paving& Paving::Sivia(ibex::Pdc &pdc, BOOLEAN_OP op, double eps)
     while (!L.empty())
     { int i=L.front();    L.pop_front();
         BoolInterval testBi=pdc.test(B[i]);
-        std::cerr << "pdc.test : " << testBi << std::endl;
         BoolInterval vali = op(val[i],testBi);
         if (vali!=MAYBE)
         { Remove_sons(i);  }
@@ -282,7 +310,7 @@ Paving& Paving::Sivia(ibex::Pdc &pdc, BOOLEAN_OP op, double eps)
         val[i]=vali;
     };
     Clean();
-//    Reunite();
+   Reunite();
     return (*this);
 }
 

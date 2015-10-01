@@ -23,7 +23,8 @@ typedef const char* cc_ptr;
         .def(repr(self))
         .def( "eval" , &Function::eval) 
         .def( "eval_vector" , &Function::eval_vector) 
-        .def( "eval_matrix" , &Function::eval_matrix) 
+        .def( "eval_matrix" , &Function::eval_matrix)
+        .def( "nb_arg", &Function::nb_arg)
         // .def( "gradient" , &Function::gradient) 
         // .def( "jacobian" , &Function::jacobian) 
         ;

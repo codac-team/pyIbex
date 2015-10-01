@@ -87,7 +87,7 @@ void export_Paving(){
     .export_values()
     ;
 
-    class_<Paving, boost::noncopyable, boost::shared_ptr<Paving>  >("Paving", no_init)
+    class_<Paving, boost::shared_ptr<Paving>  >("Paving", no_init)
         .def(init<int>())
         .def(init<IntervalVector&, BoolInterval> ())
         .def(init<IntervalVector&, Pdc&, double>())

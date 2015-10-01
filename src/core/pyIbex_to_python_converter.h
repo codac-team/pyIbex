@@ -16,7 +16,6 @@
 
 #include <ibex_Vector.h>
 #include <ibex_Array.h>
-//#include <ibex_Ctc.h>
 #include <vector>
 namespace py = boost::python;
 

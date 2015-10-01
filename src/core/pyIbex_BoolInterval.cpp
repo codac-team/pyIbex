@@ -68,7 +68,7 @@ void export_BoolInterval(){
 
     // boost::python::scope().attr("NO") = const_NO;
 
-    class_<BoolInterval, boost::noncopyable, boost::shared_ptr<ibex::BoolInterval>  >("BoolInterval", init<>())
+    class_<BoolInterval, boost::shared_ptr<ibex::BoolInterval>  >("BoolInterval", init<>())
             .def(init<bool>())
             .def(init<ibex::IBOOLEAN>() )
             .def(init<BoolInterval>())

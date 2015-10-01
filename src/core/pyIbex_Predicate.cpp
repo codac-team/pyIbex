@@ -15,6 +15,7 @@
 #include "ibex_PdcOr.h"
 #include "ibex_PdcCleared.h"
 #include "ibex_PdcFwdBwd.h"
+#include "ibex_PdcNot.h"
 
 
 #include "pyIbex_to_python_converter.h"
@@ -25,7 +26,7 @@ namespace py = boost::python;
 
 using namespace ibex;
 
-
+namespace ibex {
 struct PdcWrap : Pdc, wrapper<Pdc> {
     PdcWrap(int nb_var) : Pdc(nb_var) {}
     ibex::BoolInterval test(const IntervalVector& box){
@@ -33,6 +34,7 @@ struct PdcWrap : Pdc, wrapper<Pdc> {
     }
 };
 
+}
 PdcOr* __or(Pdc& c1, Pdc& c2){ return (new PdcOr(c1, c2)); }
 PdcAnd* __and(Pdc& c1, Pdc& c2){ return (new PdcAnd(c1, c2)); }
 
@@ -68,6 +70,9 @@ void export_Predicate(){
             .def(init<Function&, CmpOp>()[with_custodian_and_ward<1, 2>()])
             .def("test", &PdcFwdBwd::test)
             ;
-
+    class_<PdcNot, bases<Pdc>, boost::noncopyable, boost::shared_ptr<ibex::PdcNot> >("PdcNot", no_init)
+            .def(init<Pdc&>()[with_custodian_and_ward<1, 2>()])
+            .def("test", &PdcNot::test)
+            ;
 
 }

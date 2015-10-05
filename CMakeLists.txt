@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-set(PACKAGE_VERSION "0.9.0")
+set(PACKAGE_VERSION "1.1.0")
 
 # build type
 IF(NOT CMAKE_BUILD_TYPE)

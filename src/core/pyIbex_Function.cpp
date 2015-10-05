@@ -17,15 +17,19 @@ using namespace boost::python;
 using namespace ibex;
 
 typedef const char* cc_ptr;
-    void export_Function(){
-        class_<Function, boost::noncopyable, boost::shared_ptr<ibex::Function> >("Function")
-        .def(init<cc_ptr, optional< cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr> >())
-        .def(repr(self))
-        .def( "eval" , &Function::eval) 
-        .def( "eval_vector" , &Function::eval_vector) 
-        .def( "eval_matrix" , &Function::eval_matrix)
-        .def( "nb_arg", &Function::nb_arg)
-        // .def( "gradient" , &Function::gradient) 
-        // .def( "jacobian" , &Function::jacobian) 
-        ;
+typedef void (Function::*backward_1) (const IntervalVector&, IntervalVector&) const;
+
+void export_Function(){
+    class_<Function, boost::noncopyable, boost::shared_ptr<ibex::Function> >("Function")
+    .def(init<cc_ptr, optional< cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr> >())
+    .def(repr(self))
+    .def( "eval" , &Function::eval) 
+    .def( "eval_vector" , &Function::eval_vector) 
+    .def( "eval_matrix" , &Function::eval_matrix)
+
+    .def( "backward", backward_1(&Function::backward))
+    .def( "nb_arg", &Function::nb_arg)
+    // .def( "gradient" , &Function::gradient) 
+    // .def( "jacobian" , &Function::jacobian) 
+    ;
 }

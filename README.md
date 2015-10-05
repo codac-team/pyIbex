@@ -199,6 +199,7 @@ TODO
 --------------------------
 Change Log
 --------------------------
+04/10/2015 : Add predicate, Paving
 20/09/2015 : Add Set interface, add contract method with set for Sep
 
 

@@ -72,6 +72,10 @@ void Sivia_wrapper(Paving& X, Pdc& pdc,BoolOp bool_op,double eps){
 }
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(visit_overload, visit, 1,2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(change_overload, change, 2,3)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(ctcInside_overload, ctcInside, 1,2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(ctcOutside_overload, ctcOutside, 1,2)
+
 void export_Paving(){
     // Export comparaison constant
     enum_<BoolOp>("BoolOp")
@@ -96,11 +100,13 @@ void export_Paving(){
         .def( "Clean", &Paving::Clean, return_value_policy<copy_non_const_reference>())
         .def( "Reunite", &Paving::Reunite, return_value_policy<copy_non_const_reference>())
         .def( "contains", &Paving::contains)
+        .def( "ctcOutside", &Paving::ctcOutside, ctcOutside_overload())
+        .def( "ctcInside", &Paving::ctcInside, ctcInside_overload())
         // .def( "Sivia", &Sivia_wrapper, return_value_policy<copy_non_const_reference>())
         .def( "Sivia", &Sivia_wrapper)
         .def( "Clear", &Paving::Clear, return_value_policy<copy_non_const_reference>())
         .def( "visit", &Paving::visit, visit_overload())
-        .def( "change", &Paving::change)
+        .def( "change", &Paving::change, change_overload())
         .def( repr(self))
         ;
     def( "op_binaire", &op_binaire_wrapper);

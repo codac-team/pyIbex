@@ -45,6 +45,36 @@ Paving::Paving(ibex::IntervalVector &v, ibex::Pdc &pdc, double eps)
 
 };
 
+void Paving::ctcInside(IntervalVector& box, int k){
+
+    if (val[k] == YES)
+        box.set_empty();
+    else if (left[k] == -1 || right[k] == -1)
+        box &= B[k];
+    else {
+        IntervalVector cp1(box);
+        IntervalVector cp2(box);
+        ctcInside(cp1, left[k]);
+        ctcInside(cp2, right[k]);
+        box = cp1 | cp2;
+    }
+}
+
+void Paving::ctcOutside(IntervalVector& box, int k){
+    if (val[k] == NO){
+        box.set_empty();
+    }
+    else if (left[k] == -1 || right[k] == -1)
+        box &= B[k];
+    else {
+        IntervalVector cp1(box);
+        IntervalVector cp2(box);
+        ctcOutside(cp1, left[k]);
+        ctcOutside(cp2, right[k]);
+        box &= cp1 | cp2;
+    }
+}
+
 //    Paving::~Paving ();
 
 //----------------------------------------------------------------------
@@ -196,8 +226,8 @@ Paving& Paving::Expand(int i){
 BoolInterval  Inside(Paving& Z, const IntervalVector& X,int k=0)   // returns 0, if outside, 1 if inside, empty if X is empty, and iperhaps otherwize
 {  if (X.is_empty())
         return EMPTY; // A cause de l'Union ci-dessous
-   if (!X.is_subset(Z.B[k]))
-      return MAYBE; // n'arrive jamais, sauf pour k=0
+   // if (!X.is_subset(Z.B[k]))
+      // return MAYBE; // n'arrive jamais, sauf pour k=0
    if (Z.val[k]!=MAYBE) return Z.val[k];
    int kleft=Z.left[k];
    int kright=Z.right[k];

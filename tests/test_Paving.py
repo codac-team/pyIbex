@@ -91,6 +91,23 @@ class TestSet(unittest.TestCase):
 		vibes.newFigure('Test')
 		A.visit(ToVibes(10))
 		vibes.endDrawing()
+
+	def test_Paving3(self):
+		P = IntervalVector(2, [-4, 4])
+		pdc = myPdc()
+		A = Paving(P,YES);
+		A.Sivia(pdc,op_And,0.3);
+		
+		vibes.beginDrawing()
+		vibes.newFigure("test3")
+		# P = IntervalVector(2, [-4, -3.9])
+		A.visit(ToVibes(10))
+		vibes.drawBox(P[0][0], P[0][1], P[1][0], P[1][1], 'r')
+
+		print(P)
+		A.ctcOutside(P)
+		print(P)
+		vibes.drawBox(P[0][0], P[0][1], P[1][0], P[1][1], 'g')
 	# def test_Set2(self):
 
 	# 	vibes.beginDrawing ();

@@ -63,15 +63,3 @@ if __name__ == '__main__':
         Y.Sivia(pdcY,op_And,eps);
         X=Sqcap(Y,X);
         X.visit(ToVibes(10, "Sqcap(Y,X)x10"))
-    # for (int k=1;k<=10;k++)
-    #   { paving Y(P,itrue);
-    #     Y.Sivia(Rot,X,And,eps);
-    #     X=Sqcap(Y,X);
-    #     // DrawPaving(X, (std::string("XSQ") + std::to_string(k)).c_str());
-    #     // R8.DrawPaving(X);
-    #   }
-    # // R8.image->Picture->SaveToFile("propag_X4.bmp");
-
-
-#     // Finfo.close();
-# } ;

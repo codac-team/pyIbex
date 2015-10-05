@@ -21,6 +21,7 @@ class TestSeparator(unittest.TestCase):
 		ctcIn = CtcFwdBwd(f, CmpOp.GEQ)
 		ctcOut = CtcFwdBwd(f, CmpOp.LEQ)
 		sep = SepCtcPair(ctcIn, ctcOut)
+		self.assertEqual(sep.nb_var, 2)
 		b0 = IntervalVector([[-10, -6],  [-10, 10]])
 		b1 = IntervalVector([[-2, 2], [-2, 2]])
 		

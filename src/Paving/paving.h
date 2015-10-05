@@ -40,6 +40,9 @@ public:
     Paving(IntervalVector& v,BoolInterval b) ;
     Paving(IntervalVector&v, Pdc& pdc, double eps);
 
+    void ctcOutside(IntervalVector &box, int k = 0);
+    void ctcInside(IntervalVector &box, int k = 0);
+
     Paving& Expand(int);
     Paving& Remove_sons(int i); 
     Paving& Clean();

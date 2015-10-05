@@ -55,6 +55,8 @@ struct BoolInterval_from_python_IBOOLEAN
   }
 };
 
+
+
 void export_BoolInterval(){
 
     // Export comparaison constant
@@ -79,6 +81,7 @@ void export_BoolInterval(){
             .def(self |= self)
             .def(self == self)
             .def(self != self)
+            .def(repr(self))
             ;
     // to_python_converter<ibex::BoolInterval,BoolInterval_from_python_IBOOLEAN>();
     BoolInterval_from_python_IBOOLEAN();

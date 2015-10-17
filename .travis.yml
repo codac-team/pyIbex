@@ -1,24 +1,22 @@
-language: python
+language: c++
+
+compiler:
+  - gcc
+  - clang
+
 python:
-  - "2.7"
+  - "3.4"
 # 
 before_install:
-  #- sudo apt-get update -q
+  - sudo apt-get update -q
   - sudo apt-get install -y --force-yes python3.4 flex bison gcc g++ coinor-libclp-dev libcpptest-dev pkg-config
-  - sudo apt-get install libboost-dev libboost-python-dev
+  - sudo apt-get install libpython3.4-dev libboost-python1.55-dev 
+
 # command to install dependencies
 install: 
-  - git clone https://github.com/ibex-team/ibex-lib.git
-  - cd ./ibex-lib && ./waf configure --enable-shared && sudo ./waf install -j4 && cd  ../
-  - export PKG_CONFIG_PATH=/usr/local/share/pkgconfig/
-  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
-  - sudo ldconfig
-  - ./build.sh
-#  - sudo ./waf install
-#  - cd tests/ && make && cd ..
+  - ./build_Ibex4pyIbex.sh
+
 # command to run tests
 script:  
-#  - __build__/examples/optimizer04 benchs/benchs-optim/coconutbenchmark-library1/ex2_1_9.bch acidhc4 compo smearsumrel 1.e-8 1.e-8 10 1
-#  - cd tests/ && ./utest
-  - cd tests/ python ./test_Interval.py
+  - ./build.sh
 

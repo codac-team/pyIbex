@@ -51,29 +51,50 @@ public:
     BoolInterval contains(const IntervalVector& box);
 
     Paving& Sivia(Pdc& pdc,BOOLEAN_OP op,double eps);
+    Paving& Sivia2(Pdc& pdc,BOOLEAN_OP op,double eps);
     // Paving& Sivia(IntervalVector(*F)(const IntervalVector&),Paving& X,BoolInterval(*op)(const BoolInterval&, const BoolInterval&),double eps);
 
     Paving& Clear(BoolInterval);
     void visit(ibex::SetVisitor & visitor, int k=0);
 
     void change(BoolInterval src, BoolInterval dst, int k=0);
+    bool is_empty();
 
     friend ostream& operator<<(ostream&, const Paving&);
 
     //~Paving ();
     //Paving& operator=(const Paving&);
+    bool is_leaf(int k);
+private:
 };
 
-    void  op_binaire(Paving& Z,Paving& X,Paving& Y, BOOLEAN_OP op,int k=0, int i=0,int j=0) ;
-    void  op_unaire(Paving& Z,Paving& X,BOOLEAN_OP_UN op,int k=0,int i=0);
-    void Contract_distance_gt_Paving(Paving& Z, double z, IntervalVector& X, int k=0);
-    void  Set_Contractor_Inter(Paving& X,Paving& Y,Paving& Z);
-    void  Set_Contractor_Subset(Paving& X,Paving& Y);
-    void  Set_Contractor_Disjoint(Paving& X,Paving& Y);
-    void  Set_Contractor_Overlap(Paving& X,Paving& Y);
-    BoolInterval Overlap(Paving& X,Paving& Y);
-    Paving  Sqcap(Paving& X,Paving& Y);
-    Paving  Complement(Paving& X);
+
+//=========================================================================================
+//=========================  Inline implementation  =======================================
+//=========================================================================================
+inline bool Paving::is_leaf(int k){
+    return (this->left[k] == -1 || this->right[k] == -1);
+}
+
+inline bool Paving::is_empty(){
+    for( int i = 0; i < B.size(); i++){
+        if (val[i] == EMPTY)
+            return true;
+    }
+    return false;
+    // return (B.size() == 1  && val[0] == EMPTY);
+}
+
+void  op_binaire(Paving& Z,Paving& X,Paving& Y, BOOLEAN_OP op,int k=0, int i=0,int j=0) ;
+void  op_unaire(Paving& Z,Paving& X,BOOLEAN_OP_UN op,int k=0,int i=0);
+void Contract_distance_gt_Paving(Paving& Z, double z, IntervalVector& X, int k=0);
+void  Set_Contractor_Inter(Paving& X,Paving& Y,Paving& Z);
+void  Set_Contractor_Subset(Paving& X,Paving& Y);
+void  Set_Contractor_Disjoint(Paving& X,Paving& Y);
+void  Set_Contractor_Overlap(Paving& X,Paving& Y);
+BoolInterval Overlap(Paving& X,Paving& Y);
+Paving  Sqcap(Paving& X,Paving& Y);
+Paving  Complement(Paving& X);
 
 } // end Namespace Ibex;
 //----------------------------------------------------------

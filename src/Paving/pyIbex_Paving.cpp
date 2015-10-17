@@ -71,6 +71,18 @@ void Sivia_wrapper(Paving& X, Pdc& pdc,BoolOp bool_op,double eps){
     X.Sivia(pdc, bin_op, eps);
 }
 
+void Sivia2_wrapper(Paving& X, Pdc& pdc,BoolOp bool_op,double eps){
+    BOOLEAN_OP bin_op = switch_BoolOpBinaire(bool_op);
+    X.Sivia2(pdc, bin_op, eps);
+}
+
+Paving my_copy(Paving& p){
+    return Paving(p);
+} 
+
+IntervalVector getX0(Paving &p){
+    return p.B[0];
+}
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(visit_overload, visit, 1,2)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(change_overload, change, 2,3)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(ctcInside_overload, ctcInside, 1,2)
@@ -95,6 +107,7 @@ void export_Paving(){
         .def(init<int>())
         .def(init<IntervalVector&, BoolInterval> ())
         .def(init<IntervalVector&, Pdc&, double>())
+        .def( "copy", &my_copy)
         .def( "Expand", &Paving::Expand, return_value_policy<copy_non_const_reference>())
         .def( "Remove_sons", &Paving::Remove_sons, return_value_policy<copy_non_const_reference>())
         .def( "Clean", &Paving::Clean, return_value_policy<copy_non_const_reference>())
@@ -104,9 +117,12 @@ void export_Paving(){
         .def( "ctcInside", &Paving::ctcInside, ctcInside_overload())
         // .def( "Sivia", &Sivia_wrapper, return_value_policy<copy_non_const_reference>())
         .def( "Sivia", &Sivia_wrapper)
+        .def( "Sivia2", &Sivia2_wrapper)
         .def( "Clear", &Paving::Clear, return_value_policy<copy_non_const_reference>())
         .def( "visit", &Paving::visit, visit_overload())
         .def( "change", &Paving::change, change_overload())
+        .def( "is_empty", &Paving::is_empty)
+        .def("X0", &getX0)
         .def( repr(self))
         ;
     def( "op_binaire", &op_binaire_wrapper);

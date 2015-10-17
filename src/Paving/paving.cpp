@@ -5,6 +5,10 @@ using std::list;
 using ibex::And;
 using ibex::Or;
 using ibex::Restrict;
+using std::cerr;
+using std::endl;
+
+//#include "vibes.h"
 
 //IntervalVector(*F_sivia) (const IntervalVector&);  // Global variable used in SIVIA;
 //Paving X_sivia;
@@ -40,7 +44,7 @@ Paving::Paving(ibex::IntervalVector &v, ibex::Pdc &pdc, double eps)
     right.push_back(-1);
     val.push_back(YES);
     Sivia(pdc, And, eps);
-    Reunite();
+    // Reunite();
     Clean();
 
 };
@@ -224,22 +228,27 @@ Paving& Paving::Expand(int i){
 //faire un algo récursif du type  (A Verfier l'algo)
 //Pour le Tester, inverser tout d'abord un pavage.
 BoolInterval  Inside(Paving& Z, const IntervalVector& X,int k=0)   // returns 0, if outside, 1 if inside, empty if X is empty, and iperhaps otherwize
-{  if (X.is_empty())
+{  
+    if (X.is_empty()){
         return EMPTY; // A cause de l'Union ci-dessous
-   // if (!X.is_subset(Z.B[k]))
-      // return MAYBE; // n'arrive jamais, sauf pour k=0
-   if (Z.val[k]!=MAYBE) return Z.val[k];
-   int kleft=Z.left[k];
-   int kright=Z.right[k];
-   if ((kleft!=-1)||(kright!=-1))
-   { IntervalVector Xleft =X & Z.B[kleft];
-     IntervalVector Xright=X & Z.B[kright];
-     BoolInterval I1= Inside(Z,Xleft,kleft);
-     BoolInterval I2= Inside(Z,Xright,kright);
-
-     return(Union(I1,I2));
+    }
+    if (!X.is_subset(Z.B[k]))
+        return MAYBE; // n'arrive jamais, sauf pour k=0
+    // if( X == Z.B[k])
+        // return Z.val[k];
+    if( Z.is_leaf(k) ){
+        return Z.val[k];
+    } else {
+        int kleft=Z.left[k];
+        int kright=Z.right[k];
+        IntervalVector Xleft  = X & Z.B[kleft];
+        if (Xleft.is_flat()) Xleft.set_empty();
+        IntervalVector Xright = X & Z.B[kright];
+        if (Xright.is_flat()) Xright.set_empty();
+        BoolInterval I1= Inside(Z,Xleft,kleft);
+        BoolInterval I2= Inside(Z,Xright,kright);
+        return(Union(I1,I2));
    }
-   return (MAYBE);
 }
 
 //----------------------------------------------------------------------
@@ -284,21 +293,60 @@ ibex::BoolInterval Paving::contains(const ibex::IntervalVector &box)
 // Operation between Pavings
 void  op_binaire(Paving& Z, Paving& X,Paving& Y, BOOLEAN_OP op,int k,int i,int j)
 {
-    if (k==0) {Z.B[0]=X.B[0]; Z.Clear(MAYBE);};
-    BoolInterval vali = op(X.val[i],Y.val[j]);
-    Z.val[k]=vali;
+    // if (k==0) {Z.B[0]=X.B[0]; Z.Clear(MAYBE);};
+    // BoolInterval vali = op(X.val[i],Y.val[j]);
+    // if (X.val[i] == YES && Y.val[j] == NO){
+    //     std::cerr << "Error " << vali << " " << X.is_leaf(i) << " " << Y.is_leaf(j) << std::endl;
+    // }
+    Z.val[k]=MAYBE;
+
     int ileft=X.left[i];
     int jleft=Y.left[j];
     int iright=X.right[i];
     int jright=Y.right[j];
-    if (((ileft!=-1)||(jleft!=-1))&&(vali==MAYBE))
-    { if (ileft==-1) {ileft=i; iright=i;}
-        if (jleft==-1) {jleft=j; jright=j;}
+
+
+    if( X.is_leaf(i) && Y.is_leaf(j)){
+        Z.val[k] = op(X.val[i],Y.val[j]);
+    } else {
         Z.Expand(k);
-        op_binaire(Z,X,Y,op,Z.left[k],ileft,jleft);
-        op_binaire(Z,X,Y,op,Z.right[k],iright,jright);
+        if (X.is_leaf(i)){
+            X.Expand(i);
+            // X.val[X.left[i]] = X.val[i];
+            // X.val[X.right[i]] = X.val[i];
+        }
+        if( Y.is_leaf(j)){
+            Y.Expand(j);
+            // Y.val[Y.left[j]] = X.val[j];
+            // Y.val[Y.right[j]] = X.val[j];
+        }
+        op_binaire(Z,X,Y,op,Z.left[k],X.left[i],Y.left[j]);
+        op_binaire(Z,X,Y,op,Z.right[k],X.right[i],Y.right[j]);
+
     }
-   if (k==0) {Z.Clean();Z.Reunite();};
+    // } else if (vali == MAYBE){
+        // if ( X.is_leaf(i) && !Y.is_leaf(j) ){
+        //     Z.Expand(k);
+        //     op_binaire(Z,X,Y,op,Z.left[k],i,Y.left[j]);
+        //     op_binaire(Z,X,Y,op,Z.right[k],i,Y.right[j]);
+        // } else if ( !X.is_leaf(i) && Y.is_leaf(j) ){
+        //     Z.Expand(k);
+        //     op_binaire(Z,X,Y,op,Z.left[k],X.left[i],j);
+        //     op_binaire(Z,X,Y,op,Z.right[k],X.right[i],j);
+        // } else if ( !X.is_leaf(i) && !Y.is_leaf(j) ){
+        //     Z.Expand(k);
+        //     op_binaire(Z,X,Y,op,Z.left[k],ileft,jleft);
+        //     op_binaire(Z,X,Y,op,Z.right[k],iright,jright);
+        // }
+    // }
+    // if (((ileft!=-1)||(jleft!=-1))&&(vali==MAYBE))
+    // { if (ileft==-1) {ileft=i; iright=i;}
+    //     if (jleft==-1) {jleft=j; jright=j;}
+    //     Z.Expand(k);
+    //     op_binaire(Z,X,Y,ibex::Inter,Z.left[k],ileft,jleft);
+    //     op_binaire(Z,X,Y,ibex::Inter,Z.right[k],iright,jright);
+    // }
+    // if (k==0) {Z.Clean();Z.Reunite();};
     return;
 }
 //----------------------------------------------------------------------
@@ -320,27 +368,89 @@ void  op_unaire(Paving& Z, Paving& X, BOOLEAN_OP_UN op,int k,int i)
 }
 
 
+
 //----------------------------------------------------------------------
 Paving& Paving::Sivia(ibex::Pdc &pdc, BOOLEAN_OP op, double eps)
 {
+    int k = 0;
+    int j = 0;
     list<int> L;
     L.push_back(0);
     while (!L.empty())
     { int i=L.front();    L.pop_front();
+        k++;
         BoolInterval testBi=pdc.test(B[i]);
         BoolInterval vali = op(val[i],testBi);
         if (vali!=MAYBE)
         { Remove_sons(i);  }
         else
-            if  ((B[i].max_diam()>eps) && (testBi==MAYBE))    //Luc
-            {  Expand(i);
+            if  ((B[i].max_diam()>eps) && (testBi==MAYBE)){    //Luc
+                Expand(i);
+                // std::cerr << B[i] << std::endl;
+                j++;
                 L.push_back(left[i]);
                 L.push_back(right[i]);
             }
         val[i]=vali;
     };
-    Clean();
-   Reunite();
+    std::cerr << "k = " << k  << "|| j = " << j << std::endl;
+    // Clean();
+   // Reunite();
+    return (*this);
+}
+
+//----------------------------------------------------------------------
+Paving& Paving::Sivia2(ibex::Pdc &pdc, BOOLEAN_OP op, double eps)
+{
+    list<int> L;
+    L.push_back(0);
+    int k = 0, j = 0;
+//    vibes::newFigure("Test");
+//    vibes::setFigureProperties(vibesParams("x",0,"y",220,"width",400,"height",400));
+//    vibes::drawBox(B[0][0].lb(), B[0][0].ub(), B[0][1].lb(), B[0][1].ub(), "k[g]");
+//    vibes::axisAuto();
+    while (!L.empty()){ 
+        k++;
+        int i=L.front();    L.pop_front();
+//        vibes::drawBox(B[i][0].lb(), B[i][0].ub(), B[i][1].lb(), B[i][1].ub(), "k[g]");
+
+        BoolInterval testBi=pdc.test(B[i]);
+        BoolInterval vali = op(val[i],testBi);
+
+        bool b1 = (val[i] == MAYBE) | (testBi == MAYBE);
+
+        // if(vali == EMPTY){
+        //     cerr << "error !!\n";
+        //     Clear(EMPTY);
+        //     val[0] = EMPTY;
+        //     break;
+        // }
+
+
+        if( b1 && (B[i].max_diam()>eps)){
+            j++;
+            Expand(i);
+            L.push_back(left[i]);
+            L.push_back(right[i]);
+        } else if (vali != MAYBE){
+            Remove_sons(i);
+        }
+//        if (vali!=MAYBE && (B[i].max_diam()<=eps)) {
+////            if (vali == YES)
+////                vibes::drawBox(B[i][0].lb(), B[i][0].ub(), B[i][1].lb(), B[i][1].ub(), "[r]");
+////            else
+////                vibes::drawBox(B[i][0].lb(), B[i][0].ub(), B[i][1].lb(), B[i][1].ub(), "[b]");
+//            Remove_sons(i);
+//        } else if ( (B[i].max_diam()>eps) && testBi == MAYBE ){
+
+//        }
+
+        val[i] = vali;
+//        vibes::clearFigure();
+    }
+    std::cerr << "k = " << k  << "|| j = " << j << std::endl;
+    // Clean();
+   // Reunite();
     return (*this);
 }
 

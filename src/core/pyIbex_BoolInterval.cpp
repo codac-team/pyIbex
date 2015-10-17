@@ -1,6 +1,6 @@
 //============================================================================
 //                               P Y I B E X
-// File        : pyIbex_Predicate.cpp
+// File        : pyIbex_BoolInterval.cpp
 // Author      : Benoit Desrochers
 // Copyright   : Benoit Desrochers
 // License     : See the LICENSE file
@@ -68,8 +68,6 @@ void export_BoolInterval(){
         .export_values()
         ;
 
-    // boost::python::scope().attr("NO") = const_NO;
-
     class_<BoolInterval, boost::shared_ptr<ibex::BoolInterval>  >("BoolInterval", init<>())
             .def(init<bool>())
             .def(init<ibex::IBOOLEAN>() )
@@ -83,7 +81,7 @@ void export_BoolInterval(){
             .def(self != self)
             .def(repr(self))
             ;
-    // to_python_converter<ibex::BoolInterval,BoolInterval_from_python_IBOOLEAN>();
+
     BoolInterval_from_python_IBOOLEAN();
 
     def("Inter",     &ibex::Inter);

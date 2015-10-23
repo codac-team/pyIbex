@@ -1,0 +1,31 @@
+from setuptools import setup, Distribution, Extension
+import distutils
+from distutils.util import get_platform
+# force External module 
+class BinaryDistribution(Distribution):
+    def has_ext_modules(self):
+        return True
+
+
+if 'linux' in get_platform():
+    pyIbex_lib  = 'pyIbex.so'
+elif 'win' in get_platform():
+    pyIbex_lib  = 'pyIbex.pyd'
+else:
+    pyIbex_lib  = 'pyIbex.dylib'
+
+
+setup(
+    name='pyIbex',
+    version='${PACKAGE_VERSION}',
+    distclass=BinaryDistribution,
+    description='python binding for ibex',
+    packages=['pyIbex', "pyIbex.examples"],
+    package_data={
+        'pyIbex': [pyIbex_lib],
+        'pyIbex.examples': ['*.png']
+    },
+    ext_modules = [],
+    include_package_data=True
+    
+)

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 
-set(PACKAGE_VERSION "1.1.0")
+set(PACKAGE_VERSION "1.1.3")
 
 # build type
 IF(NOT CMAKE_BUILD_TYPE)
@@ -13,8 +13,8 @@ ENDIF()
 # option declaration
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLE "Build example" OFF)
-option(BUILD_STATIC "make standalone lib" ON)
-option(USE_PYTHON3 "use python3" ON)
+option(BUILD_STATIC "make standalone lib" OFF)
+
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
@@ -22,6 +22,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 if(NOT WIN32)
   #SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
+	set(IbexLib_USE_STATIC 1)
 	#SET(CMAKE_EXE_LINKER_FLAGS "-static")
 endif()
 

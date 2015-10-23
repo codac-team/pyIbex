@@ -22,14 +22,13 @@ target_link_libraries(pyIbex ${LIBS} ${PYTHON_LIBRARIES})
 
 install( TARGETS pyIbex DESTINATION "${PYTHON_INSTDIR}/pyIbex")
 install( DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/pyIbex" DESTINATION "${PYTHON_INSTDIR}")
-#get_property(PYIBEX_LIB TARGET pyIbex PROPERTY LOCATION)
-set( PYIBEX_LIB $<TARGET_FILE_NAME:pyIbex>)
-message(STATUS ${PYIBEX_LIB})
+
 
 configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in
   ${CMAKE_CURRENT_BINARY_DIR}/setup.py
  )
+
 
 
 

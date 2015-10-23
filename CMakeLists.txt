@@ -18,21 +18,27 @@ option(USE_PYTHON3 "use python3" ON)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
+
+if(NOT WIN32)
+  #SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
+	#SET(CMAKE_EXE_LINKER_FLAGS "-static")
+endif()
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/check_dependancies.cmake)
-
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
-
 # Find python install path (from morse install script)
+
 EXECUTE_PROCESS(COMMAND
 					${PYTHON_EXECUTABLE} -c "import distutils.sysconfig, sys; sys.stdout.write(distutils.sysconfig.get_python_lib(1,0,\"\"))"
 					OUTPUT_VARIABLE PYTHON_INSTALL
 					ERROR_VARIABLE PYTHON_STDERR
 					RESULT_VARIABLE PYTHON_ERR
 				)
+
 if(NOT PYTHON_INSTDIR)
 	SET(PYTHON_INSTDIR ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL}) 
 endif(NOT PYTHON_INSTDIR)
+
 if(WIN32)
     STRING(REGEX REPLACE "\\\\" "/" PYTHON_INSTDIR ${PYTHON_INSTDIR})
 endif(WIN32)
@@ -63,6 +69,8 @@ endif(BUILD_TESTS)
 if (BUILD_EXAMPLE)
 	add_subdirectory(examples)
 endif(BUILD_EXAMPLE)
+
+
 
 
 #########################################################################

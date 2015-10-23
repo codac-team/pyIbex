@@ -9,6 +9,10 @@ find_package(PkgConfig)
 pkg_check_modules(PC_CPPTEST QUIET ibex)
 message(STATUS "IBEX_ROOT ${IBEX_ROOT}")
 
+if(IbexLib_USE_STATIC)
+  SET(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+endif()
+
 set(IBEX_DEFINITIONS ${PC_IBEX_CFLAGS_OTHER})
 find_path(IBEX_INCLUDE_DIR ibex.h
           HINTS ${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${IBEX_ROOT}

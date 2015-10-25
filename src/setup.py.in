@@ -6,7 +6,7 @@ class BinaryDistribution(Distribution):
     def has_ext_modules(self):
         return True
 
-
+# select the file to copy
 if 'linux' in get_platform():
     pyIbex_lib  = 'pyIbex.so'
 elif 'win' in get_platform():

@@ -23,7 +23,6 @@
 #include "ibex_SepTransform.h"
 #include "ibex_SepQInter.h"
 #include "ibex_SepCtcPairProj.h"
-#include "ibex_SepPolarXY.h"
 
 #include "ibex_Set.h"
 #include "ibex_SetInterval.h"
@@ -146,8 +145,4 @@ void export_Separators(){
     class_<SepCtcPairProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairProj> >("SepCtcPairProj", no_init)
             .def(init<Ctc&, Ctc&, const IntervalVector&, double>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3> >()])
             .def("separate", &SepCtcPairProj::separate);
-
-    class_<SepPolarXY, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepPolarXY> >("SepPolarXY", no_init)
-        .def(init<Interval, Interval>())
-        .def("separate", &SepPolarXY::separate);
 }

@@ -7,17 +7,10 @@ configure_file(
 INCLUDE_DIRECTORIES("core")
 
 file(GLOB CORE_SRCS "core/pyIbex_*.cpp")
-INCLUDE_DIRECTORIES("Paving")
-INCLUDE_DIRECTORIES("wip")
-#set( CORE_SRCS ${CORE_SRCS} ./Paving/paving.cpp ./Paving/pyIbex_Paving.cpp)
 
-add_subdirectory(Paving)
 add_subdirectory(wip)
-
-
-PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS} )
-
-target_link_libraries(pyIbex ${LIBS} ${PYTHON_LIBRARIES} Wip Paving)
+PYTHON_ADD_MODULE(pyIbex pyIbex.cpp ${CORE_SRCS} wip/pyIbex_wip.cpp )
+target_link_libraries(pyIbex ${LIBS} wip)
 
 
 install( TARGETS pyIbex DESTINATION "${PYTHON_INSTDIR}/pyIbex")

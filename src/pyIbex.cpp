@@ -22,6 +22,7 @@
 #include "ibex_Ctc.h"
 #include "ibex_Sep.h"
 #include "ibex_Pdc.h"
+
 void export_Interval();
 void export_IntervalVector();
 void export_Bsc();
@@ -30,20 +31,17 @@ void export_Function();
 void export_Separators();
 void export_Predicate();
 void export_Set();
-void export_Paving();
 void export_BoolInterval();
+
 int export_PixelMap();
-//void export_algorithms();
+
+void export_wip();
+
 
 
 using namespace boost::python;
 using namespace ibex;
 
-
-// void translateException_IbexException(ibex::Exception const& e){
-// 	// Use the Python 'C' API to set up an exception object
-//     PyErr_SetString(PyExc_RuntimeError, e.what());
-// }
 
 void translateException_SyntaxError( const SyntaxError& x) {
 	std::ostringstream ss;
@@ -66,10 +64,6 @@ void translateException_NoBisectableVariableException( const NoBisectableVariabl
 	PyErr_SetString(PyExc_UserWarning, "NoBisectableVariableException raised");
 };
 
-// void translateException_EmptyBoxException( const EmptyBoxException& x) {
-// 	PyErr_SetString(PyExc_UserWarning, "EmptyBoxException raised");
-// };
-
 void translateException_InvalidIntervalVectorOp( const InvalidIntervalVectorOp& x){
 	PyErr_SetString(PyExc_UserWarning, "InvalidIntervalVectorOp [need to modify DimException.h to get the message] ");	
 }
@@ -86,13 +80,10 @@ BOOST_PYTHON_MODULE(pyIbex)
     Array_from_python<Sep>();
     Array_from_python<Pdc>();
 
-
-    
     register_exception_translator<SyntaxError>(translateException_SyntaxError);
 	register_exception_translator<UnknownFileException>(translateException_UnknownFileException);
 	register_exception_translator<DimException>(translateException_DimException);
 	register_exception_translator<NoBisectableVariableException>(translateException_NoBisectableVariableException);
-	// register_exception_translator<EmptyBoxException>(translateException_EmptyBoxException);
 	register_exception_translator<InvalidIntervalVectorOp>(translateException_InvalidIntervalVectorOp);
 
     export_Interval();
@@ -104,9 +95,9 @@ BOOST_PYTHON_MODULE(pyIbex)
     export_Separators();
     export_Predicate();
     export_Set();
-    export_Paving();
     export_PixelMap();
-    //export_algorithms();
+
+    export_wip();
     
 }
 

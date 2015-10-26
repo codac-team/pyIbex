@@ -123,7 +123,7 @@ void export_Ctc(){
             .def(init<Array<Ctc>, int>()[with_custodian_and_ward<1,2>()])
             .def("contract", &CtcQInterProjF::contract);
 
-    // Export CtcQInterProjF
+    // Export CtcPixelMap
     typedef void (CtcPixelMap::*contract_map) (IntervalVector&);
     class_<CtcPixelMap, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcPixelMap> >("CtcPixelMap", no_init)
             .def(init<PixelMap&>()[with_custodian_and_ward<1,2>()])

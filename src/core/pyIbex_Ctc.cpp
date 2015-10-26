@@ -11,7 +11,7 @@
 #include <ibex_CtcFwdBwd.h>
 #include <ibex_CtcUnion.h>
 #include <ibex_CtcCompo.h>
-// #include <ibex_CtcIn.h>
+
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
@@ -123,7 +123,7 @@ void export_Ctc(){
             .def(init<Array<Ctc>, int>()[with_custodian_and_ward<1,2>()])
             .def("contract", &CtcQInterProjF::contract);
 
-    // Export CtcQInterProjF
+    // Export CtcPixelMap
     typedef void (CtcPixelMap::*contract_map) (IntervalVector&);
     class_<CtcPixelMap, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcPixelMap> >("CtcPixelMap", no_init)
             .def(init<PixelMap&>()[with_custodian_and_ward<1,2>()])

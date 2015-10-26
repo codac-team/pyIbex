@@ -1,9 +1,12 @@
 # pySIVIA.py
 import pyIbex
 from pyIbex import *
-from vibes import *
 from collections import deque
-
+try:
+	from vibes import *
+	vibes_available = True
+except ImportError:
+	vibes_available = False
 
 def pySIVIA(X0, ops, epsilon, **kwargs):
 	'''
@@ -105,7 +108,7 @@ def __pySIVIA_ctc(X0, ctc, epsilon, color_out='k[b]', color_maybe='k[y]', draw_b
 		
 		#X =  __contract_and_extract(X, ctc, res_out, color_out)
 		ctc.contract(X)
-		if (draw_boxes == True):
+		if (draw_boxes == True and vibes_available == True):
 			drawBoxDiff(X0,X,color_out, **kwargs)
 
 		if save_result == True:
@@ -142,7 +145,7 @@ def __pySIVIA_sep(X0, sep, epsilon, color_in='k[r]', color_out='k[b]', color_may
 		x_in, x_out = map(IntervalVector, (X, )*2)
 		sep.separate(x_in, x_out)
 
-		if draw_boxes==True:
+		if (draw_boxes==True and vibes_available == True):
 			drawBoxDiff(X, x_in, color_in, **kwargs)
 			drawBoxDiff(X, x_out, color_out, **kwargs)
 

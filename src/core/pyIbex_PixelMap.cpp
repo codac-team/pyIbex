@@ -8,6 +8,7 @@
 
 #include "ibex_PixelMap.h"
 #include "ibex_CtcPixelMap.h"
+
 using namespace boost;
 using namespace boost::python;
 using namespace ibex;
@@ -65,4 +66,10 @@ int export_PixelMap(){
             .def("compute_integral_image", &PixelMap2D::compute_integral_image)
             .def("print", &print_II)
             ;
+
+    // Export CtcPixelMap
+    typedef void (CtcPixelMap::*contract_map) (IntervalVector&);
+    class_<CtcPixelMap, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcPixelMap> >("CtcPixelMap", no_init)
+            .def(init<PixelMap&>()[with_custodian_and_ward<1,2>()])
+            .def("contract", contract_map(&CtcPixelMap::contract));
 }

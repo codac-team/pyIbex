@@ -158,7 +158,6 @@ Tutorial
 
 ```python
 # Load pyIbex lib
-import pyIbex
 from pyIbex import *
 
 # Create new Intervals

@@ -92,6 +92,22 @@ mkdir build
 cmake -DBOOST_ROOT=${path_to_boost_1_58_0} -DIBEX_ROOT=${path_to_ibex-lib} ../
 make && make install
 ```
+
+### Linux/Mac OS X (v2)
+--------------------------------------
++ Build boost from source [boost_1_58_0](http://www.boost.org/users/history/version_1_58_0.html "boost_1_58_0 download page")
+```bash
+cd boost_1_58_0
+sh ./bootstrap.sh --with-python=3.4
+./b2 --with-python variant=release link=static
+```
++ Build pyIbex + Ibex4pyIbex
+```bash
+git clone https://github.com/benEnsta/pyIbex.git
+cd pyIbex
+sh ./build_Ibex4pyIbex.sh
+sh ./build.sh
+```
 		
 ###For Windows Users (Win64 version)
 --------------------------------------
@@ -140,6 +156,7 @@ Tutorial
 
 ```python
 # Load pyIbex lib
+import pyIbex
 from pyIbex import *
 
 # Create new Intervals

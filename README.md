@@ -108,6 +108,8 @@ cd pyIbex
 sh ./build_Ibex4pyIbex.sh
 sh ./build.sh
 ```
+
+Add /home/${user}/lib/python3/dist-packages to PYTHONPATH
 		
 ###For Windows Users (Win64 version)
 --------------------------------------

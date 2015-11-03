@@ -66,7 +66,7 @@ We assume that we want to install files in $DEVEL_BASE directory.
 + Firstly python dev packages must be installed.
 + Boost Python needs to be compiled with the correct python version. 
 	If it is not the case, download the sources from [Boost] webpage.
-+ Build boost from source
++ Build boost from source [boost_1_58_0](http://www.boost.org/users/history/version_1_58_0.html "boost_1_58_0 download page")
 ```bash
 cd boost_1_58_0
 sh ./bootstrap.sh --with-python=3.4
@@ -86,6 +86,7 @@ make install
 
 + Build pyIbex
 ```bash
+git clone https://github.com/benEnsta/pyIbex.git
 cd pyIbex
 mkdir build 
 cd build

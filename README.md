@@ -89,8 +89,7 @@ make install
 git clone https://github.com/benEnsta/pyIbex.git
 cd pyIbex
 mkdir build 
-cd build
-cmake -DBOOST_ROOT=${path_to_boost_1_58_0} ../
+cmake -DBOOST_ROOT=${path_to_boost_1_58_0} -DIBEX_ROOT=${path_to_ibex-lib} ../
 make && make install
 ```
 		

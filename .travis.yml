@@ -1,27 +1,35 @@
+sudo: false
 
-language: python
+addons:
+  apt:
+    sources:
+    - deadsnakes
+    - ubuntu-toolchain-r-test
+    - chef-current-precise
+    - boost-latest
+
+    packages:
+    - cmake
+    - time
+    - pkg-config
+    - libboost-python1.55-dev
+
+compiler:
+  - gcc
+  - clang
+
 python:
   - "3.4"
-# 
-before_install:
-  #- sudo apt-get update -q
-  - sudo apt-get install -y --force-yes python3.4-dev pkg-config python3-numpy
-  - sudo apt-get install libboost-dev libboost-python-dev
-# command to install dependencies
-install: 
-  - git clone https://github.com/benEnsta/ibex-lib.git
-  - cd ibex-lib
-  - git checkout pyIbex_version
-  - mkdir build
-  - cd build
-  - cmake -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${HOME}/ibex ../
-  - make -j2
-  - sudo make install
-  - ./build.sh
-#  - sudo ./waf install
-#  - cd tests/ && make && cd ..
+cache:
+  directories:
+  - $HOME/ibex
+
+before_script:
+  - pip install numpy
+  - bash ./build_Ibex4pyIbex.sh
+  - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
+
 # command to run tests
 script:  
-#  - __build__/examples/optimizer04 benchs/benchs-optim/coconutbenchmark-library1/ex2_1_9.bch acidhc4 compo smearsumrel 1.e-8 1.e-8 10 1
-#  - cd tests/ && ./utest
-# - cd tests/ python ./test_Interval.py
+  - bash ./build.sh
+

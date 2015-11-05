@@ -1,5 +1,13 @@
 sudo: false
 
+language: 
+  - python
+  - c++
+
+python:
+  - "3.4"
+  - "3.5"
+
 addons:
   apt:
     sources:
@@ -12,23 +20,35 @@ addons:
     - cmake
     - time
     - pkg-config
-    - libboost-python1.55-dev
-
+    - python-numpy
 compiler:
   - gcc
   - clang
-
-python:
-  - "3.4"
+os:
+  - linux
+  # - osx
 cache:
   directories:
   - $HOME/ibex
+  #- $HOME/boost_1_58_0
+  - $HOME/Downloads
+
 
 before_script:
-  - bash ./build_Ibex4pyIbex.sh
+  - bash ./travis_script/build_boostpython.sh
+  - bash ./travis_script/build_Ibex4pyIbex.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
-
+  - pip install vibes
+  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/boost_1_58_0/stage/lib
 # command to run tests
 script:  
-  - bash ./build.sh
-
+  - mkdir build
+  - cd build
+  - version=$(python -V 2>&1 | grep -Po '(?<=Python )(.+)')
+  - ls ${HOME}/ibex
+  - ls ${HOME}/ibex/lib
+  - cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DBOOST_ROOT=${HOME}/boost_1_58_0 -DPYTHON_VERSION=${version:0:3} ../
+  - make && make install
+  - export PYTHONPATH=$PYTHONPATH:/home/travis/lib/python${version:0:3}/site-packages
+  - python -c "from pyIbex import *"
+  - make test

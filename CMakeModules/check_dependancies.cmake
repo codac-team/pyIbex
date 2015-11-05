@@ -1,7 +1,7 @@
 #check_dependancy.cmake
 
 
-set(PYTHON_MIN_VERSION 3.4)
+#set(PYTHON_MIN_VERSION 3.4)
 set(PythonInterp_FIND_VERSION "${PYTHON_MIN_VERSION}")
 set(PythonLibs_FIND_VERSION "${PYTHON_MIN_VERSION}")
 find_package(PythonInterp REQUIRED)
@@ -23,7 +23,11 @@ if(BUILD_STATIC OR WIN32)
   find_package(Boost COMPONENTS python)
 else()
   SET(Boost_USE_STATIC_LIBS     OFF)
+  message(STATUS "looking for boost python-py34")
   find_package(Boost COMPONENTS python-py34)
+  IF(NOT Boost_FOUND)
+    find_package(Boost COMPONENTS python)
+  ENDIF()
 endif()
 
 

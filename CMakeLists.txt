@@ -15,7 +15,9 @@ ENDIF()
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLE "Build example" OFF)
 option(BUILD_STATIC "make standalone lib" OFF)
+set(PYTHON_VERSION "3.4" CACHE STRING "target python version")
 
+message(STATUS "Try to use python : ${PYTHON_VERSION}")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 

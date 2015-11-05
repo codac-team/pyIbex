@@ -2,7 +2,7 @@
 
 set -x
 # check to see if protobuf folder is empty
-if [ ! -d "$HOME/deps" ]; then
+if [ ! -e "$HOME/ibex/lib/libibex.a" ]; then
 	git clone https://github.com/benEnsta/ibex-lib.git
 	cd ibex-lib
 	git checkout pyIbex_version

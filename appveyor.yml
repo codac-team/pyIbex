@@ -1,0 +1,28 @@
+version: 1.0.{build}
+init:
+- cmd: >-
+    choco install nsis -pre
+
+    ECHO %CD%
+
+    git clone https://github.com/benEnsta/ibex-lib.git
+
+    cd ibex-lib
+
+    git checkout pyIbex_version
+
+    mkdir build
+
+    cd build
+
+    cmake -G "Visual Studio 12 2013 Win64" DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_prefix=. -DBUILD_TESTS=OFF ../
+
+    msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease INSTALL.vcxproj
+    	make install
+before_build:
+- cmd: >-
+    mkdir build
+
+    ECHO %CD%
+build:
+  verbosity: minimal

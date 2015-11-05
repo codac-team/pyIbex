@@ -42,6 +42,11 @@ newdoc/_build
 # build directory
 build
 build_win
+build_win32
+
+#examples 
+examples
+src/wip
 # git conflict files
 
 # qtcreator project

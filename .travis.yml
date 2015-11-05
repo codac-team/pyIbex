@@ -25,7 +25,6 @@ cache:
   - $HOME/ibex
 
 before_script:
-  - pip install numpy
   - bash ./build_Ibex4pyIbex.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
 

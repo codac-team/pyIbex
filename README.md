@@ -66,7 +66,7 @@ We assume that we want to install files in $DEVEL_BASE directory.
 + Firstly python dev packages must be installed.
 + Boost Python needs to be compiled with the correct python version. 
 	If it is not the case, download the sources from [Boost] webpage.
-+ Build boost from source
++ Build boost from source [boost_1_58_0](http://www.boost.org/users/history/version_1_58_0.html "boost_1_58_0 download page")
 ```bash
 cd boost_1_58_0
 sh ./bootstrap.sh --with-python=3.4
@@ -86,12 +86,30 @@ make install
 
 + Build pyIbex
 ```bash
+git clone https://github.com/benEnsta/pyIbex.git
 cd pyIbex
 mkdir build 
-cd build
-cmake -DBOOST_ROOT=${path_to_boost_1_58_0} ../
+cmake -DBOOST_ROOT=${path_to_boost_1_58_0} -DIBEX_ROOT=${path_to_ibex-lib} ../
 make && make install
 ```
+
+### Linux/Mac OS X (v2)
+--------------------------------------
++ Build boost from source [boost_1_58_0](http://www.boost.org/users/history/version_1_58_0.html "boost_1_58_0 download page")
+```bash
+cd boost_1_58_0
+sh ./bootstrap.sh --with-python=3.4
+./b2 --with-python variant=release link=static
+```
++ Build pyIbex + Ibex4pyIbex
+```bash
+git clone https://github.com/benEnsta/pyIbex.git
+cd pyIbex
+sh ./build_Ibex4pyIbex.sh
+sh ./build.sh
+```
+
+Add `/home/${user}/lib/python3/dist-packages` to PYTHONPATH
 		
 ###For Windows Users (Win64 version)
 --------------------------------------

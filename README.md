@@ -57,6 +57,7 @@ option :
 	- use -DCMAKE_BUILD_TYPE=DEBUG | RELEASE to change the compilation mode
 	- use -DCPPTEST_DIR= if libcpptest is installed in a non-standard directory
 	- use -DIBEX_ROOT= if ibex is installed in a non-standard directory
+  - use -DPYTHON_VERSION= to set the target python version.
 Alternatively, run the provided `build.sh` script.
 
 ### Linux/Mac OS X

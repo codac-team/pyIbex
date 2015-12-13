@@ -1,5 +1,6 @@
 set ( wip_dirs 
 				Paving
+        SepPolarXY
 )
 
 

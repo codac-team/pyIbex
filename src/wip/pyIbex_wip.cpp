@@ -11,8 +11,9 @@
 using namespace boost;
 
 void export_Paving();
-
+void export_SepPolarXY();
 void export_wip()
 {
 	export_Paving();
+  export_SepPolarXY();
 }

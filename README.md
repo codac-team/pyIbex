@@ -220,6 +220,7 @@ TODO
 --------------------------
 Change Log
 --------------------------
+12/02/2015 : Add SepPolarXY
 04/10/2015 : Add predicate, Paving
 20/09/2015 : Add Set interface, add contract method with set for Sep
 

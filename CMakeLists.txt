@@ -15,16 +15,14 @@ ENDIF()
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLE "Build example" OFF)
 option(BUILD_STATIC "make standalone lib" OFF)
-set(PYTHON_VERSION "3.4" CACHE STRING "target python version")
 
-message(STATUS "Try to use python : ${PYTHON_VERSION}")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
 
 if(NOT WIN32)
   #SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
+	# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
 	set(IbexLib_USE_STATIC 1)
 	#SET(CMAKE_EXE_LINKER_FLAGS "-static")
 endif()
@@ -49,6 +47,7 @@ endif(WIN32)
 MESSAGE(STATUS "will install python files in ${PYTHON_INSTDIR}")
 
 if(WIN32)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 	set(CompilerFlags
         CMAKE_CXX_FLAGS
         CMAKE_CXX_FLAGS_DEBUG
@@ -57,11 +56,11 @@ if(WIN32)
         CMAKE_C_FLAGS_DEBUG
         CMAKE_C_FLAGS_RELEASE
         )
-foreach(CompilerFlag ${CompilerFlags})
-  string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-endforeach()
+#foreach(CompilerFlag ${CompilerFlags})
+#  string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+#endforeach()
 endif()
-
+# INCLUDE_DIRECTORIES (pybind11/include)
 add_subdirectory(src)
 
 if (BUILD_TESTS)

@@ -1,7 +1,55 @@
 #check_dependancy.cmake
 
+include(CheckCXXCompilerFlag)
 
-#set(PYTHON_MIN_VERSION 3.4)
+# Set a default build configuration if none is specified. 'MinSizeRel' produces the smallest binaries
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'MinSizeRel' as none was specified.")
+  set(CMAKE_BUILD_TYPE MinSizeRel CACHE STRING "Choose the type of build." FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+    "MinSizeRel" "RelWithDebInfo")
+endif()
+string(TOUPPER "${CMAKE_BUILD_TYPE}" U_CMAKE_BUILD_TYPE)
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" HAS_CPP11_FLAG)
+
+  if (HAS_CPP14_FLAG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+  elseif (HAS_CPP11_FLAG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  else()
+    message(FATAL_ERROR "Unsupported compiler -- pybind11 requires C++11 support!")
+  endif()
+
+  # Enable link time optimization and set the default symbol
+  # visibility to hidden (very important to obtain small binaries)
+  if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
+    # Default symbol visibility
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+
+    # Check for Link Time Optimization support
+    CHECK_CXX_COMPILER_FLAG("-flto" HAS_LTO_FLAG)
+    if (HAS_LTO_FLAG)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
+    endif()
+  endif()
+endif()
+
+# Compile with compiler warnings turned on
+if(MSVC)
+  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+  endif()
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+endif()
+
+
+set(PYTHON_MIN_VERSION 3.4)
 set(PythonInterp_FIND_VERSION "${PYTHON_MIN_VERSION}")
 set(PythonLibs_FIND_VERSION "${PYTHON_MIN_VERSION}")
 find_package(PythonInterp REQUIRED)
@@ -9,36 +57,14 @@ find_package(PythonLibs REQUIRED)
 
 IF(PYTHONLIBS_FOUND)
   INCLUDE_DIRECTORIES("${PYTHON_INCLUDE_DIRS}")
-  find_package(NumPy REQUIRED)
-  INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
+  set(LIBS ${LIBS} ${PYTHON_LIBRARIES} )
+  #find_package(NumPy REQUIRED)
+  #INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
 ELSE()
   MESSAGE(FATAL_ERROR "Unable to find PythonLibs.")
 ENDIF()
 
-# To statically ling boost with pyIbex on Windows
-if(BUILD_STATIC OR WIN32)
-  message( "HERE")
-  SET(Boost_USE_STATIC_LIBS     ON)
-  add_definitions(-DBOOST_PYTHON_STATIC_LIB)
-  find_package(Boost COMPONENTS python)
-else()
-  SET(Boost_USE_STATIC_LIBS     OFF)
-  message(STATUS "looking for boost python-py34")
-  find_package(Boost COMPONENTS python-py34)
-  IF(NOT Boost_FOUND)
-    find_package(Boost COMPONENTS python)
-  ENDIF()
-endif()
-
-
-IF(Boost_FOUND)
-  INCLUDE_DIRECTORIES("${Boost_INCLUDE_DIRS}")
-  SET(Boost_USE_MULTITHREADED    ON)
-  SET(Boost_USE_STATIC_RUNTIME     ON)
-  SET(LIBS ${LIBS} ${Boost_LIBRARIES})
-ELSEIF(NOT Boost_FOUND)
-  MESSAGE(FATAL_ERROR "Unable to find Boost.")
-ENDIF()
+find_package(PyBind11)
 
 FIND_PACKAGE(IbexLib)
 if(IBEX_FOUND)

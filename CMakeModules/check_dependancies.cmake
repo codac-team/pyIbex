@@ -48,10 +48,9 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" OR "${CMAKE_CXX_COMPILER_ID}"
   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 endif()
 
-
-set(PYTHON_MIN_VERSION 3.4)
-set(PythonInterp_FIND_VERSION "${PYTHON_MIN_VERSION}")
-set(PythonLibs_FIND_VERSION "${PYTHON_MIN_VERSION}")
+set(PYTHON_VERSION "3.4" CACHE STRING "Python version to use for compiling the example application")
+set(PythonInterp_FIND_VERSION "${PYTHON_VERSION}")
+set(PythonLibs_FIND_VERSION "${PYTHON_VERSION}")
 find_package(PythonInterp REQUIRED)
 find_package(PythonLibs REQUIRED)
 

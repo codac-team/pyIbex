@@ -1,12 +1,6 @@
+language: c++
 sudo: false
 
-language: 
-  - python
-  - c++
-
-python:
-  - "3.4"
-  - "3.5"
 
 addons:
   apt:
@@ -19,34 +13,48 @@ addons:
     - cmake
     - time
     - pkg-config
+    - g++-4.8
 
-compiler:
-  - gcc
-  - clang
-os:
-  - linux
-  - osx
 cache:
   directories:
   - $HOME/ibex
   #- $HOME/boost_1_58_0
   - $HOME/Downloads
 
+matrix:
+  include:
+  - os: osx
+    compiler: clang
+  - os: linux
+    language: python
+    python: "3.4"
+    compiler: gcc-4.8
+  - os: linux
+    language: python
+    python: "3.5"
+    compiler: gcc-4.8
 
-before_script:
+before_install:
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install python3; fi
+
+install:
   - bash ./travis_script/build_Ibex4pyIbex.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
-  - pip install vibes
+
 # command to run tests
 script:  
-  - git submodule update
   - mkdir build
   - cd build
-  - version=$(python -V 2>&1 | grep -Po '(?<=Python )(.+)')
+  - export version=$(python -c "import sys; print(sys.version[:3])")
+  - echo $version
   - ls ${HOME}/ibex
   - ls ${HOME}/ibex/lib
-  - cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version:0:3} ../
+  - if [ $TRAVIS_OS_NAME == osx ]; then
+      cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} ../ ;
+    fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then 
+      cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} -DCMAKE_CXX_COMPILER=g++-4.8 ../ ;
+    fi
   - make && make install
-  - export PYTHONPATH=$PYTHONPATH:/home/travis/lib/python${version:0:3}/site-packages
-  - python -c "from pyIbex import *"
+# - export PYTHONPATH=$PYTHONPATH:/home/travis/lib/python${version}/site-packages
   - make test

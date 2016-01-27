@@ -22,7 +22,6 @@ using py::self;
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
-#include <ibex_CtcPolar.h>
 #include <ibex_CtcSegment.h>
 #include <ibex_CtcQInter.h>
 #include <ibex_CtcPixelMap.h>
@@ -36,7 +35,6 @@ using ibex::CtcCompo;
 using ibex::CtcFwdBwd;
 using ibex::CtcInverse;
 using ibex::CtcNotIn;
-using ibex::CtcPolar;
 using ibex::CtcSegment;
 using ibex::CtcQInterProjF;
 using ibex::IntervalVector;
@@ -124,14 +122,6 @@ void export_Ctc(py::module& m){
             .def(py::init<Function&, Interval&>(), py::keep_alive<1,2>())
             .def(py::init<Function&, IntervalVector&>(), py::keep_alive<1,2>())
             .def("contract", &CtcNotIn::contract);
-
-//     // Export CtcPolar
-    void (CtcPolar::*contract_ctcPolar_1) (IntervalVector&) = &CtcPolar::contract;
-    void (CtcPolar::*contract_ctcPolar_2) (Interval&, Interval&, Interval&, Interval&)  = &CtcPolar::contract;
-    py::class_<CtcPolar>(m, "CtcPolar", ctc)
-            .def(py::init<>())
-            .def("contract", contract_ctcPolar_1)
-            .def("contract", contract_ctcPolar_2);
 
 //     // Export CtcSegment
     py::class_<CtcSegment>(m, "CtcSegment", ctc)

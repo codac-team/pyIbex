@@ -85,15 +85,15 @@ void SepPolygonFromList(SepPolygon &instance,  std::vector< std::vector<double> 
 void export_Separators(py::module& m){
 
     typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
-    typedef void (Sep::*contract_1) (Set& , double);
-    typedef void (Sep::*contract_2) (SetInterval& , double);
+    typedef void (Sep::*contract_1) (Set& , double );
+    // typedef void (Sep::*contract_2) (SetInterval& , double, ibex::BoolInterval, ibex::BoolInterval);
     py::class_<pySep> sep(m, "Sep");
     sep
       .alias<Sep>()
       .def(init<int>())
       .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &Sep::separate)
       .def("contract", contract_1(&Sep::contract))
-      .def("contract", contract_2(&Sep::contract))
+      .def("contract", (void (Sep::*) (SetInterval& , double, ibex::BoolInterval, ibex::BoolInterval)) &Sep::contract)
       .def("__or__", &__or, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>())
       .def("__and__", &__and, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>())
       .def("__invert__", &__not, py::return_value_policy::take_ownership, keep_alive<0,1>())

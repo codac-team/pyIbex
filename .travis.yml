@@ -14,19 +14,18 @@ addons:
     - deadsnakes
     - ubuntu-toolchain-r-test
     - chef-current-precise
-    - boost-latest
 
     packages:
     - cmake
     - time
     - pkg-config
-    - python-numpy
+
 compiler:
   - gcc
   - clang
 os:
   - linux
-  # - osx
+  - osx
 cache:
   directories:
   - $HOME/ibex
@@ -35,19 +34,18 @@ cache:
 
 
 before_script:
-  - bash ./travis_script/build_boostpython.sh
   - bash ./travis_script/build_Ibex4pyIbex.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
   - pip install vibes
-  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${HOME}/boost_1_58_0/stage/lib
 # command to run tests
 script:  
+  - git submodule update
   - mkdir build
   - cd build
   - version=$(python -V 2>&1 | grep -Po '(?<=Python )(.+)')
   - ls ${HOME}/ibex
   - ls ${HOME}/ibex/lib
-  - cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DBOOST_ROOT=${HOME}/boost_1_58_0 -DPYTHON_VERSION=${version:0:3} ../
+  - cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version:0:3} ../
   - make && make install
   - export PYTHONPATH=$PYTHONPATH:/home/travis/lib/python${version:0:3}/site-packages
   - python -c "from pyIbex import *"

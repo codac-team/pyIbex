@@ -16,8 +16,8 @@ Prerequisites
 --------------------------
 
 + [CMake](http://www.cmake.org "CMake project page") (>= 2.8.3)
-+ [Boost](http://www.boost.org/ "Boost project page") (tested with 1.58.0)
 + [Python](http://www.python.org "Python home page") (tested with 3.4, but should work with >= 2.7)
++ [pybind11](https://github.com/wjakob/pybind11) 
 + a C++ compiler for your platform, e.g. [GCC](http://gcc.gnu.org "GCC home"), [MSVS 13](https://www.visualstudio.com "Visual Studio 2013"), [llvm](http://llvm.org "llvm")
 
 
@@ -26,13 +26,13 @@ Prerequisites
 Features
 --------------------------
 Binding for :
-- Interval, IntervalVector
+- Interval, IntervalVector, IntervalMatrix (Partial)
 - Bsc, LargestFirst
 - Function (only text constructors)
 - Ctc, CtcFwdBwd, CtcIn, CtcNotIn
 - CtcUnion, CtcCompo
 - CtcInverse
-- CtcPolar
+- CtcPolar ( TODO )
 - CtcSegment (need ibex modification !!!)
 - CtcQInterProjF
 - SepUnion, SepInter
@@ -220,6 +220,8 @@ TODO
 --------------------------
 Change Log
 --------------------------
+27/01/2016 : Use pybind11 instead of boost python.
+             Remove wip directory 
 12/02/2015 : Add SepPolarXY
 04/10/2015 : Add predicate, Paving
 20/09/2015 : Add Set interface, add contract method with set for Sep

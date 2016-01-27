@@ -8,11 +8,11 @@ class BinaryDistribution(Distribution):
 
 # select the file to copy
 if 'linux' in get_platform():
-    pyIbex_lib  = 'pyIbex.so'
+    ext_lib  = '.so'
 elif 'win' in get_platform():
-    pyIbex_lib  = 'pyIbex.pyd'
+    ext_lib  = '.pyd'
 else:
-    pyIbex_lib  = 'pyIbex.dylib'
+    ext_lib  = '.dylib'
 
 
 setup(
@@ -20,12 +20,12 @@ setup(
     version='${PACKAGE_VERSION}',
     distclass=BinaryDistribution,
     description='python binding for ibex',
-    packages=['pyIbex', "pyIbex.examples"],
+    packages=['pyIbex'],
     package_data={
-        'pyIbex': [pyIbex_lib],
-        'pyIbex.examples': ['*.png']
+        'pyIbex': ['pyIbex'+ext_lib],
+#       'pyIbex.examples': ['*.png'],
+#        'pyIbex.wip' : ['wip'+ext_lib]
     },
     ext_modules = [],
-    include_package_data=True
-    
+    include_package_data=True   
 )

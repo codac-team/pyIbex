@@ -43,6 +43,7 @@ class TestInheritance(unittest.TestCase):
 		ctc2 = myCtc(1,1)
 		ctc = CtcUnion([ctc1, ctc2])
 		x = IntervalVector(2, [-10,10])
+		ctc.contract(x)
 		# SIVIA(x, ctc, 1)
 
 	def test_mySep(self):
@@ -51,6 +52,8 @@ class TestInheritance(unittest.TestCase):
 		sep2 = mySep(1,1)
 		sep = SepUnion([sep1, sep2])
 		x = IntervalVector(2, [-10,10])
+		xin, xout = map(IntervalVector, [x, x])
+		sep.separate(xin, xout)
 		# SIVIA(x, sep, 1)
 		
 

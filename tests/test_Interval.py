@@ -231,7 +231,7 @@ class TestInterval(unittest.TestCase):
 	def test_asin(self):
 		c = Interval(-2,4)
 		pyIbex.asin(c)
-
+			
 	def test_atan(self):
 		c = Interval(-2,4)
 		pyIbex.atan(c)
@@ -288,6 +288,10 @@ class TestInterval(unittest.TestCase):
 	def test_pow(self):
 		a = Interval(2, 3)
 		self.assertEqual(a**2, Interval(4, 9))
+		a**3
+		a**2.3
+		a**Interval(2,3)
+
 
 	def test_bwd_add(self):
 		c = Interval(-2,4)
@@ -429,7 +433,7 @@ class TestInterval(unittest.TestCase):
 		
 # a regular function
 def interval_str(self):
-    return "[ %f, %f ]" % ( self.lb(), self.ub() )
+		return "[ %f, %f ]" % ( self.lb(), self.ub() )
 
 if __name__ == '__main__':
 	

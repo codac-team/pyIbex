@@ -9,7 +9,16 @@ Introduction
 --------------------------
 pyIbex is a python binding of Ibex library. It aims at providing a basic interface
 of Ibex Basic types (Interval, IntervalVector, Ctc, ...), high level functionnalities and 
-contractors programming.
+contractors programming. 
+
+The version 1.2 uses now uses pyBind11 instead of Boost-Python to link C++ and python code.
+The core fonctionnalities of pyIbex are also reduced and additionnal features are moved to additionnal module.
+As a consequence, the following modules are removed from the core distributes :
+ + Polar contractors (CtcAngle, CtcPolar, SepPolarXY, ...)
+ + Pavings
+
+
+
 
 --------------------------
 Prerequisites
@@ -17,9 +26,9 @@ Prerequisites
 
 + [CMake](http://www.cmake.org "CMake project page") (>= 2.8.3)
 + [Python](http://www.python.org "Python home page") (tested with 3.4, but should work with >= 2.7)
-+ [pybind11](https://github.com/wjakob/pybind11) 
-+ a C++ compiler for your platform, e.g. [GCC](http://gcc.gnu.org "GCC home"), [MSVS 13](https://www.visualstudio.com "Visual Studio 2013"), [llvm](http://llvm.org "llvm")
-
++ [pybind11](https://github.com/wjakob/pybind11) required C++11 support
++ [ibex-lib](http://www.ibex-lib.org/) custom version from [github](https://github.com/benEnsta/ibex-lib/tree/pyIbex_version_3)
++ a C++ compiler for your platform , e.g. [GCC](http://gcc.gnu.org "GCC home") (>= 4.8), [MSVS 13](https://www.visualstudio.com "Visual Studio 2014"), [llvm](http://llvm.org "llvm")
 
 
 --------------------------
@@ -32,7 +41,6 @@ Binding for :
 - Ctc, CtcFwdBwd, CtcIn, CtcNotIn
 - CtcUnion, CtcCompo
 - CtcInverse
-- CtcPolar ( TODO )
 - CtcSegment (need ibex modification !!!)
 - CtcQInterProjF
 - SepUnion, SepInter
@@ -49,70 +57,39 @@ Build From Source
 
 ###Building
 --------------------------------------
-+ Set the `BOOST_ROOT` environment variable if Boost is installed in a non-standard directory
-+ create a build directory, e.g. directly in the project directory and cd to it: `mkdir build ; cd build`
-+ run `cmake ..` and afterwards `make`, `make install` and `make test`
-option : 
+
+The build process is entirely based on cmake with the following options:
+
 	- use -DCMAKE_INSTALL_PREFIX= to change the install destination
 	- use -DCMAKE_BUILD_TYPE=DEBUG | RELEASE to change the compilation mode
-	- use -DCPPTEST_DIR= if libcpptest is installed in a non-standard directory
 	- use -DIBEX_ROOT= if ibex is installed in a non-standard directory
   - use -DPYTHON_VERSION= to set the target python version.
+
+Sometime, you will have to manualy specify python executable, include and libs dir using:
+
+  -using -DPYTHON_EXECUTABLE to specify python executable path.
+
+
 Alternatively, run the provided `build.sh` script.
+remark : If Ibex isn't installed on the current machine, it will be download, build an installed.
+
 
 ### Linux/Mac OS X
 --------------------------------------
-We assume that we want to install files in $DEVEL_BASE directory.
 
-+ Firstly python dev packages must be installed.
-+ Boost Python needs to be compiled with the correct python version. 
-	If it is not the case, download the sources from [Boost] webpage.
-+ Build boost from source [boost_1_58_0](http://www.boost.org/users/history/version_1_58_0.html "boost_1_58_0 download page")
-```bash
-cd boost_1_58_0
-sh ./bootstrap.sh --with-python=3.4
-./b2 --with-python variant=release link=static
-```
-+ Build Ibex (Use version from benEnsta repository)
-```bash
-git clone https://github.com/benEnsta/ibex-lib.git
-cd ibex-lib
-git checkout pyIbex_version
-mkdir build
-cd build
-cmake -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release ../
-make 
-make install
-```
+To install pyIbex run the following commands:
 
-+ Build pyIbex
-```bash
-git clone https://github.com/benEnsta/pyIbex.git
-cd pyIbex
-mkdir build 
-cmake -DBOOST_ROOT=${path_to_boost_1_58_0} -DIBEX_ROOT=${path_to_ibex-lib} ../
-make && make install
-```
-
-### Linux/Mac OS X (v2)
---------------------------------------
-+ Build boost from source [boost_1_58_0](http://www.boost.org/users/history/version_1_58_0.html "boost_1_58_0 download page")
-```bash
-cd boost_1_58_0
-sh ./bootstrap.sh --with-python=3.4
-./b2 --with-python variant=release link=static
-```
 + Build pyIbex + Ibex4pyIbex
 ```bash
 git clone https://github.com/benEnsta/pyIbex.git
 cd pyIbex
+git submodule init
 sh ./build_Ibex4pyIbex.sh
 sh ./build.sh
 ```
-
 Add `/home/${user}/lib/python3/dist-packages` to PYTHONPATH
 		
-###For Windows Users (Win64 version)
+###For Windows Users (Win64 version) (Not ready Yet)
 --------------------------------------
 + build boost from source
   Create in boost directory a file named "user-config.jam" which looks like:
@@ -148,7 +125,6 @@ cd build
 cmake -G "Visual Studio 12 2013 Win64" -DBOOST_ROOT=$$$$$$$$ -DIBEX_ROOT=$$$$$$$$ -DPYTHON_EXECUTABLE=$$$$$$$$ ../
 msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease INSTALL.vcxproj
 ```
-
 
 
 

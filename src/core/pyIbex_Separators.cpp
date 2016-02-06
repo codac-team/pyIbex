@@ -116,6 +116,9 @@ void export_Separators(py::module& m){
      // ctcPair.alias<SepCtcPair>()
             .def(init<Ctc&, Ctc&>(), keep_alive<1,2>(), keep_alive<1,3>())
             .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepCtcPair::separate)
+            .def("ctc_in", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_in;})
+            .def("ctc_out", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_out;})
+            // .def_static_readonly("ctc_out", &SepCtcPair::ctc_out)
             ;
 
 
@@ -124,6 +127,10 @@ void export_Separators(py::module& m){
             .def(init<Function&, Interval& >(), keep_alive<1,2>())
             .def(init<Function&, IntervalVector& >(), keep_alive<1,2>())
             .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepFwdBwd::separate)
+            .def("ctc_in", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_in;})
+            .def("ctc_out", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_out;})
+            // .def_static_readonly("ctc_in", &SepFwdBwd::ctc_in)
+            // .def_static_readonly("ctc_out", &SepFwdBwd::ctc_out)
             ;
 
     class_<SepNot>(m, "SepNot", sep)

@@ -1,4 +1,4 @@
-from setuptools import setup, Distribution, Extension
+from setuptools import setup, Distribution
 import distutils
 from distutils.util import get_platform
 # force External module 
@@ -20,11 +20,9 @@ setup(
     version='${PACKAGE_VERSION}',
     distclass=BinaryDistribution,
     description='python binding for ibex',
-    packages=['pyIbex'],
+    packages=['pyIbex', 'pyIbex.core'],
     package_data={
-        'pyIbex': ['pyIbex'+ext_lib],
-#       'pyIbex.examples': ['*.png'],
-#        'pyIbex.wip' : ['wip'+ext_lib]
+        'pyIbex.core': ['_core'+ext_lib],
     },
     ext_modules = [],
     include_package_data=True   

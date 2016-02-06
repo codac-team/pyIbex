@@ -23,6 +23,7 @@ using py::self;
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
 #include <ibex_CtcSegment.h>
+#include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
 #include <ibex_CtcPixelMap.h>
 
@@ -36,6 +37,7 @@ using ibex::CtcFwdBwd;
 using ibex::CtcInverse;
 using ibex::CtcNotIn;
 using ibex::CtcSegment;
+using ibex::CtcFixPoint;
 using ibex::CtcQInterProjF;
 using ibex::IntervalVector;
 using ibex::Function;
@@ -123,6 +125,12 @@ void export_Ctc(py::module& m){
             .def(py::init<Function&, IntervalVector&>(), py::keep_alive<1,2>())
             .def("contract", &CtcNotIn::contract);
 
+//     // Export CtcNotIn
+    py::class_<CtcFixPoint>(m, "CtcFixPoint", ctc)
+            .def(py::init<Ctc&>(), py::keep_alive<1,2>())
+            .def("contract", &CtcFixPoint::contract);
+
+
 //     // Export CtcSegment
     py::class_<CtcSegment>(m, "CtcSegment", ctc)
             .def(py::init<double, double,double,double>())
@@ -132,4 +140,6 @@ void export_Ctc(py::module& m){
     py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc)
             .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
             .def("contract", &CtcQInterProjF::contract);
+
+
 }

@@ -56,9 +56,9 @@ if(WIN32)
         CMAKE_C_FLAGS_DEBUG
         CMAKE_C_FLAGS_RELEASE
         )
-#foreach(CompilerFlag ${CompilerFlags})
-#  string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-#endforeach()
+  foreach(CompilerFlag ${CompilerFlags})
+    string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+  endforeach()
 endif()
 # INCLUDE_DIRECTORIES (pybind11/include)
 add_subdirectory(src)

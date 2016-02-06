@@ -28,7 +28,7 @@ add_custom_command(TARGET pip_package PRE_BUILD
 )
 
 add_dependencies(pip_package pyIbex)
-add_dependencies(pip_package wip)
+# add_dependencies(pip_package wip)
 
 
 

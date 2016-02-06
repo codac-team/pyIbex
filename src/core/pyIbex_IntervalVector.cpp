@@ -48,7 +48,7 @@ template<typename T>
 std::vector<T> pyTuple2Vector(py::tuple &tup){
   std::vector<T> v;
   for (auto item : tup)
-    v.push_back(item.cast<T>());  
+    v.push_back(item.cast<T>());
   return v;
 }
 
@@ -228,7 +228,7 @@ void export_IntervalVector(py::module& m){
             // .def( "__rmul__", [](Interval& x, IntervalVector& a){return x*a;})
             // .def( "__rmul__", [](IntervalVector& a, Interval& x ){return x*a;})
             // .def(Interval() * self)
-            
+
             .def( "__mul__", [](IntervalVector& a, const Vector& x){return a*x;})
             .def( "__rmul__", [](IntervalVector& a, const Vector& x){return x*a;})
 
@@ -327,7 +327,7 @@ void export_IntervalVector(py::module& m){
             m.def( "abs", ( IntervalVector (*) (const IntervalVector& ) ) &ibex::abs);
             m.def( "bwd_add", (bool (*) (const IntervalVector&, IntervalVector&, IntervalVector&) ) &ibex::bwd_add);
             m.def( "bwd_sub", (bool (*) (const IntervalVector&, IntervalVector&, IntervalVector&) ) &ibex::bwd_sub);
-            // m.def( "cart_prod", &ibex::cart_prod);
+            m.def( "cart_prod", (IntervalVector (*) (const IntervalVector&, const IntervalVector&)) &ibex::cart_prod);
 
             // hadamard_product overloading
             // IntervalVector (*hadamard_product_1) (const IntervalVector& , const Vector& ) = &ibex::hadamard_product;
@@ -344,5 +344,3 @@ void export_IntervalVector(py::module& m){
             m.def( "bwd_mul", (bool (*) (const Interval&, IntervalVector&, IntervalVector&)) &ibex::bwd_mul);
 
 };
-
-

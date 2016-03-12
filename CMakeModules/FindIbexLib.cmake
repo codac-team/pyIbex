@@ -6,7 +6,7 @@
 #  IBEX_DEFINITIONS - Compiler switches required for using ibex
 
 find_package(PkgConfig)
-pkg_check_modules(PC_IBEX QUIET ibex)
+pkg_check_modules(PC_CPPTEST QUIET ibex)
 message(STATUS "IBEX_ROOT ${IBEX_ROOT}")
 
 if(IbexLib_USE_STATIC)

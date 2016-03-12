@@ -1,3 +1,3 @@
-from .pyIbex import *
+from .core import *
 from .pySIVIA import pySIVIA
 

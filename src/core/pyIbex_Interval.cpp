@@ -9,9 +9,14 @@
 
 
 #include "ibex_Interval.h"
-#include <boost/python.hpp>
-using namespace boost::python;
+#include <pybind11/pybind11.h>
+#include <pybind11/operators.h>
+#include "ibex_IntervalVector.h"
+namespace py = pybind11;
+using py::self;
 using namespace ibex;
+
+#include <sstream>
 
 double getitem(Interval& X, int i){
     if(i == 0)
@@ -30,16 +35,19 @@ void assignItv(Interval& self, const Interval& other){
     self = other;
 }
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 0,1)
+std::string to_string(const Interval& a){
+  std::stringstream ss;
+  ss << a;
+  return ss.str();
+  // return "[" + std::to_string(a.lb()) + "," + std::to_string(a.ub()) + "]" ; 
+}
 
-
-Interval (*pow__)(const Interval& x, int n) = &ibex::pow;
-
-void export_Interval(){
-    class_<Interval, boost::shared_ptr<ibex::Interval> >("Interval")
-    .def(init<double, double>())
-    .def(init<double>())
-    .def(init<Interval>())
+void export_Interval(py::module& m){
+    py::class_<Interval>(m, "Interval")
+    .def(py::init<>())
+    .def(py::init<double, double>())
+    .def(py::init<double>())
+    .def(py::init<Interval>())
     .def("assign", &assignItv)
     .def( self == self )
     .def( self + self )
@@ -49,48 +57,57 @@ void export_Interval(){
     .def( self & self )
     .def( self | self )
 
-    .def( self += self)
-    .def( self -= self)
-    .def( self *= self)
-    .def( self /= self)
+    // .def( self += self)
+    .def("__iadd__", [](Interval& self,Interval& o ) {return self+=o;})
+    .def("__isub__", [](Interval& self,Interval& o ) {return self-=o;})
+    .def("__imul__", [](Interval& self,Interval& o ) {return self*=o;})
+    .def("__ifloordiv__", [](Interval& self,Interval& o ) {return self/=o;})
+
+    // .def( self *= self)
+    // .def( self -= self)
+    // .def( self /= self)
     .def( self &= self)
     .def( self |= self)
 
     .def( self + double())
     .def( self += double())
-    .def( other<double>() + self)
+    .def( double() + self)
     .def( self - double())
     .def( double() - self)
-    .def( self * other<double>())
-    .def( other<double>() * self)
+    .def( self * double())
+    .def( double() * self)
     .def( self / double())
     .def( double() / self)
 
+    .def( "__mul__", [](Interval& x, IntervalVector& a){return x*a;})
+
     .def( -self )
 
-    .def(repr(self))
-    .def(abs(self))
-    // .def(pow(self,self))
-    // .def(pow(self,int()))
-    // .def(pow(self,float()))
+    .def("__repr__", &to_string)
+
+    .def("__abs__", [](const Interval& a){return ibex::abs(a);})
+    .def("__pow__", [](const Interval& x, int n) { return ibex::pow(x, n);})
+    .def("__pow__", [](const Interval& x, double d) { return ibex::pow(x, d);})
+    .def("__pow__", [](const Interval &x, const Interval &y) { return ibex::pow(x, y);})
 
     .def( "lb",     &Interval::lb, "return the upper bound")
     .def( "ub",     &Interval::ub, "return the lower bound" )
-    .def( "inflate",&Interval::inflate, return_internal_reference<>() )
+    .def( "inflate",&Interval::inflate, py::return_value_policy::copy )
     .def( "set_empty", &Interval::set_empty )
     .def( "mid",    &Interval::mid )
     .def( "rad",    &Interval::rad )
     .def( "diam",   &Interval::diam )
     .def( "mig",    &Interval::mig )
     .def( "mag",    &Interval::mag )
-    .def( "is_subset",  &Interval::is_subset )
-    .def( "is_strict_subset",   &Interval::is_strict_subset )
-    .def( "is_interior_subset", &Interval::is_interior_subset )
-    .def( "is_strict_interior_subset",  &Interval::is_strict_interior_subset )
-    .def( "is_superset",    &Interval::is_superset )
-    .def( "is_strict_superset", &Interval::is_strict_superset )
-    .def( "contains",   &Interval::contains )
-    .def( "interior_contains",  &Interval::interior_contains )
+    .def( "is_subset",  &Interval::is_subset, "True iff this interval is a subset of x.")
+    .def( "is_strict_subset",   &Interval::is_strict_subset, "True iff this interval is a subset of x and not x itself.")
+    .def( "is_interior_subset", &Interval::is_interior_subset, "True iff this interval is in the interior of x." )
+    .def( "is_strict_interior_subset",  &Interval::is_strict_interior_subset, 
+            "True iff this interval is in the interior of x and different from x." )
+    .def( "is_superset",    &Interval::is_superset, "True iff this interval is a superset of x." )
+    .def( "is_strict_superset", &Interval::is_strict_superset, "True iff this interval is a superset of x different from x." )
+    .def( "contains",   &Interval::contains, "True iff *this contains d." )
+    .def( "interior_contains",  &Interval::interior_contains, "True iff the interior of *this contains d." )
     .def( "intersects", &Interval::intersects )
     .def( "overlaps",   &Interval::overlaps )
     .def( "is_disjoint",    &Interval::is_disjoint )
@@ -101,94 +118,94 @@ void export_Interval(){
     .def( "rel_distance",   &Interval::rel_distance )
     .def( "complementary",  &Interval::complementary )
     .def( "diff",   &Interval::diff )
-    .def_readonly("PI", &Interval::PI)
-    .def_readonly("TWO_PI", &Interval::TWO_PI)
-    .def_readonly("HALF_PI", &Interval::HALF_PI)
-    .def_readonly("EMPTY_SET", &Interval::EMPTY_SET)
-    .def_readonly("ALL_REALS", &Interval::ALL_REALS)
-    .def_readonly("ZERO", &Interval::ZERO)
-    .def_readonly("ONE", &Interval::ONE)
-    .def_readonly("POS_REALS", &Interval::POS_REALS)
-    .def_readonly("NEG_REALS", &Interval::NEG_REALS)    
-    .def( "bisect", &Interval::bisect, bisect_overloads())
-    .def<double(Interval&, int)> ("__getitem__", getitem)
+    .def_readonly_static("PI", &Interval::PI)
+    .def_readonly_static("TWO_PI", &Interval::TWO_PI)
+    .def_readonly_static("HALF_PI", &Interval::HALF_PI)
+    .def_readonly_static("EMPTY_SET", &Interval::EMPTY_SET)
+    .def_readonly_static("ALL_REALS", &Interval::ALL_REALS)
+    .def_readonly_static("ZERO", &Interval::ZERO)
+    .def_readonly_static("ONE", &Interval::ONE)
+    .def_readonly_static("POS_REALS", &Interval::POS_REALS)
+    .def_readonly_static("NEG_REALS", &Interval::NEG_REALS)    
+    .def( "bisect", &Interval::bisect, "Bisect into two subintervals. ratio is used to chose the split point (default =0.5 middle)",
+          py::arg("ratio")=0.5)
+    .def("__getitem__", getitem)
     .def( "copy", &my_copy)
-    .def( "__pow__", pow__)
+    // .def( "__pow__", pow__)
     ;
 
     // External functions
-    def( "sqr" , &ibex::sqr  );
-    def( "sqrt", &ibex::sqrt );
-    def( "root", &ibex::root );
-    def( "exp" , &ibex::exp  );
-    def( "log" , &ibex::log  );
-    def( "cos" , &ibex::cos  );
-    def( "sin" , &ibex::sin  );
-    def( "tan" , &ibex::tan  );
-    def( "acos", &ibex::acos );
-    def( "asin", &ibex::asin );
-    def( "atan",    &ibex::atan );  
-    def( "atan2",   &ibex::atan2    );  
-    def( "cosh",    &ibex::cosh );  
-    def( "sinh",    &ibex::sinh );  
-    def( "tanh",    &ibex::tanh );  
-    def( "acosh",   &ibex::acosh);  
-    def( "asinh",   &ibex::asinh);  
-    def( "atanh",   &ibex::atanh);  
-    def<Interval(const Interval&)>( "abs",     &ibex::abs  );  
-    def( "max",     &ibex::max  );  
-    def( "min",     &ibex::min  );  
-    def( "sign",    &ibex::sign );   
-    def( "chi",     &ibex::chi  );  
-    def( "integer", &ibex::integer  );
+    m.def( "sqr" , &ibex::sqr  );
+    m.def( "sqrt", &ibex::sqrt );
+    m.def( "root", &ibex::root );
+    m.def( "exp" , &ibex::exp  );
+    m.def( "log" , &ibex::log  );
+    m.def( "cos" , &ibex::cos  );
+    m.def( "sin" , &ibex::sin  );
+    m.def( "tan" , &ibex::tan  );
+    m.def( "acos", &ibex::acos );
+    m.def( "asin", &ibex::asin );
+    m.def( "atan",    &ibex::atan );
+    m.def( "atan2",   &ibex::atan2 );
+    m.def( "cosh",    &ibex::cosh );
+    m.def( "sinh",    &ibex::sinh );
+    m.def( "tanh",    &ibex::tanh );
+    m.def( "acosh",   &ibex::acosh );
+    m.def( "asinh",   &ibex::asinh );
+    m.def( "atanh",   &ibex::atanh );
+    m.def( "abs",    ( Interval (*) (const Interval&) ) &ibex::abs  );  
+    m.def( "max",     &ibex::max  );  
+    m.def( "min",     &ibex::min  );  
+    m.def( "sign",    &ibex::sign );   
+    m.def( "chi",     &ibex::chi  );  
+    m.def( "integer", &ibex::integer  );
 
     // Attention en python l'argument est passé en double par defaut et pas en int.
     // Bug possible dans pow_2
-    Interval (*pow_1)(const Interval& x, int n) = &ibex::pow;
+    // Interval (*pow_1)(const Interval& x, int n) = &ibex::pow;
     // Interval (*pow_2)(const Interval& x, double d)  = &ibex::pow;
     // Interval (*pow_3)(const Interval &x, const Interval &y) = &ibex::pow;
-    def( "ipow", pow_1);
-    // def( "__pow__", pow_1);
+    // def( "ipow", pow_1);
     // def( "ipow", pow_2);
     // def( "ipow", pow_3);
 
 
     // pwd projection
-    def( "bwd_add",     &ibex::bwd_add );
-    def( "bwd_sub",     &ibex::bwd_sub );
-    def( "bwd_mul",     &ibex::bwd_mul );
-    def( "bwd_div",     &ibex::bwd_div );
-    def( "bwd_sqr",     &ibex::bwd_sqr );
-    def( "bwd_sqrt",    &ibex::bwd_sqrt );
+    m.def( "bwd_add",     (bool (*)(const Interval&, Interval&, Interval&)) &ibex::bwd_add );
+    m.def( "bwd_sub",     (bool (*)(const Interval&, Interval&, Interval&)) &ibex::bwd_sub );
+    m.def( "bwd_mul",     (bool (*)(const Interval&, Interval&, Interval&)) &ibex::bwd_mul );
+    m.def( "bwd_div",     &ibex::bwd_div );
+    m.def( "bwd_sqr",     &ibex::bwd_sqr );
+    m.def( "bwd_sqrt",    &ibex::bwd_sqrt );
     
-    bool (*bwd_pow_1)(const Interval&, Interval& , Interval&) = &ibex::bwd_pow;
-    bool (*bwd_pow_2)(const Interval&, int , Interval&) = &ibex::bwd_pow;
-    def( "bwd_pow",     bwd_pow_1 );
-    def( "bwd_pow",     bwd_pow_2 );
+    // sbool (*bwd_pow_1)(const Interval&, Interval& , Interval&) = &ibex::bwd_pow;
+    // sbool (*bwd_pow_2)(const Interval&, int , Interval&) = &ibex::bwd_pow;
+    m.def( "bwd_pow", (bool (*)(const Interval&, Interval& , Interval&))  &ibex::bwd_pow);
+    m.def( "bwd_pow", (bool (*)(const Interval&, int , Interval&))        &ibex::bwd_pow);
     
-    def( "bwd_root",    &ibex::bwd_root );
-    def( "bwd_exp",     &ibex::bwd_exp );
-    def( "bwd_log",     &ibex::bwd_log );
-    def( "bwd_cos",     &ibex::bwd_cos );
-    def( "bwd_sin",     &ibex::bwd_sin );
-    def( "bwd_tan",     &ibex::bwd_tan );
-    def( "bwd_acos",    &ibex::bwd_acos );
-    def( "bwd_asin",    &ibex::bwd_asin );
-    def( "bwd_atan",    &ibex::bwd_atan );
-    def( "bwd_atan2",   &ibex::bwd_atan2 );
-    def( "bwd_cosh",    &ibex::bwd_cosh );
-    def( "bwd_sinh",    &ibex::bwd_sinh );
-    def( "bwd_tanh",    &ibex::bwd_tanh );
-    def( "bwd_acosh",   &ibex::bwd_acosh );
-    def( "bwd_asinh",   &ibex::bwd_asinh );
-    def( "bwd_atanh",   &ibex::bwd_atanh );
-    def( "bwd_abs",     &ibex::bwd_abs );
-    def( "bwd_max",     &ibex::bwd_max );
-    def( "bwd_min",     &ibex::bwd_min );
-    def( "bwd_sign",    &ibex::bwd_sign );
-    def( "bwd_chi",     &ibex::bwd_chi );
-    def( "bwd_integer", &ibex::bwd_integer );
-    def( "bwd_imod",    &ibex::bwd_imod );
+    m.def( "bwd_root",    &ibex::bwd_root );
+    m.def( "bwd_exp",     &ibex::bwd_exp );
+    m.def( "bwd_log",     &ibex::bwd_log );
+    m.def( "bwd_cos",     &ibex::bwd_cos );
+    m.def( "bwd_sin",     &ibex::bwd_sin );
+    m.def( "bwd_tan",     &ibex::bwd_tan );
+    m.def( "bwd_acos",    &ibex::bwd_acos );
+    m.def( "bwd_asin",    &ibex::bwd_asin );
+    m.def( "bwd_atan",    &ibex::bwd_atan );
+    m.def( "bwd_atan2",   &ibex::bwd_atan2 );
+    m.def( "bwd_cosh",    &ibex::bwd_cosh );
+    m.def( "bwd_sinh",    &ibex::bwd_sinh );
+    m.def( "bwd_tanh",    &ibex::bwd_tanh );
+    m.def( "bwd_acosh",   &ibex::bwd_acosh );
+    m.def( "bwd_asinh",   &ibex::bwd_asinh );
+    m.def( "bwd_atanh",   &ibex::bwd_atanh );
+    m.def( "bwd_abs",     &ibex::bwd_abs );
+    m.def( "bwd_max",     &ibex::bwd_max );
+    m.def( "bwd_min",     &ibex::bwd_min );
+    m.def( "bwd_sign",    &ibex::bwd_sign );
+    m.def( "bwd_chi",     &ibex::bwd_chi );
+    m.def( "bwd_integer", &ibex::bwd_integer );
+    m.def( "bwd_imod",    &ibex::bwd_imod );
     
 };
 

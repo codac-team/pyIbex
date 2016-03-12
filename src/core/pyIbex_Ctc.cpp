@@ -7,6 +7,13 @@
 // Created     : Dec 28, 2014
 //============================================================================
 
+#include <pybind11/pybind11.h>
+#include <pybind11/operators.h>
+#include <pybind11/functional.h>
+#include <pyIbex_type_caster.h>
+namespace py = pybind11;
+using py::self;
+
 #include <ibex_Ctc.h>
 #include <ibex_CtcFwdBwd.h>
 #include <ibex_CtcUnion.h>
@@ -15,49 +22,60 @@
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
-#include <ibex_CtcPolar.h>
 #include <ibex_CtcSegment.h>
+#include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
 #include <ibex_CtcPixelMap.h>
 
+using ibex::Ctc;
+using ibex::CtcUnion;
+using ibex::CmpOp;
+using ibex::FwdMode;
+using ibex::CtcUnion;
+using ibex::CtcCompo;
+using ibex::CtcFwdBwd;
+using ibex::CtcInverse;
+using ibex::CtcNotIn;
+using ibex::CtcSegment;
+using ibex::CtcFixPoint;
+using ibex::CtcQInterProjF;
+using ibex::IntervalVector;
+using ibex::Function;
+using ibex::Array;
+using ibex::Interval;
 
-#include <boost/shared_ptr.hpp>
-#include <stdexcept>
-#include <boost/python.hpp>
-
-using namespace boost;
-using namespace boost::python;
-using namespace ibex;
-namespace py = boost::python;
-
-namespace  ibex {
-
-
-struct CtcWrap : Ctc, wrapper<Ctc> {
-    CtcWrap(int nb_var) : Ctc(nb_var) {}
-    void contract(IntervalVector& box){
-        this->get_override("contract")(boost::ref(box));
-    }
+class pyCtc : public Ctc {
+public:
+  /* Inherit the constructors */
+  using Ctc::Ctc;
+  /* Trampoline (need one for each virtual function) */
+  virtual void contract(IntervalVector& box){
+    PYBIND11_OVERLOAD_PURE(
+      void,       /* return type */
+      Ctc,        /* Parent class */
+      contract,   /* Name of function */
+      box         /* Argument(s) */
+    );
+  }
 };
 
-}
 
 CtcUnion* __or(Ctc& c1, Ctc& c2){ return (new CtcUnion(c1, c2)); }
 CtcCompo* __and(Ctc& c1, Ctc& c2){ return (new CtcCompo(c1, c2)); }
 
-void export_Ctc(){
+void export_Ctc(py::module& m){
 
-    typedef void (Ctc::*contract_1) (IntervalVector&);
-    class_<CtcWrap, boost::noncopyable, boost::shared_ptr<CtcWrap> >("Ctc", no_init)
-            .def(init<int>())
-            .def("contract", pure_virtual( contract_1(&Ctc::contract)))
-            .def_readonly("nb_var", &Ctc::nb_var)
-            .def("__or__", &__or, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >())
-            .def("__and__", &__and, return_value_policy<manage_new_object, with_custodian_and_ward_postcall<0,1, with_custodian_and_ward_postcall<0,2 > > >());
-            ;
+  py::class_<pyCtc> ctc(m, "Ctc");
+   ctc.alias<Ctc>()
+      .def(py::init<int>())
+      .def("contract",(void (ibex::Ctc::*)(IntervalVector&)) &Ctc::contract)
+      .def_readonly("nb_var", &Ctc::nb_var)
+      .def("__or__", &__or, py::return_value_policy::take_ownership, py::keep_alive<0,1>(),py::keep_alive<0,2>()  )
+      .def("__and__", &__and, py::return_value_policy::take_ownership, py::keep_alive<0,1>(),py::keep_alive<0,2>())
+    ;
 
     // Export comparaison constant
-    enum_<CmpOp>("CmpOp")
+    py::enum_<CmpOp>(m, "CmpOp")
             .value( "LT", 	ibex::LT)
             .value( "LEQ", 	ibex::LEQ)
             .value( "EQ", 	ibex::EQ)
@@ -66,66 +84,62 @@ void export_Ctc(){
             ;
 
     // Export computation mode
-    enum_<FwdMode>("FwdMode")
+    py::enum_<FwdMode>(m, "FwdMode")
             .value( "INTERVAL_MODE", ibex::INTERVAL_MODE)
             .value( "AFFINE2_MODE",  ibex::AFFINE2_MODE)
             .value( "AFFINE_MODE",   ibex::AFFINE_MODE)
             ;
 
-    // Export CtcUnion
-    class_<CtcUnion, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcUnion> >("CtcUnion", no_init)
-            .def(init<ibex::Array<Ctc> >()[with_custodian_and_ward<1, 2>()])
+//     // Export CtcUnion
+    py::class_<CtcUnion>(m, "CtcUnion", ctc)
+            .def(py::init<ibex::Array<Ctc> >(), py::keep_alive<1,2>())//[with_custodian_and_ward<1, 2>()])
 //            .def("__init__", make_constructor(ctcFromList<CtcUnion>), "CtcUnion from list of contractor\n Usage : CtcUnion([c1, c2, ...])")
             .def("contract", &CtcUnion::contract)
             ;
 
-    // Export CtcCompo
-    class_<CtcCompo, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcCompo> >("CtcCompo", no_init)
-            .def(init<ibex::Array<Ctc> >()[with_custodian_and_ward<1, 2>()])
+//     // Export CtcCompo
+    py::class_<CtcCompo>(m, "CtcCompo", ctc)
+            .def(py::init<ibex::Array<Ctc> >(), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
 //            .def("__init__", make_constructor(ctcFromList<CtcCompo>), "CtcCompo from list of contractor\n Usage : CtcCompo([c1, c2, ...])")
             .def("contract", &CtcCompo::contract)
             ;
 
-    // Export CtcFwdBwd
-    class_<CtcFwdBwd, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcFwdBwd> >("CtcFwdBwd", no_init)
-            .def(init<Function&,optional<CmpOp, FwdMode> > ()[with_custodian_and_ward<1, 2>()])
-            .def(init<Function&,Interval&>()[with_custodian_and_ward<1, 2>()])
-            .def(init<Function&,IntervalVector&>()[with_custodian_and_ward<1, 2>()])
+//     // Export CtcFwdBwd
+    py::class_<CtcFwdBwd>(m, "CtcFwdBwd", ctc)
+            .def(py::init<Function&> (), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
+            .def(py::init<Function&, CmpOp>(), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
+            .def(py::init<Function&, CmpOp, FwdMode> (), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
+            .def(py::init<Function&,Interval&>(), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
+            .def(py::init<Function&,IntervalVector&>(), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
             .def("contract", &CtcFwdBwd::contract)
             ;
 
-    // Export CtcInverse
-    class_<CtcInverse, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcInverse> >("CtcInverse", no_init)
-            .def(init<Ctc&, Function&>()[with_custodian_and_ward<1, 2, with_custodian_and_ward<1, 3> >()])
+//     // Export CtcInverse
+    py::class_<CtcInverse>(m, "CtcInverse", ctc)
+            .def(py::init<Ctc&, Function&>(),py::keep_alive<1,2>(), py::keep_alive<1,3>())
             .def("contract", &CtcInverse::contract);
 
-    // Export CtcNotIn
-    class_<CtcNotIn, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcNotIn> >("CtcNotIn", no_init)
-            .def(init<Function&, Interval&>()[with_custodian_and_ward<1, 2 >()])
-            .def(init<Function&, IntervalVector&>()[with_custodian_and_ward<1, 2 >()])
+//     // Export CtcNotIn
+    py::class_<CtcNotIn>(m, "CtcNotIn", ctc)
+            .def(py::init<Function&, Interval&>(), py::keep_alive<1,2>())
+            .def(py::init<Function&, IntervalVector&>(), py::keep_alive<1,2>())
             .def("contract", &CtcNotIn::contract);
 
-    // Export CtcPolar
-    void (CtcPolar::*contract_ctcPolar_1) (IntervalVector&) = &CtcPolar::contract;
-    void (CtcPolar::*contract_ctcPolar_2) (Interval&, Interval&, Interval&, Interval&)  = &CtcPolar::contract;
-    class_<CtcPolar, bases<Ctc>, boost::noncopyable, boost::shared_ptr<ibex::CtcPolar> >("CtcPolar")
-            .def(init<>())
-            .def("contract", contract_ctcPolar_1)
-            .def("contract", contract_ctcPolar_2);
+//     // Export CtcNotIn
+    py::class_<CtcFixPoint>(m, "CtcFixPoint", ctc)
+            .def(py::init<Ctc&>(), py::keep_alive<1,2>())
+            .def("contract", &CtcFixPoint::contract);
 
-    // Export CtcSegment
-    class_<CtcSegment, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcSegment> >("CtcSegment", no_init)
-            .def(init<double, double,double,double>())
+
+//     // Export CtcSegment
+    py::class_<CtcSegment>(m, "CtcSegment", ctc)
+            .def(py::init<double, double,double,double>())
             .def("contract", &CtcSegment::contract);
 
-    // Export CtcQInterProjF
-    class_<CtcQInterProjF, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcQInterProjF> >("CtcQInterProjF", no_init)
-            .def(init<Array<Ctc>, int>()[with_custodian_and_ward<1,2>()])
+//     // Export CtcQInterProjF
+    py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc)
+            .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
             .def("contract", &CtcQInterProjF::contract);
 
-    // Export CtcPixelMap
-    typedef void (CtcPixelMap::*contract_map) (IntervalVector&);
-    class_<CtcPixelMap, bases<Ctc> , boost::noncopyable, boost::shared_ptr<ibex::CtcPixelMap> >("CtcPixelMap", no_init)
-            .def(init<PixelMap&>()[with_custodian_and_ward<1,2>()])
-            .def("contract", contract_map(&CtcPixelMap::contract));
+
 }

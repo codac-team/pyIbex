@@ -1,28 +1,71 @@
 version: 1.0.{build}
-init:
-- cmd: >-
-    choco install nsis -pre
+os: Visual Studio 2015
+clone_folder: C:\projects\pyIbex
+test: off
+configuration:
+    - Release
+    # - Debug
+# branches:
+  # only:
+    # - master
+environment:
+  matrix:
+    # - CMAKE_PLATFORM: "Visual Studio 14 2015"
+      # PYTHON_DIR: "C:\\Python34"
+    - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
+      PYTHON_DIR: "C:\\Python34-x64"
 
-    ECHO %CD%
+install:
+  - cinstall: python
+  - ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
+  - "%PYTHON_DIR%/python.exe C:/get-pip.py"
+  #- "%PYTHON_DIR%/Scripts/pip.exe install setuptools --upgrade"
+  #- "%PYTHON_DIR%/Scripts/pip.exe install wheel --upgrade"
+  - curl -L "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.1.35/ibex-lib-2.1.12-win64.zip" -o "C:\projects\pyIbex\ibex-lib.zip"
+  - ls C:\projects\pyIbex
+  - cd C:\projects\pyIbex
+  - 7z x -tzip -oC:"ibex-lib" "C:\projects\pyIbex\ibex-lib.zip"
+  - ls C:\projects\pyIbex\ibex-lib
 
-    git clone https://github.com/benEnsta/ibex-lib.git
+artifacts:
+  - path: '**\*.whl'
+    name: pip_wheel
 
-    cd ibex-lib
+build_script:
+  - echo Running cmake..  .
+  - cd c:\projects\pyIbex
+  - git submodule init
+  - git submodule update
+  - cmake -G "%CMAKE_PLATFORM%" -DPYTHON_INCLUDE_DIR:PATH=%PYTHON_DIR%/include -DPYTHON_LIBRARY:FILEPATH=%PYTHON_DIR%/libs/python34.lib -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DIBEX_ROOT=C:\projects\pyIbex\ibex-lib\ibex-lib-2.1.12-win64
+  - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+  - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
+  - msbuild %MSBuildOptions% INSTALL.vcxproj
+  - ctest -C %Configuration%
+  - msbuild %MSBuildOptions% src/pip_package.vcxproj
 
-    git checkout pyIbex_version
+deploy:
+  release: pyIbex-v$(appveyor_build_version)
+  description: 'pyIbex build'
+  provider: GitHub
+  auth_token:
+    secure: kfuelei+usQrQv/IZnoepVAx6SU1E8BKoR6rXwXM3grYnvzBQM2P9xMKQ+Nc+BYr
+  artifact: pip_wheel
+  draft: true
+  prerelease: false
+  on:
+    branch: master      # release from master branch only
+    appveyor_repo_tag: false        # deploy on tag push only
 
-    mkdir build
 
-    cd build
 
-    cmake -G "Visual Studio 12 2013 Win64" DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_prefix=. -DBUILD_TESTS=OFF ../
 
-    msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease INSTALL.vcxproj
-    	make install
-before_build:
-- cmd: >-
-    mkdir build
+# curl -L "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.1.17/ibex-lib-2.1.12-win64.exe" -o "C:\projects\pyIbex\ibex-lib.exe"
+# ls C:\projects\pyIbex
+# cd C:\projects\pyIbex
+# ibex-lib.exe /D="C:\projects\pyIbex"
+# ls "C:\projects\pyIbex"
 
-    ECHO %CD%
-build:
-  verbosity: minimal
+# curl -L "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.1.17/ibex-lib-2.1.12-win64.zip" -o "C:\projects\pyIbex\ibex-lib.zip"
+# ls C:\projects\pyIbex
+# 7z x -tzip -oC:"C:\projects\pyIbex\ibex-lib" "C:\projects\pyIbex\ibex-lib.zip"
+# ls C:\projects\pyIbex\ibex-lib

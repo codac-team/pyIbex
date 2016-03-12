@@ -53,7 +53,7 @@ deploy:
   draft: true
   prerelease: false
   on:
-    branch: appveyor_build      # release from master branch only
+    branch: master      # release from master branch only
     appveyor_repo_tag: false        # deploy on tag push only
 
 

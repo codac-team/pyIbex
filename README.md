@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/benEnsta/pyIbex.svg?branch=master)](https://travis-ci.org/benEnsta/pyIbex)
-
+[![Build status](https://ci.appveyor.com/api/projects/status/ughoj13u2rve6mw0?svg=true)](https://ci.appveyor.com/project/benEnsta/pyibex)
 
 ==========================
 Ibex python binding
@@ -9,16 +9,14 @@ Ibex python binding
 Introduction
 --------------------------
 pyIbex is a python binding of Ibex library. It aims at providing a basic interface
-of Ibex Basic types (Interval, IntervalVector, Ctc, ...), high level functionnalities and 
-contractors programming. 
+of Ibex Basic types (Interval, IntervalVector, Ctc, ...), high level functionnalities and
+contractors programming.
 
 The version 1.2 uses now uses pyBind11 instead of Boost-Python to link C++ and python code.
 The core fonctionnalities of pyIbex are also reduced and additionnal features are moved to additionnal module.
 As a consequence, the following modules are removed from the core distributes :
  + Polar contractors (CtcAngle, CtcPolar, SepPolarXY, ...)
- + Pavings
-
-
+ + Pavings ( still under huge developpement)
 
 
 --------------------------
@@ -89,22 +87,9 @@ sh ./build_Ibex4pyIbex.sh
 sh ./build.sh
 ```
 Add `/home/${user}/lib/python3/dist-packages` to PYTHONPATH
-		
+
 ###For Windows Users (Win64 version) (Not ready Yet)
 --------------------------------------
-+ build boost from source
-  Create in boost directory a file named "user-config.jam" which looks like:
-```text
-using python
-	: 3.4 												# python version 
-	: E:\pyzo2015a\python.exe 		# python executable path
-	: E:\pyzo2015a\include				# python include dir
-	: E:\pyzo2015a\libs 					# python lib dir
-```
-++ Compile boost with visual studio with correct options :
-```bash
-./bjam --with-python variant=release link=static address-model=64 runtime-link=static
-```
 + Build Ibex
   Open the developer command prompt and compile ibex-lib
 ```bash
@@ -118,8 +103,8 @@ msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease PACKAGE.vcxp
 ```
 The last command generates a installer for ibex-lib
 
-+ build pyIbex with pyzo2015a 
-```bash 
++ build pyIbex with pyzo2015a
+```bash
 cd pyIbex
 mkdir build
 cd build
@@ -144,7 +129,7 @@ a = Interval.ALL_REALS
 a  = Interval(-2, 3)
 
 # Create IntervalVector
-b = IntervalVector( 2, a) 
+b = IntervalVector( 2, a)
 c = IntervalVector([1,2,3])
 d = IntervalVector([[-1,3], [3,10], [-3, -1]])
 
@@ -168,11 +153,11 @@ ctc1 = CtcFwdBwd(f, CmpOp.LEQ, FwdMode.AFFINE_MODE)
 ctcIn = CtcIn(f, Interval(3).inflate(0.5))
 ctcOut = CtcNotIn(f, Interval(3).inflate(0.5))
 
-# Operations on Contractors 
+# Operations on Contractors
 # composition of two contractor
-ctc = ctcIn & ctcOut 
+ctc = ctcIn & ctcOut
 # union of a python list of contractors
-ctc1 = CtcUnion([ctcIn, ctcOut, ctc1]) 
+ctc1 = CtcUnion([ctcIn, ctcOut, ctc1])
 
 ```
 
@@ -183,25 +168,22 @@ TODO
 - [ ] Add IntervalMatrix support
 	- [ ] Add IntervalMatrix support
 	- [ ] Add Jacobian and gradient
-- [ ] Add numpy array support for interval Vector class 
+- [ ] Add numpy array support for interval Vector class
 - [ ] Add ratio option for LargestFirst(Vector, double )
 - [X] Simplify Wrapper interface
 - [X] Add n_var in separator
 - [ ] fix exceptions
 - [X] Improve ItervalVectorinterface
-	- [X] Initialisation with X = IntervalVector(2, [2,3]) 
+	- [X] Initialisation with X = IntervalVector(2, [2,3])
 	- [ ] Iterate over dimension of an IntervalVector
 - [ ] add Function / Ctc / Sep Properties ( nb_vars, ...)
 - [X] inheritance with python objects
-	
+
 --------------------------
 Change Log
 --------------------------
 27/01/2016 : Use pybind11 instead of boost python.
-             Remove wip directory 
+             Remove wip directory
 12/02/2015 : Add SepPolarXY
 04/10/2015 : Add predicate, Paving
 20/09/2015 : Add Set interface, add contract method with set for Sep
-
-
-	

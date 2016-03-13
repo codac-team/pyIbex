@@ -6,7 +6,7 @@
 #  IBEX_DEFINITIONS - Compiler switches required for using ibex
 
 find_package(PkgConfig)
-pkg_check_modules(PC_CPPTEST QUIET ibex)
+pkg_check_modules(PC_IBEXLIB QUIET ibex)
 message(STATUS "IBEX_ROOT ${IBEX_ROOT}")
 
 if(IbexLib_USE_STATIC)
@@ -20,7 +20,7 @@ find_path(IBEX_INCLUDE_DIR ibex.h
 
 find_path(FILIB_INCLUDE_DIR ieee/primitive.hpp
           HINTS ${PC_IBEX_INCLUDEDIR} ${PC_IBEX_INCLUDE_DIRS} ${IBEX_ROOT}
-          PATH_SUFFIXES include          
+          PATH_SUFFIXES include
           )
 
 

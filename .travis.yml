@@ -39,7 +39,6 @@ before_install:
 
 install:
   - bash ./travis_script/build_Ibex4pyIbex.sh
-  - bash ./travis_script/build_IbexRobotics.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
 
 # command to run tests

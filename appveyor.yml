@@ -19,9 +19,7 @@ install:
   - cinstall: python
   - ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
   - "%PYTHON_DIR%/python.exe C:/get-pip.py"
-  #- "%PYTHON_DIR%/Scripts/pip.exe install setuptools --upgrade"
-  #- "%PYTHON_DIR%/Scripts/pip.exe install wheel --upgrade"
-  - curl -L "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.1.35/ibex-lib-2.1.12-win64.zip" -o "C:\projects\pyIbex\ibex-lib.zip"
+  - ps: (new-object net.webclient).DownloadFile('https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.1.35/ibex-lib-2.1.12-win64.zip', 'C:\projects\pyIbex\ibex-lib.zip')
   - ls C:\projects\pyIbex
   - cd C:\projects\pyIbex
   - 7z x -tzip -oC:"ibex-lib" "C:\projects\pyIbex\ibex-lib.zip"

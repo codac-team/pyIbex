@@ -27,7 +27,7 @@ install:
       cd C:\projects\pyIbex
 
       7z x -tzip -oC:"ibex-lib" "C:\projects\pyIbex\ibex-lib.zip"
-      
+
       ls C:\projects\pyIbex\ibex-lib
 
 artifacts:
@@ -57,7 +57,7 @@ deploy:
   draft: true
   prerelease: false
   on:
-    branch: master      # release from master branch only
+    #branch: master      # release from master branch only
     appveyor_repo_tag: false        # deploy on tag push only
 
 

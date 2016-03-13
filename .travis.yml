@@ -39,10 +39,11 @@ before_install:
 
 install:
   - bash ./travis_script/build_Ibex4pyIbex.sh
+  - bash ./travis_script/build_IbexRobotics.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
 
 # command to run tests
-script:  
+script:
   - mkdir build
   - cd build
   - export version=$(python -c "import sys; print(sys.version[:3])")
@@ -52,7 +53,7 @@ script:
   - if [ $TRAVIS_OS_NAME == osx ]; then
       cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} ../ ;
     fi
-  - if [ $TRAVIS_OS_NAME == linux ]; then 
+  - if [ $TRAVIS_OS_NAME == linux ]; then
       cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} -DCMAKE_CXX_COMPILER=g++-4.8 ../ ;
     fi
   - make && make install

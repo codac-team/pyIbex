@@ -15,14 +15,15 @@ ENDIF()
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLE "Build example" OFF)
 option(BUILD_STATIC "make standalone lib" OFF)
+# option(WITH_IBEX_ROBOTICS "use ibex-robotics additionnal lib" ON)
 
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
 
 if(NOT WIN32)
-  #SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-	# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
+  # SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
 	set(IbexLib_USE_STATIC 1)
 	#SET(CMAKE_EXE_LINKER_FLAGS "-static")
 endif()
@@ -38,7 +39,7 @@ EXECUTE_PROCESS(COMMAND
 				)
 
 if(NOT PYTHON_INSTDIR)
-	SET(PYTHON_INSTDIR ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL}) 
+	SET(PYTHON_INSTDIR ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL})
 endif(NOT PYTHON_INSTDIR)
 
 if(WIN32)
@@ -61,6 +62,9 @@ if(WIN32)
   endforeach()
 endif()
 # INCLUDE_DIRECTORIES (pybind11/include)
+set(ONLY_PYTHON_BINDINGS ON)
+add_subdirectory(ibex-robotics/src)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/ibex-robotics/include)
 add_subdirectory(src)
 
 if (BUILD_TESTS)

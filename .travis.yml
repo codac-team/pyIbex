@@ -36,13 +36,15 @@ matrix:
 
 before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install python3; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew install clang-omp; fi
 
 install:
   - bash ./travis_script/build_Ibex4pyIbex.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
 
 # command to run tests
-script:  
+script:
+  - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
   - mkdir build
   - cd build
   - export version=$(python -c "import sys; print(sys.version[:3])")
@@ -50,9 +52,9 @@ script:
   - ls ${HOME}/ibex
   - ls ${HOME}/ibex/lib
   - if [ $TRAVIS_OS_NAME == osx ]; then
-      cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} ../ ;
+      CC=clang-omp CXX=clang-omp++ cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} ../ ;
     fi
-  - if [ $TRAVIS_OS_NAME == linux ]; then 
+  - if [ $TRAVIS_OS_NAME == linux ]; then
       cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} -DCMAKE_CXX_COMPILER=g++-4.8 ../ ;
     fi
   - make && make install

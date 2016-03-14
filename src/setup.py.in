@@ -1,7 +1,7 @@
 from setuptools import setup, Distribution
 import distutils
 from distutils.util import get_platform
-# force External module 
+# force External module
 class BinaryDistribution(Distribution):
     def has_ext_modules(self):
         return True
@@ -23,7 +23,8 @@ setup(
     packages=['pyIbex', 'pyIbex.core'],
     package_data={
         'pyIbex.core': ['_core'+ext_lib],
+				'pyIbex': ['polar'+ext_lib],
     },
     ext_modules = [],
-    include_package_data=True   
+    include_package_data=True
 )

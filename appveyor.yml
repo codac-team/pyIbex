@@ -39,7 +39,7 @@ build_script:
   - cd c:\projects\pyIbex
   - git submodule init
   - git submodule update
-  - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
+  # - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
   - cmake -G "%CMAKE_PLATFORM%" -DPYTHON_INCLUDE_DIR:PATH=%PYTHON_DIR%/include -DPYTHON_LIBRARY:FILEPATH=%PYTHON_DIR%/libs/python34.lib -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DIBEX_ROOT=C:\projects\pyIbex\ibex-lib\ibex-lib-2.1.12-win64
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%

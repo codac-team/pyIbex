@@ -1,6 +1,6 @@
 #/bin/sh
 
-py_version=python_version=$(python -c "import sys; print(sys.version[:3])") # default python version
+py_version=$(python -c "import sys; print(sys.version[:3])") # default python version
 prefix=""  # Default install prefix
 
 # extract options and their arguments into variables.
@@ -11,13 +11,13 @@ for var in "$@"; do
             echo "    $0 [options]"
             echo "Options: "
             echo "    -h                           Display this help message."
-            echo "    -prefix=<install_prefix>     Install prefix for libs"
-            echo "    -python=<python_version>     Python version to use"
+            echo "    --prefix=<install_prefix>     Install prefix for libs"
+            echo "    --python=<python_version>     Python version to use"
             exit 0;;
         --prefix=*)
             prefix="-DCMAKE_INSTALL_PREFIX=${var##*=}" ;;# Remove 'install' from the argument list
         --python=*)
-            py_version=${var##*=}; ;;# Remove 'install' from the argument list
+            py_version="${var##*=}"; ;;# Remove 'install' from the argument list
         *) echo "Internal error!" ; exit 1 ;;
     esac
 done
@@ -30,8 +30,7 @@ echo "Configuration :"
 if [ -n "$prefix" ]; then
   echo "    - custom install prefix = ${prefix##*=}"
 fi
-echo "    - python version = $py_version"
-
+echo "    - python version = ${py_version}"
 
 # save current path
 curr_path=$(pwd)
@@ -54,12 +53,9 @@ make -j2
 make install
 
 cd $curr_path
+git submodule init
+git submodule update
 echo " build pyIbex"
 mkdir -p build && cd build
 cmake $prefix -DPYTHON_VERSION=${py_version} ../
-make && make install && make test
-
-
-
-
-  
+make && make test

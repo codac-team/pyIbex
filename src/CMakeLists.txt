@@ -28,5 +28,5 @@ add_custom_command(TARGET pip_package PRE_BUILD
     WORKING_DIRECTORY ${PYTHON_PACKAGE_DIR}
 )
 
-add_dependencies(pip_package pyIbex)
+# add_dependencies(pip_package pyIbex)
 # add_dependencies(pip_package wip)

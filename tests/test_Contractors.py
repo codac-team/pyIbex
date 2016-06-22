@@ -21,19 +21,22 @@ class TestContractors(unittest.TestCase):
 			print("Unexpected error:", sys.exc_info()[0])
 		# # except SyntaxError:
 		# 	print("Get syntaxError exeption")
-		
+
 	def test_Function_vector(self):
 		f = Function("x[2]", "y[3]", "(x[1]^2 - y[1]*y[0], y[0])")
 		del f
 
-	def test_function_matrix(self):
-		f = Function("x[2]", "y[3]", "(( x[1]^2 - y[1]*y[0], y[0]);(x[0] + y[2], x[0]))")
+	# def test_function_matrix(self):
+	# 	try:
+	# 		f = Function("x[2]", "y[3]", "(( x[1]^2 - y[1]*y[0], y[0]);(x[0] + y[2], x[0]))")
+	# 	except:
+	# 		print("Unexpected error:", sys.exc_info()[0])
 
 	def test_CtcFwdBwd_default_arg(self):
 		f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
 		ctc1 = CtcFwdBwd(f)
 		ctc1 = CtcFwdBwd(f, CmpOp.LEQ)
-		
+
 
 	def test_CtcUnion_2_arguments(self):
 		f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
@@ -64,12 +67,12 @@ class TestContractors(unittest.TestCase):
 		ctc2 = CtcFwdBwd(f2, CmpOp.EQ)
 		f3 = Function("x", "y", "(x-1)^2 + (y-1)^2 - [3.61, 4.41]")
 		ctc3 = CtcFwdBwd(f3, CmpOp.EQ)
-		ctc = ctc1 & ctc2 & ctc3 
+		ctc = ctc1 & ctc2 & ctc3
 		del ctc1, ctc2, ctc3 # optionnal test if references are kept by python
 		a = IntervalVector(2)
 		ctc.contract(a)
 		self.assertEqual(a, IntervalVector(2, Interval(-1.1000000000000005, 2.1000000000000005)))
-	
+
 	def test_CtcArray(self):
 		f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
 		ctc1 = CtcFwdBwd(f, CmpOp.EQ)
@@ -82,7 +85,7 @@ class TestContractors(unittest.TestCase):
 		a = IntervalVector(2)
 		ctc.contract(a)
 		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
-	
+
 	# def test_CtcPolar(self):
 	# 	ctc = CtcPolar()
 	# 	x, y, rho, theta = Interval(3,4), Interval(3,6), Interval(2,6), Interval(0, math.pi/4.0)
@@ -94,21 +97,20 @@ class TestContractors(unittest.TestCase):
 		cx = [0, 1]
 		cy = [0, 1]
 		ctcs = []
-		
+
 		for x, y, r  in zip(cx, cy, data):
 			f = Function('x', 'y', '(x-%f)^2 + (y-%f)^2 - %s'%(x,y,r))
 			ctcs.append(CtcFwdBwd(f, CmpOp.LEQ))
-		
+
 		ctc = CtcQInterProjF(ctcs, len(ctcs)-1) # Union
 		ctcs = None
 		a = IntervalVector(2, Interval(-20,20))
 		ctc.contract(a)
 		self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
-		
-		
+
+
 
 
 if __name__ == '__main__':
-	
-	unittest.main()
 
+	unittest.main()

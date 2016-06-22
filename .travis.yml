@@ -44,7 +44,7 @@ install:
 
 # command to run tests
 script:
-  - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
+  # - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
   - mkdir build
   - cd build
   - export version=$(python -c "import sys; print(sys.version[:3])")

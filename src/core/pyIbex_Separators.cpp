@@ -87,10 +87,8 @@ void export_Separators(py::module& m){
     typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
     typedef void (Sep::*contract_1) (Set& , double );
     // typedef void (Sep::*contract_2) (SetInterval& , double, ibex::BoolInterval, ibex::BoolInterval);
-    py::class_<pySep> sep(m, "Sep");
-    sep
-      .alias<Sep>()
-      .def(init<int>())
+    py::class_<Sep, std::unique_ptr<Sep>, pySep> sep(m, "Sep");
+    sep.def(init<int>())
       .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &Sep::separate)
       .def("contract", contract_1(&Sep::contract))
       .def("contract", (void (Sep::*) (SetInterval& , double, ibex::BoolInterval, ibex::BoolInterval)) &Sep::contract)
@@ -99,7 +97,7 @@ void export_Separators(py::module& m){
       .def("__invert__", &__not, py::return_value_policy::take_ownership, keep_alive<0,1>())
       .def_readonly("nb_var", &Sep::nb_var);
       ;
-    
+
 
     class_<SepUnion>(m, "SepUnion", sep)
             .def(init<Array<Sep> >(), keep_alive<1,2>())
@@ -155,7 +153,7 @@ void export_Separators(py::module& m){
 
 
     class_<SepTransform>(m, "SepTransform", sep)
-            .def(init<Sep&, Function&, Function&>(), keep_alive<1,2>(), keep_alive<1,3>(),  keep_alive<1,4>()) 
+            .def(init<Sep&, Function&, Function&>(), keep_alive<1,2>(), keep_alive<1,3>(),  keep_alive<1,4>())
             .def("separate", &SepTransform::separate);
 
     // class_<SepCtcPairProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairProj> >("SepCtcPairProj", no_init)

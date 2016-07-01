@@ -65,9 +65,8 @@ CtcCompo* __and(Ctc& c1, Ctc& c2){ return (new CtcCompo(c1, c2)); }
 
 void export_Ctc(py::module& m){
 
-  py::class_<pyCtc> ctc(m, "Ctc");
-   ctc.alias<Ctc>()
-      .def(py::init<int>())
+  py::class_<Ctc, std::unique_ptr<Ctc>, pyCtc > ctc(m, "Ctc");
+   ctc.def(py::init<int>())
       .def("contract",(void (ibex::Ctc::*)(IntervalVector&)) &Ctc::contract)
       .def_readonly("nb_var", &Ctc::nb_var)
       .def("__or__", &__or, py::return_value_policy::take_ownership, py::keep_alive<0,1>(),py::keep_alive<0,2>()  )

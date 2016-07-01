@@ -47,7 +47,7 @@ public:
       Bsc,                                            /* Parent class */
       bisect,                                         /* Name of function */
       cell                                             /* Argument(s) */
-    ); 
+    );
   }
 
   virtual void add_backtrackable(Cell& root){
@@ -56,7 +56,7 @@ public:
       Bsc,                /* Parent class */
       add_backtrackable,  /* Name of function */
       root                /* Argument(s) */
-    ); 
+    );
   }
 };
 
@@ -73,9 +73,8 @@ void export_Bsc(py::module& m){
 	typedef std::pair<IntervalVector,IntervalVector> (Bsc::*bisect_2) (Cell&);
 
 	// Bsc Class binding
-	class_<pyBsc> bsc(m, "Bsc");
-    bsc.alias<Bsc>()
-		.def("bisect", bisect_1(&Bsc::bisect))
+	class_<Bsc, std::unique_ptr<Bsc>, pyBsc> bsc(m, "Bsc");
+    bsc.def("bisect", bisect_1(&Bsc::bisect))
     .def("bisect", bisect_2(&Bsc::bisect))
     .def("add_backtrackable", &Bsc::add_backtrackable)
 		.def( "default_ratio", &Bsc::default_ratio )

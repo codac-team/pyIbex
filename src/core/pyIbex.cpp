@@ -24,18 +24,16 @@ void export_Ctc(py::module& m);
 void export_Separators(py::module& m);
 
 
-PYBIND11_PLUGIN(_core)
+PYBIND11_PLUGIN(pyibex)
 {
-  py::module m("_core", "python binding of ibex core fonctionnality");
+  py::module m("pyibex", "python binding of ibex core fonctionnality");
   export_Interval(m);
   export_IntervalVector(m);
   export_Function(m);
   export_IntervalMatrix(m);
   export_Bsc(m);
-  export_Ctc(m);    
+  export_Ctc(m);
   export_Separators(m);
   return m.ptr();
-    
+
 }
-
-

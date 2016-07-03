@@ -40,7 +40,7 @@ class TestContractors(unittest.TestCase):
 
 	def test_CtcUnion_2_arguments(self):
 		f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
-		ctc1 = CtcFwdBwd(f, CmpOp.EQ, FwdMode.AFFINE2_MODE)
+		ctc1 = CtcFwdBwd(f, CmpOp.EQ)
 		f2 = Function("x", "y", "(x-1)^2 + (y-1)^2 - [3.61, 4.41]")
 		ctc2 = CtcFwdBwd(f2, CmpOp.EQ)
 		ctc = CtcUnion([ctc1, ctc2])
@@ -102,7 +102,7 @@ class TestContractors(unittest.TestCase):
 			f = Function('x', 'y', '(x-%f)^2 + (y-%f)^2 - %s'%(x,y,r))
 			ctcs.append(CtcFwdBwd(f, CmpOp.LEQ))
 
-		ctc = CtcQInterProjF(ctcs, len(ctcs)-1) # Union
+		ctc = CtcQInter(ctcs, len(ctcs)-1) # Union
 		ctcs = None
 		a = IntervalVector(2, Interval(-20,20))
 		ctc.contract(a)

@@ -195,13 +195,11 @@ void export_IntervalVector(py::module& m){
             .def(py::init<int>())
             .def(py::init<int,const Interval>())
             .def(py::init<const IntervalVector&>() )
-            .def("__init__", &CreateWithList) //make_constructor(&CreateWithList))
+            .def("__init__", &CreateWithList)
             .def("__init__", &CreateWithIntAndList)
             .def("__init__", &CreateWithTuple)
 
-            // .def("__init__", make_constructor(&CreateWithPyArrayObject))
-            // .def( "__getitem__", &IntervalVector::getitem, return_value_policy<copy_const_reference>()  )
-            // .def( "__setitem__", &IntervalVector::setitem)
+
             .def("__getitem__", getitem, py::return_value_policy::reference_internal)
             .def("__setitem__", setitem)
 

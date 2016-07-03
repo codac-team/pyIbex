@@ -11,7 +11,8 @@
 #include "ibex_SyntaxError.h"
 
 #include <pybind11/pybind11.h>
-#include <pybind11/operators.h> 
+#include <pybind11/operators.h>
+#include <sstream>
 namespace py = pybind11;
 
 using py::self;
@@ -25,12 +26,12 @@ std::string to_string(const Function& f){
   return ss.str();
 }
 
-typedef void (Function::*backward_1) (const IntervalVector&, IntervalVector&) const;
+// typedef void (Function::*backward_1) (const IntervalVector&, IntervalVector&) const;
 
 void export_Function(py::module& m){
-  
+
   py::class_<Function>(m, "Function")
-    
+
     .def(py::init<cc_ptr, cc_ptr>())
     .def(py::init<cc_ptr, cc_ptr, cc_ptr>())
     .def(py::init<cc_ptr, cc_ptr, cc_ptr, cc_ptr>())
@@ -39,13 +40,16 @@ void export_Function(py::module& m){
     .def(py::init<cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr>())
     .def(py::init<cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr, cc_ptr>())
     .def("__repr__", &to_string)
-    .def( "eval" , &Function::eval) 
-    .def( "eval_vector" , &Function::eval_vector) 
+    .def( "eval" , &Function::eval)
+    .def( "eval_vector" , &Function::eval_vector)
     .def( "eval_matrix" , &Function::eval_matrix)
-    .def( "backward", backward_1(&Function::backward))
-    // .def( "backward", (*backward_1) &Function::backward)
+
+    .def( "backward", ( bool(Function::*) (const Interval& , IntervalVector&) const) &Function::backward)
+    .def( "backward", ( bool(Function::*) (const IntervalVector& , IntervalVector&) const) &Function::backward)
+    .def( "backward", ( bool(Function::*) (const IntervalMatrix& , IntervalVector&) const) &Function::backward)
+    
     .def( "nb_arg", &Function::nb_arg)
-    // .def( "gradient" , &Function::gradient) 
-    // .def( "jacobian" , &Function::jacobian) 
+    // .def( "gradient" , &Function::gradient)
+    // .def( "jacobian" , &Function::jacobian)
     ;
 }

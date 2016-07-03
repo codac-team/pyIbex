@@ -1,6 +1,6 @@
 # pySIVIA.py
-import pyIbex
-from pyIbex import *
+import pyibex
+from pyibex import *
 from collections import deque
 try:
 	from vibes import *
@@ -15,13 +15,13 @@ def pySIVIA(X0, ops, epsilon, **kwargs):
 	Parameters
 	----------
 		X0: IntervalVector
-			Initial box 
+			Initial box
 
-		ops: ctc or sep  
+		ops: ctc or sep
 			Operator must be a contractor or a separatot
 
-		epsilon: double 
-			Accuracy of the sub-Paving. 
+		epsilon: double
+			Accuracy of the sub-Paving.
 			Use to end the algorithm.
 
 		color_out : string, optional
@@ -47,13 +47,13 @@ def pySIVIA(X0, ops, epsilon, **kwargs):
 			if None use the current figure
 			default value : None
 
-		draw_boxes: boolean, optional 
+		draw_boxes: boolean, optional
 			if True, boxes removed by contractor are displayed
 			if vibes is not installed, draw_boxes is always equal to false
 			default value False
 
 		display_stats: boolean, optional
-			if True, display the number of call of the contractor, time needed by the sivia 
+			if True, display the number of call of the contractor, time needed by the sivia
 			and the total number of boxes generated.
 			default value: False
 
@@ -89,7 +89,7 @@ def drawBoxDiff(X0, X, color, use_patch=False, **kwargs):
 			 [X[0].lb(), X[0].ub(), X[1].lb(), X[1].ub()], color)
 		else:
 			for b in X0.diff(X):
-				vibes.drawBox(b[0].lb(), b[0].ub(), b[1].lb(), b[1].ub(), color)	
+				vibes.drawBox(b[0].lb(), b[0].ub(), b[1].lb(), b[1].ub(), color)
 	else:
 		vibes.drawBox(X0[0].lb(), X0[0].ub(), X0[1].lb(), X0[1].ub(), color)
 
@@ -105,7 +105,7 @@ def __pySIVIA_ctc(X0, ctc, epsilon, color_out='k[b]', color_maybe='k[y]', draw_b
 		k = k+1
 		X = stack.popleft()
 		X0 = IntervalVector(X)
-		
+
 		#X =  __contract_and_extract(X, ctc, res_out, color_out)
 		ctc.contract(X)
 		if (draw_boxes == True and vibes_available == True):
@@ -114,7 +114,7 @@ def __pySIVIA_ctc(X0, ctc, epsilon, color_out='k[b]', color_maybe='k[y]', draw_b
 		if save_result == True:
 			res_out += X0.diff(X)
 
-	
+
 		if (X.is_empty()): continue
 		if( X.max_diam() < epsilon):
 			if draw_boxes == True:
@@ -152,7 +152,7 @@ def __pySIVIA_sep(X0, sep, epsilon, color_in='k[r]', color_out='k[b]', color_may
 		if save_result==True:
 			res_in += X.diff(x_in)
 			res_out += X.diff(x_out)
-			
+
 		X = x_in & x_out
 
 		if (X.is_empty()): continue
@@ -182,4 +182,3 @@ if __name__ == '__main__':
 	vibes.newFigure('test2')
 	pySIVIA(box, sep, 0.1, draw_boxes=True, save_result=False, **params)
 	vibes.endDrawing()
-

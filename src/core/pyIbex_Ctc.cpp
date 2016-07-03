@@ -22,23 +22,22 @@ using py::self;
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
-#include <ibex_CtcSegment.h>
+// #include <ibex_CtcSegment.h>
 #include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
-#include <ibex_CtcPixelMap.h>
+// #include <ibex_CtcPixelMap.h>
 
 using ibex::Ctc;
 using ibex::CtcUnion;
 using ibex::CmpOp;
-using ibex::FwdMode;
 using ibex::CtcUnion;
 using ibex::CtcCompo;
 using ibex::CtcFwdBwd;
 using ibex::CtcInverse;
 using ibex::CtcNotIn;
-using ibex::CtcSegment;
+// using ibex::CtcSegment;
 using ibex::CtcFixPoint;
-using ibex::CtcQInterProjF;
+using ibex::CtcQInter;
 using ibex::IntervalVector;
 using ibex::Function;
 using ibex::Array;
@@ -83,11 +82,11 @@ void export_Ctc(py::module& m){
             ;
 
     // Export computation mode
-    py::enum_<FwdMode>(m, "FwdMode")
-            .value( "INTERVAL_MODE", ibex::INTERVAL_MODE)
-            .value( "AFFINE2_MODE",  ibex::AFFINE2_MODE)
-            .value( "AFFINE_MODE",   ibex::AFFINE_MODE)
-            ;
+    // py::enum_<FwdMode>(m, "FwdMode")
+    //         .value( "INTERVAL_MODE", ibex::INTERVAL_MODE)
+    //         .value( "AFFINE2_MODE",  ibex::AFFINE2_MODE)
+    //         .value( "AFFINE_MODE",   ibex::AFFINE_MODE)
+    //         ;
 
 //     // Export CtcUnion
     py::class_<CtcUnion>(m, "CtcUnion", ctc)
@@ -107,7 +106,7 @@ void export_Ctc(py::module& m){
     py::class_<CtcFwdBwd>(m, "CtcFwdBwd", ctc)
             .def(py::init<Function&> (), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
             .def(py::init<Function&, CmpOp>(), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
-            .def(py::init<Function&, CmpOp, FwdMode> (), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
+            // .def(py::init<Function&, CmpOp, FwdMode> (), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
             .def(py::init<Function&,Interval&>(), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
             .def(py::init<Function&,IntervalVector&>(), py::keep_alive<1,2>()) //[with_custodian_and_ward<1, 2>()])
             .def("contract", &CtcFwdBwd::contract)
@@ -131,14 +130,14 @@ void export_Ctc(py::module& m){
 
 
 //     // Export CtcSegment
-    py::class_<CtcSegment>(m, "CtcSegment", ctc)
-            .def(py::init<double, double,double,double>())
-            .def("contract", &CtcSegment::contract);
+    // py::class_<CtcSegment>(m, "CtcSegment", ctc)
+    //         .def(py::init<double, double,double,double>())
+    //         .def("contract", &CtcSegment::contract);
 
 //     // Export CtcQInterProjF
-    py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc)
+    py::class_<CtcQInter>(m, "CtcQInter", ctc)
             .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
-            .def("contract", &CtcQInterProjF::contract);
+            .def("contract", &CtcQInter::contract);
 
 
 }

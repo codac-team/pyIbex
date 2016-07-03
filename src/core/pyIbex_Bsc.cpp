@@ -28,6 +28,7 @@ using ibex::Vector;
 
 
 typedef std::pair<IntervalVector,IntervalVector> ItvPair;
+
 class pyBsc : public Bsc {
 public:
   /* Inherit the constructors */
@@ -60,12 +61,6 @@ public:
   }
 };
 
-
-
-// boost::shared_ptr<LargestFirst> largestFirstFromList(const py::list& lst){
-//     std::vector<double> prec_v = to_std_vector<double>(lst);
-//     return boost::shared_ptr<LargestFirst>(new LargestFirst(Vector(prec_v.size(), &prec_v[0]), Bsc::default_ratio()));
-// }
 
 void export_Bsc(py::module& m){
 	// Overloading bisection Function

@@ -28,15 +28,16 @@ using py::keep_alive;
 #include "ibex_SepCtcPair.h"
 #include "ibex_SepFwdBwd.h"
 #include "ibex_SepBoundaryCtc.h"
-#include "ibex_SepPolygon.h"
-
 #include "ibex_SepInverse.h"
-#include "ibex_SepTransform.h"
 #include "ibex_SepQInter.h"
-#include "ibex_SepCtcPairProj.h"
 
-#include "ibex_Set.h"
-#include "ibex_SetInterval.h"
+
+// #include "ibex_SepPolygon.h"
+// #include "ibex_SepTransform.h"
+// #include "ibex_SepCtcPairProj.h"
+
+// #include "ibex_Set.h"
+// #include "ibex_SetInterval.h"
 using namespace ibex;
 
 
@@ -64,34 +65,15 @@ SepInter* __and(Sep& s1, Sep& s2){ return (new SepInter(s1, s2)); }
 SepNot* __not(Sep& s1){ return (new SepNot(s1)); }
 
 
-void SepPolygonFromList(SepPolygon &instance,  std::vector< std::vector<double> >& lst){
-  if (lst.size() != 2){
-    throw std::invalid_argument("Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]");
-  }
-  std::vector<double> &lx = lst[0];
-  std::vector<double> &ly = lst[1];
-  int n = lx.size();
-  std::vector<double> ax(n), ay(n),bx(n),by(n);
-  for(size_t i = 0; i < n; i++){
-      ax[i] = lx[i];
-      ay[i] = ly[i];
-      bx[i] = lx[ (i+1)%n ];
-      by[i] = ly[ (i+1)%n ];
-  }
-  new(&instance) SepPolygon(ax, ay, bx, by);
-}
-
-
 void export_Separators(py::module& m){
 
-    typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
-    typedef void (Sep::*contract_1) (Set& , double );
-    // typedef void (Sep::*contract_2) (SetInterval& , double, ibex::BoolInterval, ibex::BoolInterval);
+    // typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
+    // typedef void (Sep::*contract_1) (Set& , double );
+
     py::class_<Sep, std::unique_ptr<Sep>, pySep> sep(m, "Sep");
     sep.def(init<int>())
       .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &Sep::separate)
-      .def("contract", contract_1(&Sep::contract))
-      .def("contract", (void (Sep::*) (SetInterval& , double, ibex::BoolInterval, ibex::BoolInterval)) &Sep::contract)
+      // .def("contract", contract_1(&Sep::contract))
       .def("__or__", &__or, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>())
       .def("__and__", &__and, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>())
       .def("__invert__", &__not, py::return_value_policy::take_ownership, keep_alive<0,1>())
@@ -99,7 +81,13 @@ void export_Separators(py::module& m){
       ;
 
 
-    class_<SepUnion>(m, "SepUnion", sep)
+    class_<SepUnion>(m, "SepUnion", sep, R"mydelimiter(
+      The sep union seprator .....
+
+      param
+      =====
+      Mon param
+    )mydelimiter")
             .def(init<Array<Sep> >(), keep_alive<1,2>())
             .def("separate", &SepUnion::separate)
             ;
@@ -111,12 +99,10 @@ void export_Separators(py::module& m){
 
 
     class_<SepCtcPair>(m, "SepCtcPair", sep)
-     // ctcPair.alias<SepCtcPair>()
             .def(init<Ctc&, Ctc&>(), keep_alive<1,2>(), keep_alive<1,3>())
             .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepCtcPair::separate)
             .def("ctc_in", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_in;})
             .def("ctc_out", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_out;})
-            // .def_static_readonly("ctc_out", &SepCtcPair::ctc_out)
             ;
 
 
@@ -127,36 +113,21 @@ void export_Separators(py::module& m){
             .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepFwdBwd::separate)
             .def("ctc_in", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_in;})
             .def("ctc_out", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_out;})
-            // .def_static_readonly("ctc_in", &SepFwdBwd::ctc_in)
-            // .def_static_readonly("ctc_out", &SepFwdBwd::ctc_out)
             ;
 
     class_<SepNot>(m, "SepNot", sep)
             .def(init<Sep&>(), keep_alive<1,2>())
             .def("separate", &SepNot::separate);
 
-    class_<SepPolygon>(m, "SepPolygon", sep)
-            // .def(init<std::vector<double>&, std::vector<double>&, std::vector<double>&, std::vector<double>&>())
-            .def("__init__", &SepPolygonFromList)
-            .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepPolygon::separate);
 
-
-    class_<SepQInterProjF>(m, "SepQInterProjF", sep)
+    class_<SepQInter>(m, "SepQInter", sep)
             .def(init<Array<Sep> >(), keep_alive<1,2>())
-            .def("separate", &SepQInterProjF::separate)
-            .def_property("q", &SepQInterProjF::getq, &SepQInterProjF::setq)
+            .def("separate", &SepQInter::separate)
+            .def_property("q", &SepQInter::get_q, &SepQInter::set_q)
             ;
 
     class_<SepInverse>(m, "SepInverse", sep)
             .def(init<Sep&, Function& >(), keep_alive<1,2>(), keep_alive<1,3>())
             .def("separate", &SepInverse::separate);
 
-
-    class_<SepTransform>(m, "SepTransform", sep)
-            .def(init<Sep&, Function&, Function&>(), keep_alive<1,2>(), keep_alive<1,3>(),  keep_alive<1,4>())
-            .def("separate", &SepTransform::separate);
-
-    // class_<SepCtcPairProj, bases<Sep>, boost::noncopyable, boost::shared_ptr<ibex::SepCtcPairProj> >("SepCtcPairProj", no_init)
-    //         .def(init<Ctc&, Ctc&, const IntervalVector&, double>()[with_custodian_and_ward<1,2, with_custodian_and_ward<1,3> >()])
-    //         .def("separate", &SepCtcPairProj::separate);
 }

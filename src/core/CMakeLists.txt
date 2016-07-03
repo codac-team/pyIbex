@@ -1,6 +1,6 @@
 file(GLOB CORE_SRCS "pyIbex_*.cpp")
 
-PYBIND11_ADD_MODULE(_core SHARED
+PYBIND11_ADD_MODULE(pyibex SHARED
     pyIbex.cpp
     pyIbex_Interval.cpp
     pyIbex_IntervalVector.cpp
@@ -10,9 +10,9 @@ PYBIND11_ADD_MODULE(_core SHARED
     pyIbex_Bsc.cpp
     pyIbex_IntervalMatrix.cpp
 )
-target_link_libraries(_core ${LIBS})
+target_link_libraries(pyibex ${LIBS})
 
 # install( TARGETS _core DESTINATION "${PYTHON_INSTDIR}/pyIbex/core")
-add_custom_command(TARGET _core POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:_core>" "${PYTHON_PACKAGE_DIR}/pyIbex/core"
+add_custom_command(TARGET pyibex POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:pyibex>" "${PYTHON_PACKAGE_DIR}/pyibex"
 )

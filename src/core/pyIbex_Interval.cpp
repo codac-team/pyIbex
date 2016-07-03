@@ -12,8 +12,10 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include "ibex_IntervalVector.h"
+#include "pyIbex_Interval_doc.h"
 namespace py = pybind11;
 using py::self;
+using namespace pybind11::literals;
 using namespace ibex;
 
 #include <sstream>
@@ -23,7 +25,7 @@ double getitem(Interval& X, int i){
         return X.lb();
     else if (i == 1)
         return X.ub();
-    else 
+    else
         return IBEX_NAN;
 }
 
@@ -39,19 +41,20 @@ std::string to_string(const Interval& a){
   std::stringstream ss;
   ss << a;
   return ss.str();
-  // return "[" + std::to_string(a.lb()) + "," + std::to_string(a.ub()) + "]" ; 
+  // return "[" + std::to_string(a.lb()) + "," + std::to_string(a.ub()) + "]" ;
 }
 
+
 void export_Interval(py::module& m){
-    py::class_<Interval>(m, "Interval")
+    py::class_<Interval>(m, "Interval", DOCS_INTERVAL_TYPE)
     .def(py::init<>())
-    .def(py::init<double, double>())
-    .def(py::init<double>())
-    .def(py::init<Interval>())
-    .def("assign", &assignItv)
+    .def(py::init<double, double>(), "\tbuild Interval [lb, ub]", "lb"_a, "ub"_a)
+    .def(py::init<double>(), "\tbuild singleton [val,val]", "val"_a)
+    .def(py::init<Interval>(), "\tbuild a  copy of interval itv", "itv"_a)
+    .def("assign", &assignItv, "\tassign the value of itv to this", "itv"_a)
     .def( self == self )
     .def( self + self )
-    .def( self - self ) 
+    .def( self - self )
     .def( self * self )
     .def( self / self )
     .def( self & self )
@@ -92,46 +95,45 @@ void export_Interval(py::module& m){
 
     .def( "lb",     &Interval::lb, "return the upper bound")
     .def( "ub",     &Interval::ub, "return the lower bound" )
-    .def( "inflate",&Interval::inflate, py::return_value_policy::copy )
-    .def( "set_empty", &Interval::set_empty )
-    .def( "mid",    &Interval::mid )
-    .def( "rad",    &Interval::rad )
-    .def( "diam",   &Interval::diam )
-    .def( "mig",    &Interval::mig )
-    .def( "mag",    &Interval::mag )
-    .def( "is_subset",  &Interval::is_subset, "True iff this interval is a subset of x.")
-    .def( "is_strict_subset",   &Interval::is_strict_subset, "True iff this interval is a subset of x and not x itself.")
-    .def( "is_interior_subset", &Interval::is_interior_subset, "True iff this interval is in the interior of x." )
-    .def( "is_strict_interior_subset",  &Interval::is_strict_interior_subset, 
-            "True iff this interval is in the interior of x and different from x." )
-    .def( "is_superset",    &Interval::is_superset, "True iff this interval is a superset of x." )
-    .def( "is_strict_superset", &Interval::is_strict_superset, "True iff this interval is a superset of x different from x." )
-    .def( "contains",   &Interval::contains, "True iff *this contains d." )
-    .def( "interior_contains",  &Interval::interior_contains, "True iff the interior of *this contains d." )
-    .def( "intersects", &Interval::intersects )
-    .def( "overlaps",   &Interval::overlaps )
-    .def( "is_disjoint",    &Interval::is_disjoint )
-    .def( "is_empty",   &Interval::is_empty )
-    .def( "is_degenerated",     &Interval::is_degenerated )
-    .def( "is_unbounded",   &Interval::is_unbounded )
-    .def( "is_bisectable",  &Interval::is_bisectable )
-    .def( "rel_distance",   &Interval::rel_distance )
-    .def( "complementary",  &Interval::complementary )
-    .def( "diff",   &Interval::diff )
-    .def_readonly_static("PI", &Interval::PI)
-    .def_readonly_static("TWO_PI", &Interval::TWO_PI)
-    .def_readonly_static("HALF_PI", &Interval::HALF_PI)
-    .def_readonly_static("EMPTY_SET", &Interval::EMPTY_SET)
-    .def_readonly_static("ALL_REALS", &Interval::ALL_REALS)
-    .def_readonly_static("ZERO", &Interval::ZERO)
-    .def_readonly_static("ONE", &Interval::ONE)
-    .def_readonly_static("POS_REALS", &Interval::POS_REALS)
-    .def_readonly_static("NEG_REALS", &Interval::NEG_REALS)    
-    .def( "bisect", &Interval::bisect, "Bisect into two subintervals. ratio is used to chose the split point (default =0.5 middle)",
-          py::arg("ratio")=0.5)
-    .def("__getitem__", getitem)
-    .def( "copy", &my_copy)
+    .def( "inflate",&Interval::inflate, DOCS_INTERVAL_INFLATE, py::return_value_policy::copy )
+    .def( "set_empty", &Interval::set_empty, "set self to empty set" )
+    .def( "mid",    &Interval::mid, DOCS_INTERVAL_MID)
+    .def( "rad",    &Interval::rad, DOCS_INTERVAL_RAD )
+    .def( "diam",   &Interval::diam, DOCS_INTERVAL_DIAM )
+    .def( "mig",    &Interval::mig, DOCS_INTERVAL_MIG )
+    .def( "mag",    &Interval::mag, DOCS_INTERVAL_MAG )
+    .def( "is_subset",  &Interval::is_subset, DOCS_INTERVAL_IS_SUBSET)
+    .def( "is_strict_subset",   &Interval::is_strict_subset, DOCS_INTERVAL_IS_STRICT_SUBSET)
+    .def( "is_interior_subset", &Interval::is_interior_subset, DOCS_INTERVAL_IS_INTERIOR_SUBSET )
+    .def( "is_strict_interior_subset",  &Interval::is_strict_interior_subset,DOCS_INTERVAL_IS_STRICT_INTERIOR_SUBSET )
+    .def( "is_superset",    &Interval::is_superset, DOCS_INTERVAL_IS_SUPERSET)
+    .def( "is_strict_superset", &Interval::is_strict_superset, DOCS_INTERVAL_IS_STRICT_SUPERSET)
+    .def( "contains",   &Interval::contains, DOCS_INTERVAL_CONTAINS )
+    .def( "interior_contains",  &Interval::interior_contains, DOCS_INTERVAL_INTERIOR_CONTAINS)
+    .def( "intersects", &Interval::intersects, DOCS_INTERVAL_INTERSECTS )
+    .def( "overlaps",   &Interval::overlaps, DOCS_INTERVAL_OVERLAPS )
+    .def( "is_disjoint",    &Interval::is_disjoint, DOCS_INTERVAL_IS_DISJOINT )
+    .def( "is_empty",   &Interval::is_empty, DOCS_INTERVAL_IS_EMPTY )
+    .def( "is_degenerated",     &Interval::is_degenerated, DOCS_INTERVAL_IS_DEGENERATED )
+    .def( "is_unbounded",   &Interval::is_unbounded, DOCS_INTERVAL_IS_UNBOUNDED )
+    .def( "is_bisectable",  &Interval::is_bisectable,DOCS_INTERVAL_IS_BISECTABLE )
+    .def( "rel_distance",   &Interval::rel_distance, DOCS_INTERVAL_REL_DISTANCE )
+    .def( "complementary",  &Interval::complementary, DOCS_INTERVAL_COMPLEMENTARY )
+    .def( "diff",   &Interval::diff, DOCS_INTERVAL_DIFF )
+
+    .def( "bisect", &Interval::bisect, DOCS_INTERVAL_BISECT, py::arg("ratio")=0.5)
+    .def("__getitem__", getitem, "self[0] returns the lb and self[1] return ub")
+    .def( "copy", &my_copy, "return a new objec which is the copy of self")
     // .def( "__pow__", pow__)
+    .def_readonly_static("PI", &Interval::PI )
+    .def_readonly_static("TWO_PI", &Interval::TWO_PI )
+    .def_readonly_static("HALF_PI", &Interval::HALF_PI )
+    .def_readonly_static("EMPTY_SET", &Interval::EMPTY_SET )
+    .def_readonly_static("ALL_REALS", &Interval::ALL_REALS )
+    .def_readonly_static("ZERO", &Interval::ZERO )
+    .def_readonly_static("ONE", &Interval::ONE )
+    .def_readonly_static("POS_REALS", &Interval::POS_REALS )
+    .def_readonly_static("NEG_REALS", &Interval::NEG_REALS )
     ;
 
     // External functions
@@ -153,11 +155,11 @@ void export_Interval(py::module& m){
     m.def( "acosh",   &ibex::acosh );
     m.def( "asinh",   &ibex::asinh );
     m.def( "atanh",   &ibex::atanh );
-    m.def( "abs",    ( Interval (*) (const Interval&) ) &ibex::abs  );  
-    m.def( "max",     &ibex::max  );  
-    m.def( "min",     &ibex::min  );  
-    m.def( "sign",    &ibex::sign );   
-    m.def( "chi",     &ibex::chi  );  
+    m.def( "abs",    ( Interval (*) (const Interval&) ) &ibex::abs  );
+    m.def( "max",     &ibex::max  );
+    m.def( "min",     &ibex::min  );
+    m.def( "sign",    &ibex::sign );
+    m.def( "chi",     &ibex::chi  );
     m.def( "integer", &ibex::integer  );
 
     // Attention en python l'argument est passé en double par defaut et pas en int.
@@ -177,12 +179,12 @@ void export_Interval(py::module& m){
     m.def( "bwd_div",     &ibex::bwd_div );
     m.def( "bwd_sqr",     &ibex::bwd_sqr );
     m.def( "bwd_sqrt",    &ibex::bwd_sqrt );
-    
+
     // sbool (*bwd_pow_1)(const Interval&, Interval& , Interval&) = &ibex::bwd_pow;
     // sbool (*bwd_pow_2)(const Interval&, int , Interval&) = &ibex::bwd_pow;
     m.def( "bwd_pow", (bool (*)(const Interval&, Interval& , Interval&))  &ibex::bwd_pow);
     m.def( "bwd_pow", (bool (*)(const Interval&, int , Interval&))        &ibex::bwd_pow);
-    
+
     m.def( "bwd_root",    &ibex::bwd_root );
     m.def( "bwd_exp",     &ibex::bwd_exp );
     m.def( "bwd_log",     &ibex::bwd_log );
@@ -206,7 +208,5 @@ void export_Interval(py::module& m){
     m.def( "bwd_chi",     &ibex::bwd_chi );
     m.def( "bwd_integer", &ibex::bwd_integer );
     m.def( "bwd_imod",    &ibex::bwd_imod );
-    
+
 };
-
-

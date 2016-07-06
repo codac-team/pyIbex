@@ -18,6 +18,10 @@
 #include <stdexcept>
 #include <sstream>
 
+using namespace pybind11::literals;
+#include "pyIbex_IntervalVector_doc.h"
+
+
 namespace py = pybind11;
 using py::self;
 
@@ -169,6 +173,12 @@ std::vector<IntervalVector> diff_wrapper(IntervalVector& X, IntervalVector& Y){
     return v;
 }
 
+std::vector<int> sort_indices_wrapper(IntervalVector& X, bool min){
+  std::vector<int> v(X.size());
+  X.sort_indices(min, &v[0]);
+  return v;
+}
+
 
 void assignItv(IntervalVector& self, const IntervalVector& other){
     self = other;
@@ -191,13 +201,13 @@ void export_IntervalVector(py::module& m){
 
 
 
-    py::class_<IntervalVector>(m, "IntervalVector")
-            .def(py::init<int>())
-            .def(py::init<int,const Interval>())
-            .def(py::init<const IntervalVector&>() )
-            .def("__init__", &CreateWithList)
-            .def("__init__", &CreateWithIntAndList)
-            .def("__init__", &CreateWithTuple)
+    py::class_<IntervalVector>(m, "IntervalVector", DOCS_INTERVALVECTOR_TYPE)
+            .def(py::init<int>(), "dim"_a)
+            .def(py::init<int,const Interval>(), "dim"_a, "itv"_a)
+            .def(py::init<const IntervalVector&>(), "x"_a )
+            .def("__init__", &CreateWithList, "list"_a)
+            .def("__init__", &CreateWithIntAndList, "dim"_a, "list"_a)
+            .def("__init__", &CreateWithTuple, "list"_a)
 
 
             .def("__getitem__", getitem, py::return_value_policy::reference_internal)
@@ -278,48 +288,49 @@ void export_IntervalVector(py::module& m){
             .def("copy", &my_copy)
             .def("__len__", &IntervalVector::size )
             .def("size", &IntervalVector::size )
-            .def_static( "empty", &IntervalVector::empty ) //.staticmethod("empty")
-            .def( "set_empty", &IntervalVector::set_empty)
-            .def( "clear", &IntervalVector::clear)
-            .def( "init", &IntervalVector::init)
-            .def( "inflate", &IntervalVector::inflate, py::return_value_policy::reference_internal)
-            .def( "resize", &IntervalVector::resize)
-            .def( "subvector", &IntervalVector::subvector) //, return_value_policy<return_by_value>())
-            .def( "put", &IntervalVector::put)
-            .def( "size" , &IntervalVector::size )
-            .def( "lb" , &IntervalVector::lb )
-            .def( "ub" , &IntervalVector::ub )
-            .def( "mid" , &IntervalVector::mid )
-            .def( "mig" , &IntervalVector::mig )
-            .def( "mag" , &IntervalVector::mag )
-            .def( "is_empty" , &IntervalVector::is_empty )
-            .def( "is_flat" , &IntervalVector::is_flat )
-            .def( "is_unbounded" , &IntervalVector::is_unbounded )
-            .def( "is_subset" , &IntervalVector::is_subset )
-            .def( "is_strict_subset" , &IntervalVector::is_strict_subset )
-            .def( "is_interior_subset" , &IntervalVector::is_interior_subset )
-            .def( "is_strict_interior_subset" , &IntervalVector::is_strict_interior_subset )
-            .def( "is_superset" , &IntervalVector::is_superset )
-            .def( "is_strict_superset" , &IntervalVector::is_strict_superset )
-            .def( "contains" , &IntervalVector::contains )
-            .def( "interior_contains" , &IntervalVector::interior_contains )
-            .def( "intersects" , &IntervalVector::intersects )
-            .def( "overlaps" , &IntervalVector::overlaps )
-            .def( "is_disjoint" , &IntervalVector::is_disjoint )
-            .def( "is_zero" , &IntervalVector::is_zero )
-            .def( "is_bisectable" , &IntervalVector::is_bisectable )
-            .def( "rad",    &IntervalVector::rad )
-            .def( "diam",   &IntervalVector::diam )
-            .def( "sort_indices",   &IntervalVector::sort_indices )
-            .def( "max_diam",   &IntervalVector::max_diam, "return maximal diameter of (*this)" )
-            .def( "min_diam",   &IntervalVector::min_diam, "return minimal diameter of (*this)")
-            .def( "volume",     &IntervalVector::volume )
-            .def( "perimeter",  &IntervalVector::perimeter )
-            .def( "rel_distance",   &IntervalVector::rel_distance )
+            .def_static( "empty", &IntervalVector::empty, DOCS_INTERVALVECTOR_EMPTY, py::arg("n") )
+            .def( "set_empty", &IntervalVector::set_empty, DOCS_INTERVALVECTOR_SET_EMPTY)
+            .def( "clear", &IntervalVector::clear, DOCS_INTERVALVECTOR_CLEAR)
+            .def( "init", &IntervalVector::init, DOCS_INTERVALVECTOR_INIT, py::arg("x"))
+            .def( "inflate", &IntervalVector::inflate, DOCS_INTERVALVECTOR_INFLATE, py::return_value_policy::reference_internal, py::arg("rad"))
+            .def( "resize", &IntervalVector::resize, DOCS_INTERVALVECTOR_RESIZE, py::arg("n"))
+            .def( "subvector", &IntervalVector::subvector, DOCS_INTERVALVECTOR_SUBVECTOR, "start_index"_a, "end_index"_a) //, return_value_policy<return_by_value>())
+            .def( "put", &IntervalVector::put, DOCS_INTERVALVECTOR_PUT)
+            .def( "size" , &IntervalVector::size, DOCS_INTERVALVECTOR_SIZE )
+            .def( "lb" , &IntervalVector::lb, DOCS_INTERVALVECTOR_LB )
+            .def( "ub" , &IntervalVector::ub, DOCS_INTERVALVECTOR_UB )
+            .def( "mid" , &IntervalVector::mid, DOCS_INTERVALVECTOR_MID )
+            .def( "mig" , &IntervalVector::mig, DOCS_INTERVALVECTOR_MIG )
+            .def( "mag" , &IntervalVector::mag, DOCS_INTERVALVECTOR_MAG )
+            .def( "is_empty" , &IntervalVector::is_empty, DOCS_INTERVALVECTOR_IS_EMPTY )
+            .def( "is_flat" , &IntervalVector::is_flat, DOCS_INTERVALVECTOR_IS_FLAT )
+            .def( "is_unbounded" , &IntervalVector::is_unbounded, DOCS_INTERVALVECTOR_IS_UNBOUNDED )
+            .def( "is_subset" , &IntervalVector::is_subset, DOCS_INTERVALVECTOR_IS_SUBSET, "x"_a )
+            .def( "is_strict_subset" , &IntervalVector::is_strict_subset, DOCS_INTERVALVECTOR_IS_STRICT_SUBSET, "x"_a )
+            .def( "is_interior_subset" , &IntervalVector::is_interior_subset, DOCS_INTERVALVECTOR_IS_INTERIOR_SUBSET, "x"_a )
+            .def( "is_strict_interior_subset" , &IntervalVector::is_strict_interior_subset, DOCS_INTERVALVECTOR_IS_STRICT_INTERIOR_SUBSET, "x"_a )
+            .def( "is_superset" , &IntervalVector::is_superset, DOCS_INTERVALVECTOR_IS_SUPERSET, "x"_a )
+            .def( "is_strict_superset" , &IntervalVector::is_strict_superset, DOCS_INTERVALVECTOR_IS_STRICT_SUPERSET, "x"_a )
+            .def( "contains" , &IntervalVector::contains, DOCS_INTERVALVECTOR_CONTAINS, "x"_a)
+            .def( "interior_contains" , &IntervalVector::interior_contains, DOCS_INTERVALVECTOR_INTERIOR_CONTAINS, "x"_a )
+            .def( "intersects" , &IntervalVector::intersects, DOCS_INTERVALVECTOR_INTERSECTS, "x"_a )
+            .def( "overlaps" , &IntervalVector::overlaps, DOCS_INTERVALVECTOR_OVERLAPS, "x"_a )
+            .def( "is_disjoint" , &IntervalVector::is_disjoint, DOCS_INTERVALVECTOR_IS_DISJOINT,"x"_a )
+            .def( "is_zero" , &IntervalVector::is_zero, DOCS_INTERVALVECTOR_IS_ZERO )
+            .def( "is_bisectable" , &IntervalVector::is_bisectable, DOCS_INTERVALVECTOR_IS_BISECTABLE )
+            .def( "rad",    &IntervalVector::rad, DOCS_INTERVALVECTOR_RAD )
+            .def( "diam",   &IntervalVector::diam, DOCS_INTERVALVECTOR_DIAM )
+            .def( "extr_diam_index", &IntervalVector::extr_diam_index, DOCS_INTERVALVECTOR_EXTR_DIAM_INDEX, "min"_a)
+            .def( "sort_indices", sort_indices_wrapper, DOCS_INTERVALVECTOR_SORT_INDICES, "min"_a )
+            .def( "max_diam",   &IntervalVector::max_diam, DOCS_INTERVALVECTOR_MAX_DIAM)
+            .def( "min_diam",   &IntervalVector::min_diam, DOCS_INTERVALVECTOR_MIN_DIAM)
+            .def( "volume",     &IntervalVector::volume, DOCS_INTERVALVECTOR_VOLUME )
+            .def( "perimeter",  &IntervalVector::perimeter, DOCS_INTERVALVECTOR_PERIMETER )
+            .def( "rel_distance",   &IntervalVector::rel_distance, DOCS_INTERVALVECTOR_REL_DISTANCE, "x"_a )
 
-            .def( "diff",   &diff_wrapper )
-            .def( "complementary",  &complementary_wrapper )
-            .def( "bisect",     &IntervalVector::bisect, "bisect interval vector", py::arg("i"), py::arg("ratio")=0.5 )
+            .def( "diff",   &diff_wrapper , DOCS_INTERVALVECTOR_DIFF, "y"_a)
+            .def( "complementary",  &complementary_wrapper , DOCS_INTERVALVECTOR_COMPLEMENTARY)
+            .def( "bisect",   &IntervalVector::bisect, DOCS_INTERVALVECTOR_BISECT,  py::arg("i"), py::arg("ratio")=0.5)
             ;
 
             m.def( "abs", ( IntervalVector (*) (const IntervalVector& ) ) &ibex::abs);

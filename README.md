@@ -182,8 +182,11 @@ TODO
 --------------------------
 Change Log
 --------------------------
-27/01/2016 : Use pybind11 instead of boost python.
+- 06/07/2016 : use ibex-lib 3.2.0
+               update Docstring
+               update pybind11 interface
+- 27/01/2016 : Use pybind11 instead of boost python.
              Remove wip directory
-12/02/2015 : Add SepPolarXY
-04/10/2015 : Add predicate, Paving
-20/09/2015 : Add Set interface, add contract method with set for Sep
+- 12/02/2015 : Add SepPolarXY
+- 04/10/2015 : Add predicate, Paving
+- 20/09/2015 : Add Set interface, add contract method with set for Sep

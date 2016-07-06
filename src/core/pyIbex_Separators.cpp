@@ -31,6 +31,7 @@ using py::keep_alive;
 #include "ibex_SepInverse.h"
 #include "ibex_SepQInter.h"
 
+#include "pyIbex_Separators_doc.h"
 
 // #include "ibex_SepPolygon.h"
 // #include "ibex_SepTransform.h"
@@ -67,67 +68,63 @@ SepNot* __not(Sep& s1){ return (new SepNot(s1)); }
 
 void export_Separators(py::module& m){
 
-    // typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
-    // typedef void (Sep::*contract_1) (Set& , double );
+  // typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
+  // typedef void (Sep::*contract_1) (Set& , double );
 
-    py::class_<Sep, std::unique_ptr<Sep>, pySep> sep(m, "Sep");
-    sep.def(init<int>())
-      .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &Sep::separate)
-      // .def("contract", contract_1(&Sep::contract))
-      .def("__or__", &__or, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>())
-      .def("__and__", &__and, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>())
-      .def("__invert__", &__not, py::return_value_policy::take_ownership, keep_alive<0,1>())
-      .def_readonly("nb_var", &Sep::nb_var);
-      ;
-
-
-    class_<SepUnion>(m, "SepUnion", sep, R"mydelimiter(
-      The sep union seprator .....
-
-      param
-      =====
-      Mon param
-    )mydelimiter")
-            .def(init<Array<Sep> >(), keep_alive<1,2>())
-            .def("separate", &SepUnion::separate)
-            ;
-
-    class_<SepInter>(m, "SepInter", sep)
-            .def(init<Array<Sep> >(), keep_alive<1,2>())
-            .def("separate", &SepInter::separate)
-            ;
+  py::class_<Sep, std::unique_ptr<Sep>, pySep> sep(m, "Sep", DOCS_SEP_TYPE);
+  sep.def(init<int>())
+    .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &Sep::separate, DOCS_SEP_SEPARATE,
+                      py::arg("x_in"), py::arg("x_out"))
+    .def_readonly("nb_var", &Sep::nb_var, DOCS_SEP_NBVAR)
+    .def("__or__", &__or, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>(), DOCS_SEP_OR)
+    .def("__and__", &__and, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>(), DOCS_SEP_AND)
+    .def("__invert__", &__not, py::return_value_policy::take_ownership, keep_alive<0,1>(), DOCS_SEP_INVERSE)
+  ;
 
 
-    class_<SepCtcPair>(m, "SepCtcPair", sep)
-            .def(init<Ctc&, Ctc&>(), keep_alive<1,2>(), keep_alive<1,3>())
-            .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepCtcPair::separate)
-            .def("ctc_in", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_in;})
-            .def("ctc_out", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_out;})
-            ;
+  class_<SepUnion>(m, "SepUnion", sep, DOCS_SEP_SEPUNION)
+    .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
+    .def("separate", &SepUnion::separate)
+  ;
+
+  class_<SepInter>(m, "SepInter", sep, DOCS_SEP_SEPINTER)
+    .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
+    .def("separate", &SepInter::separate)
+  ;
 
 
-    class_<SepFwdBwd>(m, "SepFwdBwd", sep)
-            .def(init< Function&, CmpOp >(), keep_alive<1,2>())
-            .def(init<Function&, Interval& >(), keep_alive<1,2>())
-            .def(init<Function&, IntervalVector& >(), keep_alive<1,2>())
-            .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepFwdBwd::separate)
-            .def("ctc_in", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_in;})
-            .def("ctc_out", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_out;})
-            ;
-
-    class_<SepNot>(m, "SepNot", sep)
-            .def(init<Sep&>(), keep_alive<1,2>())
-            .def("separate", &SepNot::separate);
+  class_<SepCtcPair>(m, "SepCtcPair", sep, DOCS_SEP_SEPCTCPAIR)
+    .def(init<Ctc&, Ctc&>(), keep_alive<1,2>(), keep_alive<1,3>(), py::arg("ctc_in"), py::arg("ctc_out"))
+    .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepCtcPair::separate)
+    .def("ctc_in", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_in;})
+    .def("ctc_out", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_out;})
+  ;
 
 
-    class_<SepQInter>(m, "SepQInter", sep)
-            .def(init<Array<Sep> >(), keep_alive<1,2>())
-            .def("separate", &SepQInter::separate)
-            .def_property("q", &SepQInter::get_q, &SepQInter::set_q)
-            ;
+  class_<SepFwdBwd>(m, "SepFwdBwd", sep, DOCS_SEP_SEPFWDBWD)
+    .def(init< Function&, CmpOp >(), keep_alive<1,2>(), py::arg("f"), py::arg("op"))
+    .def(init<Function&, Interval& >(), keep_alive<1,2>(), py::arg("f"), py::arg("itv_y"))
+    .def(init<Function&, IntervalVector& >(), keep_alive<1,2>(), py::arg("f"), py::arg("box_y"))
+    .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepFwdBwd::separate)
+    .def("ctc_in", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_in;})
+    .def("ctc_out", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_out;})
+  ;
 
-    class_<SepInverse>(m, "SepInverse", sep)
-            .def(init<Sep&, Function& >(), keep_alive<1,2>(), keep_alive<1,3>())
-            .def("separate", &SepInverse::separate);
+  class_<SepNot>(m, "SepNot", sep, DOCS_SEP_SEPNOT)
+    .def(init<Sep&>(), keep_alive<1,2>(), py::arg("sep"))
+    .def("separate", &SepNot::separate)
+  ;
+
+
+  class_<SepQInter>(m, "SepQInter", sep, DOCS_SEP_SEPQINTER)
+    .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
+    .def("separate", &SepQInter::separate)
+    .def_property("q", &SepQInter::get_q, &SepQInter::set_q)
+  ;
+
+  class_<SepInverse>(m, "SepInverse", sep, DOCS_SEP_SEPINVERSE)
+    .def(init<Sep&, Function& >(), keep_alive<1,2>(), keep_alive<1,3>(), py::arg("sep"), py::arg("f"))
+    .def("separate", &SepInverse::separate)
+  ;
 
 }

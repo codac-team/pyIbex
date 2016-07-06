@@ -70,7 +70,7 @@ void export_Bsc(py::module& m){
 
 	// Bsc Class binding
 	class_<Bsc, std::unique_ptr<Bsc>, pyBsc> bsc(m, "Bsc", DOCS_BSC_TYPE);
-    bsc.def("bisect", (ItvPair (Bsc::*) (const IntervalVector& box) )(&Bsc::bisect), DOCS_BSC_BISECT, "x"_a)
+    bsc.def("bisect", (ItvPair (Bsc::*) (const IntervalVector& box) )(&Bsc::bisect), DOCS_BSC_BISECT, py::arg("x"))
     // .def("bisect", bisect_2(&Bsc::bisect))
     // .def("add_backtrackable", &Bsc::add_backtrackable)
 		.def( "default_ratio", &Bsc::default_ratio , DOCS_BSC_DEFAULT_RATIO)

@@ -5,7 +5,7 @@ set -x
 if [ ! -e "$HOME/ibex/lib/libibex.a" ]; then
 	git clone https://github.com/benEnsta/ibex-lib.git
 	cd ibex-lib
-	git checkout pyIbex_version_3
+	git checkout with_cmake
 	mkdir build
 	cd build
 	cmake -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${HOME}/ibex ../
@@ -14,4 +14,3 @@ if [ ! -e "$HOME/ibex/lib/libibex.a" ]; then
 else
   echo 'Using cached directory.';
 fi
-	

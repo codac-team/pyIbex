@@ -1,6 +1,6 @@
 //============================================================================
 //                                P Y I B E X
-// File        : pyIbex_Bsc_doc.h
+// File        : pyIbex_doc_Bsc.h
 // Author      : Benoit Desrochers, Gilles Charbert
 // Copyright   : Benoit Desrochers
 // License     : See the LICENSE file

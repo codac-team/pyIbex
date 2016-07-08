@@ -19,7 +19,7 @@
 #include <sstream>
 
 using namespace pybind11::literals;
-#include "pyIbex_IntervalVector_doc.h"
+#include "pyIbex_doc_IntervalVector.h"
 
 
 namespace py = pybind11;

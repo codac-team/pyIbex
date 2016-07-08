@@ -12,7 +12,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include "ibex_IntervalVector.h"
-#include "pyIbex_Interval_doc.h"
+#include "pyIbex_doc_Interval.h"
 namespace py = pybind11;
 using py::self;
 using namespace pybind11::literals;

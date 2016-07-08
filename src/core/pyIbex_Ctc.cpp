@@ -25,7 +25,7 @@ using namespace pybind11::literals;
 #include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
 
-#include "pyIbex_Ctc_doc.h"
+#include "pyIbex_doc_Ctc.h"
 
 // #include <ibex_CtcSegment.h>
 // #include <ibex_CtcPixelMap.h>

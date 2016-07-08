@@ -1,6 +1,6 @@
 //============================================================================
 //                                P Y I B E X
-// File        : pyIbex_Ctc_doc.h
+// File        : pyIbex_doc_Ctc.h
 // Author      : Benoit Desrochers, Gilles Charbert
 // Copyright   : Benoit Desrochers
 // License     : See the LICENSE file

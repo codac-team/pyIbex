@@ -31,7 +31,7 @@ using py::keep_alive;
 #include "ibex_SepInverse.h"
 #include "ibex_SepQInter.h"
 
-#include "pyIbex_Separators_doc.h"
+#include "pyIbex_doc_Separators.h"
 
 // #include "ibex_SepPolygon.h"
 // #include "ibex_SepTransform.h"

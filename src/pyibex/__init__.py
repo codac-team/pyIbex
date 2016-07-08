@@ -1,2 +1,2 @@
 from .pyibex import *
-from .pySIVIA import pySIVIA
+from .pysivia import pySIVIA

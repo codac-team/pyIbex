@@ -17,7 +17,6 @@ configure_file(
 set( pip_dir "${CMAKE_CURRENT_BINARY_DIR}/pip_package")
 include_directories(.)
 add_subdirectory(core)
-# add_subdirectory(robotics)
 
 
 install( DIRECTORY "${PYTHON_PACKAGE_DIR}/pyibex" DESTINATION "${PYTHON_INSTDIR}")

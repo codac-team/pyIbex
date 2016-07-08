@@ -14,16 +14,16 @@ elif 'win' in get_platform():
 else:
     ext_lib  = '.dylib'
 
-
+    
 setup(
-    name='pyIbex',
+    name='pyibex',
     version='${PACKAGE_VERSION}',
     distclass=BinaryDistribution,
     description='python binding for ibex',
-    packages=['pyIbex', 'pyIbex.core'],
+    packages=['pyibex', 'pyibex'],
     package_data={
-        'pyIbex.core': ['_core'+ext_lib],
-				'pyIbex': ['polar'+ext_lib],
+        'pyibex': ['pyibex'+ext_lib],
+
     },
     ext_modules = [],
     include_package_data=True

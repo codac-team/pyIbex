@@ -20,8 +20,8 @@ install:
   - ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
   - "%PYTHON_DIR%/python.exe C:/get-pip.py"
   - ps: >-
-      (new-object net.webclient).DownloadFile('https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.1.35/ibex-lib-2.1.12-win64.zip', 'C:\projects\pyIbex\ibex-lib.zip')
-
+      (new-object net.webclient).DownloadFile('https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.51/ibex-lib-2.3.0-win64.zip', 'C:\projects\pyIbex\ibex-lib.zip')
+      
       ls C:\projects\pyIbex
 
       cd C:\projects\pyIbex

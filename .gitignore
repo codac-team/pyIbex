@@ -45,7 +45,6 @@ build_win
 build_win32
 
 #examples 
-examples
 src/wip
 # git conflict files
 
@@ -58,4 +57,3 @@ CMakeLists.txt.user
 *._py
 *~
 __pycache__
-

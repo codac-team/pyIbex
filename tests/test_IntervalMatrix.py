@@ -10,8 +10,8 @@
 
 
 import unittest
-import pyIbex
-from pyIbex import IntervalMatrix, IntervalVector, Interval
+import pyibex
+from pyibex import IntervalMatrix, IntervalVector, Interval
 
 class TestIntervalVector(unittest.TestCase):
 
@@ -21,8 +21,8 @@ class TestIntervalVector(unittest.TestCase):
 		b = IntervalVector([[1,1], [1,1], [1,1]])
 		c = a*b
 		self.assertEqual(c,IntervalVector(3, [9, 12]))
-	
-		
+
+
 	def test_contructor(self):
 		lst = [Interval(i) for i in range(0,9)]
 		M = IntervalMatrix(3,3,lst)
@@ -74,7 +74,7 @@ class TestIntervalVector(unittest.TestCase):
 	# 	a = IntervalVector(2)
 	# 	a[1] = Interval(2,1)
 	# 	self.assertEqual(a[1], Interval(2,1))
-				
+
 	# def test_empty(self):
 	# 	a  = IntervalVector.empty(3)
 	# 	self.assertEqual(a.size(), 3)
@@ -124,8 +124,8 @@ class TestIntervalVector(unittest.TestCase):
 	# 	self.assertEqual(a[4], Interval(2))
 	# 	self.assertEqual(a[5], Interval(3))
 	# 	self.assertEqual(a[6], Interval(6))
-		
-		
+
+
 	# def test_size(self):
 	# 	a = IntervalVector(list(range(0,10)))
 	# 	self.assertTrue(a.size() == 10)
@@ -145,11 +145,11 @@ class TestIntervalVector(unittest.TestCase):
 	# 	a = IntervalVector(list(range(0,7))).inflate(1)
 	# 	test = list(range(0,7))
 	# 	self.assertEqual(test, a.mid())
-	
+
 	# def test_mig(self):
 	# 	a = IntervalVector(list(range(0,7))).inflate(1)
 	# 	self.assertEqual([0.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0], a.mig())
-		
+
 	# def test_mag(self):
 	# 	a = IntervalVector(list(range(0,7))).inflate(1)
 	# 	self.assertEqual([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0], a.mag())
@@ -244,8 +244,8 @@ class TestIntervalVector(unittest.TestCase):
 	# 	self.assertTrue(b.is_bisectable())
 	# 	b[1]  = Interval(0)
 	# 	self.assertFalse(b.is_bisectable())
-		
-		
+
+
 	# def test_rad(self):
 	# 	a = IntervalVector(list(range(0,3))).inflate(1)
 	# 	self.assertEqual(a.rad(),[1,1,1])
@@ -267,7 +267,7 @@ class TestIntervalVector(unittest.TestCase):
 	# 	self.assertEqual(a.min_diam(),2)
 
 
-	
+
 	# def test_volume(self):
 	# 	a = IntervalVector(list(range(0,3))).inflate(1)
 	# 	self.assertEqual(round(a.volume()), 8)
@@ -295,7 +295,7 @@ class TestIntervalVector(unittest.TestCase):
 	# 	l = a.diff(b)
 	# 	self.assertEqual(len(l), 0)
 	# 	#self.assertEqual(l[0], IntervalVector.empty(3))
-		
+
 	# 	# self.assertEqual(l[0], IntervalVector([[-1,1], [0,2], [3, 5]]))
 
 
@@ -304,13 +304,13 @@ class TestIntervalVector(unittest.TestCase):
 	# 	l = a.complementary()
 	# 	self.assertEqual(l[0], IntervalVector(1, Interval(float("-inf"), -1)))
 	# 	self.assertEqual(l[1], IntervalVector(1, Interval(1, float("inf"))))
-		
+
 
 	# def test_bisect(self):
 	# 	a = IntervalVector(list(range(0,3))).inflate(1)
 	# 	(c,d) = a.bisect(2)
 
-		
+
 	# def test_ops_plus(self):
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	b = IntervalVector(2, Interval(-3, 1))
@@ -335,25 +335,25 @@ class TestIntervalVector(unittest.TestCase):
 	# 	a |= b
 	# 	self.assertEqual(a, IntervalVector(2, Interval(-3,1)))
 
-		
+
 	# def test_ops_3(self):
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	a += [2,2]
 	# 	self.assertEqual(a, IntervalVector(2, Interval(1, 3)))
-		
+
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	a -= [2,2]
 	# 	self.assertEqual(a, IntervalVector(2, Interval(-3, -1)))
-		
+
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	a *= Interval(2,3)
 	# 	self.assertEqual(a, IntervalVector(2, Interval(-3, 3)))
-		
+
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	a *= 3.0
 	# 	self.assertEqual(a, IntervalVector(2, Interval(-3, 3)))
-		
-		
+
+
 	# def test_ops_4(self):
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	b = IntervalVector(2, Interval(-3, 1))
@@ -366,12 +366,12 @@ class TestIntervalVector(unittest.TestCase):
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	self.assertEqual(a+[1,1], IntervalVector(2,Interval(0,2)))
 	# 	self.assertEqual([1,1] + a, IntervalVector(2, Interval(0,2)))
-	
+
 	# def test_ops_6(self):
 	# 	a = IntervalVector(2, Interval(-1,1))
 	# 	self.assertEqual(a-[1,1], IntervalVector(2,Interval(-2,0)))
 	# 	self.assertEqual([1,1] - a, IntervalVector(2, Interval(0,2)))
-			
+
 	# def test_abs(self):
 	# 	a =  IntervalVector(2, Interval(-2,4))
 	# 	self.assertEqual(pyIbex.abs(a), IntervalVector(2, Interval(0,4)))
@@ -402,5 +402,5 @@ class TestIntervalVector(unittest.TestCase):
 	# 	pyIbex.bwd_mul(b,a,c)
 
 
-if __name__ == '__main__':	
+if __name__ == '__main__':
 	unittest.main()

@@ -9,12 +9,12 @@
 #============================================================================
 
 import unittest
-import pyIbex
-from pyIbex import *
+import pyibex
+from pyibex import *
 
-class myCtc(pyIbex.Ctc):
+class myCtc(pyibex.Ctc):
 	def __init__(self, x=0, y=0, R=2):
-		pyIbex.Ctc.__init__(self, 2)
+		pyibex.Ctc.__init__(self, 2)
 		self.f = Function('x', 'y', '(x-%f)^2+(y-%f)^2-%f'%(x,y,R**2))
 		self.ctc = CtcFwdBwd(self.f, CmpOp.LEQ)
 
@@ -23,9 +23,9 @@ class myCtc(pyIbex.Ctc):
 		self.ctc.contract(box)
 		# box.assign(tmp)
 
-class mySep(pyIbex.Sep):
+class mySep(pyibex.Sep):
 	def __init__(self, x=0, y=0, R=2):
-		pyIbex.Sep.__init__(self, 2)
+		pyibex.Sep.__init__(self, 2)
 		self.f = Function('x', 'y', '(x-%f)^2+(y-%f)^2-%f'%(x,y,R**2))
 		self.sep = SepFwdBwd(self.f, CmpOp.LEQ)
 
@@ -35,7 +35,7 @@ class mySep(pyIbex.Sep):
 		self.sep.separate(xin, xout)
 		# xin.assign(tmp_in)
 		# xout.assign(tmp_out)
-		
+
 class TestInheritance(unittest.TestCase):
 
 	def test_myCtc(self):
@@ -55,9 +55,8 @@ class TestInheritance(unittest.TestCase):
 		xin, xout = map(IntervalVector, [x, x])
 		sep.separate(xin, xout)
 		# SIVIA(x, sep, 1)
-		
+
 
 if __name__ == '__main__':
-	
-	unittest.main()
 
+	unittest.main()

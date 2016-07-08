@@ -8,8 +8,8 @@
 # Created     : Dec 28, 2014
 #============================================================================
 import unittest
-import pyIbex
-from pyIbex import Interval
+import pyibex
+from pyibex import Interval
 class TestInterval(unittest.TestCase):
 
 	def setUp(self):
@@ -156,7 +156,7 @@ class TestInterval(unittest.TestCase):
 		self.assertEqual(res, Interval(2)	, " test & ops")
 		res = c | d
 		self.assertEqual(res, Interval(1, 3)	, " test | ops")
-		
+
 		res = c
 		res += Interval(-2, 3)
 		self.assertEqual(res, Interval(0, 6) , " test += ops")
@@ -206,84 +206,84 @@ class TestInterval(unittest.TestCase):
 		self.assertEqual(abs(c), Interval(0, 4))
 	def test_sqr(self):
 		c = Interval(-2,4)
-		self.assertEqual(pyIbex.sqr(c), Interval(0,16))
+		self.assertEqual(pyibex.sqr(c), Interval(0,16))
 	def test_root(self):
 		c = Interval(-2,4)
-		pyIbex.root(c,3)
+		pyibex.root(c,3)
 	def test_exp(self):
 		c = Interval(-2,4)
-		pyIbex.exp(c)
+		pyibex.exp(c)
 	def test_log(self):
 		c = Interval(-2,4)
-		pyIbex.log(c)
+		pyibex.log(c)
 	def test_cos(self):
 		c = Interval(-2,4)
-		pyIbex.cos(c)
+		pyibex.cos(c)
 	def test_sin(self):
 		c = Interval(-2,4)
-		pyIbex.sin(c)
+		pyibex.sin(c)
 	def test_tan(self):
 		c = Interval(-2,4)
-		pyIbex.tan(c)
+		pyibex.tan(c)
 	def test_acos(self):
 		c = Interval(-2,4)
-		pyIbex.acos(c)
+		pyibex.acos(c)
 	def test_asin(self):
 		c = Interval(-2,4)
-		pyIbex.asin(c)
-			
+		pyibex.asin(c)
+
 	def test_atan(self):
 		c = Interval(-2,4)
-		pyIbex.atan(c)
+		pyibex.atan(c)
 
 	def test_atan2(self):
 		c = Interval(-2,4)
-		pyIbex.atan2(c,self.a)
+		pyibex.atan2(c,self.a)
 
 	def test_cosh(self):
 		c = Interval(-2,4)
-		pyIbex.cosh(c)
+		pyibex.cosh(c)
 
 	def test_sinh(self):
 		c = Interval(-2,4)
-		pyIbex.sinh(c)
+		pyibex.sinh(c)
 
 	def test_tanh(self):
 		c = Interval(-2,4)
-		pyIbex.tanh(c)
+		pyibex.tanh(c)
 
 	def test_acosh(self):
 		c = Interval(-2,4)
-		pyIbex.acosh(c)
+		pyibex.acosh(c)
 
 	def test_asinh(self):
 		c = Interval(-2,4)
-		pyIbex.asinh(c)
+		pyibex.asinh(c)
 
 	def test_atanh(self):
 		c = Interval(-2,4)
-		pyIbex.atanh(c)
+		pyibex.atanh(c)
 
 	def test_max(self):
 		c = Interval(-2,4)
-		pyIbex.max(c,self.a)
+		pyibex.max(c,self.a)
 
 	def test_min(self):
 		c = Interval(-2,4)
-		pyIbex.min(c,self.a)
+		pyibex.min(c,self.a)
 
 	def test_sign(self):
 		c = Interval(-2,4)
-		pyIbex.sign(c)
+		pyibex.sign(c)
 
 	def test_chi(self):
 		c = Interval(-2,4)
 		b = Interval(-2,4)
-		pyIbex.chi(c,self.a,b)
+		pyibex.chi(c,self.a,b)
 
 	def test_integer(self):
 		c = Interval(-2,4)
-		pyIbex.integer(c)
+		pyibex.integer(c)
 
 	def test_pow(self):
 		a = Interval(2, 3)
@@ -296,147 +296,147 @@ class TestInterval(unittest.TestCase):
 	def test_bwd_add(self):
 		c = Interval(-2,4)
 		b = Interval(4,2)
-		pyIbex.bwd_add(c,self.a,b)
+		pyibex.bwd_add(c,self.a,b)
 
 	def test_bwd_sub(self):
 		c = Interval(-2,4)
 		b = Interval(4,2)
-		pyIbex.bwd_sub(c,self.a,b)
+		pyibex.bwd_sub(c,self.a,b)
 
 	def test_bwd_mul(self):
 		c = Interval(-2,4)
 		b = Interval(4,2)
-		pyIbex.bwd_mul(c,self.a,b)
+		pyibex.bwd_mul(c,self.a,b)
 
 	def test_bwd_div(self):
 		b = Interval(4,2)
 		c = Interval(-2,4)
-		pyIbex.bwd_div(c,self.a,b)
+		pyibex.bwd_div(c,self.a,b)
 
 	def test_bwd_sqr(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_sqr(c,self.a)
+		pyibex.bwd_sqr(c,self.a)
 
 	def test_bwd_sqrt(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_sqrt(c,self.a)
+		pyibex.bwd_sqrt(c,self.a)
 
 	def test_bwd_pow(self):
 		c = Interval(-2,4)
 		b = Interval(4,2)
-		pyIbex.bwd_pow(c,b, self.a)
+		pyibex.bwd_pow(c,b, self.a)
 
 	def test_bwd_pow(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_pow(c, 3, self.a)
+		pyibex.bwd_pow(c, 3, self.a)
 
 	def test_bwd_root(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_root(c,3, self.a)
+		pyibex.bwd_root(c,3, self.a)
 
 	def test_bwd_exp(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_exp(c,self.a)
+		pyibex.bwd_exp(c,self.a)
 
 	def test_bwd_log(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_log(c,self.a)
+		pyibex.bwd_log(c,self.a)
 
 	def test_bwd_cos(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_cos(c,self.a)
+		pyibex.bwd_cos(c,self.a)
 
 	def test_bwd_sin(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_sin(c,self.a)
+		pyibex.bwd_sin(c,self.a)
 
 	def test_bwd_tan(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_tan(c,self.a)
+		pyibex.bwd_tan(c,self.a)
 
 	def test_bwd_acos(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_acos(c,self.a)
+		pyibex.bwd_acos(c,self.a)
 
 	def test_bwd_asin(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_asin(c,self.a)
+		pyibex.bwd_asin(c,self.a)
 
 	def test_bwd_atan(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_atan(c,self.a)
+		pyibex.bwd_atan(c,self.a)
 
 	# def test_bwd_atan2(self):
 	# 	c = Interval(-2,4)
 	# 	b = Interval(-2,4)
-	# 	pyIbex.bwd_atan2(c,self.a,b)
+	# 	pyibex.bwd_atan2(c,self.a,b)
 
 	def test_bwd_cosh(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_cosh(c,self.a)
+		pyibex.bwd_cosh(c,self.a)
 
 	def test_bwd_sinh(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_sinh(c,self.a)
+		pyibex.bwd_sinh(c,self.a)
 
 	def test_bwd_tanh(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_tanh(c,self.a)
+		pyibex.bwd_tanh(c,self.a)
 
 	def test_bwd_acosh(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_acosh(c,self.a)
+		pyibex.bwd_acosh(c,self.a)
 
 	def test_bwd_asinh(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_asinh(c,self.a)
+		pyibex.bwd_asinh(c,self.a)
 
 	def test_bwd_atanh(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_atanh(c,self.a)
+		pyibex.bwd_atanh(c,self.a)
 
 	def test_bwd_abs(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_abs(c,self.a)
+		pyibex.bwd_abs(c,self.a)
 
 	def test_bwd_max(self):
 		c = Interval(-2,4)
 		b = Interval(2,10)
-		pyIbex.bwd_max(c,self.a,b)
+		pyibex.bwd_max(c,self.a,b)
 
 	def test_bwd_min(self):
 		c = Interval(-2,4)
 		b = Interval(2,10)
-		pyIbex.bwd_min(c,self.a,b)
+		pyibex.bwd_min(c,self.a,b)
 
 	def test_bwd_sign(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_sign(c,self.a)
+		pyibex.bwd_sign(c,self.a)
 
 	def test_bwd_chi(self):
 		c = Interval(-2,4)
 		b = Interval(4,2)
 		d = Interval(-2,1)
-		pyIbex.bwd_chi(c,self.a,b,d)
+		pyibex.bwd_chi(c,self.a,b,d)
 
 	def test_bwd_integer(self):
 		c = Interval(-2,4)
-		pyIbex.bwd_integer(c)
+		pyibex.bwd_integer(c)
 
 
 
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 # a regular function
 def interval_str(self):
 		return "[ %f, %f ]" % ( self.lb(), self.ub() )
 
 if __name__ == '__main__':
-	
+
 	unittest.main()
 
 
@@ -448,4 +448,3 @@ if __name__ == '__main__':
 # c2 += c2
 
 # print(c1.lb(), c1.ub(),c4.lb(), c4.ub(),c2.lb(), c2.ub())
-

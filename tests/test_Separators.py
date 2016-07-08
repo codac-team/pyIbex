@@ -10,8 +10,8 @@
 
 
 import unittest
-import pyIbex
-from pyIbex import *
+import pyibex
+from pyibex import *
 import sys
 import math
 class TestSeparator(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestSeparator(unittest.TestCase):
 		self.assertEqual(sep.nb_var, 2)
 		b0 = IntervalVector([[-10, -6],  [-10, 10]])
 		b1 = IntervalVector([[-2, 2], [-2, 2]])
-		
+
 		xin = IntervalVector(b0)
 		xout = IntervalVector(b0)
 		sep.separate(xin, xout)
@@ -37,13 +37,13 @@ class TestSeparator(unittest.TestCase):
 		sep.separate(xin, xout)
 		self.assertFalse(xout.is_empty())
 		self.assertTrue(xin.is_empty())
-	
+
 	def test_SepFwdBwd_CmdOp(self):
 		f = Function("x", "y", "x^2 + y^2 - 25")
 		sep = SepFwdBwd(f, CmpOp.LEQ)
 		b0 = IntervalVector([[-10, -6],  [-10, 10]])
 		b1 = IntervalVector([[-2, 2], [-2, 2]])
-		
+
 		xin = IntervalVector(b0)
 		xout = IntervalVector(b0)
 		sep.separate(xin, xout)
@@ -56,14 +56,14 @@ class TestSeparator(unittest.TestCase):
 		sep.separate(xin, xout)
 		self.assertFalse(xout.is_empty())
 		self.assertTrue(xin.is_empty())
-		
+
 
 	def test_SepFwdBwd_Interval(self):
 		f = Function("x", "y", "x^2 + y^2")
 		sep = SepFwdBwd(f, Interval(0, 16))
 		b0 = IntervalVector([[-10, -6],  [-10, 10]])
 		b1 = IntervalVector([[1, 2], [1, 2]])
-		
+
 		xin = IntervalVector(b0)
 		xout = IntervalVector(b0)
 		sep.separate(xin, xout)
@@ -77,13 +77,13 @@ class TestSeparator(unittest.TestCase):
 		self.assertFalse(xout.is_empty())
 		# print(xin)
 		self.assertTrue(xin.is_empty())
-		
+
 	def test_SepFwdBwd_IntervalVector(self):
 		f = Function("x", "y", "(x^2 + y^2, x^2 + y^2)")
 		sep = SepFwdBwd(f, IntervalVector(2, Interval(0, 16)))
 		b0 = IntervalVector([[-10, -6],  [-10, 10]])
 		b1 = IntervalVector([[1, 2], [1, 2]])
-		
+
 		xin = IntervalVector(b0)
 		xout = IntervalVector(b0)
 		sep.separate(xin, xout)
@@ -107,7 +107,7 @@ class TestSeparator(unittest.TestCase):
 		del sep # [optionnal] test for memory manadgment
 		b0 = IntervalVector([[-10, -6],  [-10, 10]])
 		b1 = IntervalVector([[-2, 2], [-2, 2]])
-		
+
 		xin = IntervalVector(b0)
 		xout = IntervalVector(b0)
 		sepN.separate(xin, xout)
@@ -136,7 +136,7 @@ class TestSeparator(unittest.TestCase):
 		sepI = SepInter([sep1, sep2, sep3])
 
 		# [optionnal] test for memory manadgment
-		del f1, f2, f3, sep1, sep2, sep3 
+		del f1, f2, f3, sep1, sep2, sep3
 
 		b00 = IntervalVector([[-10, -6],  [-10, 10]])
 		b01 = IntervalVector(b00)
@@ -159,7 +159,7 @@ class TestSeparator(unittest.TestCase):
 	# 	Xout = IntervalVector([[-10,0]])
 	# 	sep2.separate(Xin, Xout)
 	# 	print(Xin, Xout)
-		
+
 
 	def test_UnionInter_with_array(self):
 		cx = [3, 7,-3]
@@ -174,7 +174,7 @@ class TestSeparator(unittest.TestCase):
 		sepInter = SepInter(seps)
 		del seps
 
-		
+
 		Xin = IntervalVector(2, Interval(-10,10))
 		Xout = IntervalVector(2, Interval(-10,10))
 		sepUnion.separate(Xin, Xout)
@@ -203,6 +203,5 @@ class TestSeparator(unittest.TestCase):
 
 
 if __name__ == '__main__':
-	
-	unittest.main()
 
+	unittest.main()

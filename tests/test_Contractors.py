@@ -8,8 +8,8 @@
 # Created     : Dec 28, 2014
 #============================================================================
 import unittest
-import pyIbex
-from pyIbex import *
+import pyibex
+from pyibex import *
 import sys
 import math
 class TestContractors(unittest.TestCase):

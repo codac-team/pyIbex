@@ -14,6 +14,7 @@ The docs string is taken from ibex_Interval.h source file
 For more information read doc from http://www.ibex-lib.org/
 
 Example:
+
     a = Interval(1,2)
     a = Interval(2)
     a = Interval.ALL_REALS
@@ -21,7 +22,7 @@ Example:
 
 Note:
     For C++ user, recall that the assigment operator in python copies only references
-    and not the object. Fir instance
+    and not the object. For instance
         a = Interval(4)
         b = a
     a and b are referencing the same object. To make a copy used:
@@ -31,6 +32,7 @@ It is posible to acess ub and lower bound with lb() and ub() but also with
 an array like syntax.
 
 Example:
+
     a = Interval(1,4)
     a.lb()
     >>> 1
@@ -47,6 +49,7 @@ const char* DOCS_INTERVAL_INFLATE =
 R"doc_itv(Add [-rad,+rad] to self.
 Returns:
      Return self.
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_MID =

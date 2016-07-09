@@ -140,7 +140,7 @@ void CreateWithTuple(IntervalVector &instance, py::tuple & tup)
   } else if(check_cvt<Interval>(obj)){
     std::vector<Interval> v = pyTuple2Vector<Interval>(tup);
     new(&instance) IntervalVector(size_n1);
-    for (int i = 0; i < v.size(); i++){
+    for (size_t i = 0; i < v.size(); i++){
       instance[i] = v[i];
     }
   } else {

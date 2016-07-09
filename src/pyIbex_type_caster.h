@@ -12,8 +12,9 @@ template <> struct type_caster<ibex::Vector> {
     typedef type_caster<double> value_conv;
 public:
 
-    type_caster<ibex::Vector>() :  value(0) { }
+    type_caster<ibex::Vector>() :  value(1) { }
     bool load(PyObject *src, bool convert) {
+        std::cerr << value << "\n";
         if (!PyList_Check(src))
             return false;
         size_t size = (size_t) PyList_GET_SIZE(src);
@@ -27,6 +28,7 @@ public:
             tmp[i] = (double) conv;
             // value.push_back((Value) conv);
         }
+        value.resize(size);
         value = ibex::Vector(size, tmp);
         delete tmp;
         return true;

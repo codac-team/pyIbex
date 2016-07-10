@@ -10,34 +10,35 @@
 
 const char* DOCS_INTERVAL_TYPE =
 R"doc_itv(An Interval represents a closed sub set of R
+
 The docs string is taken from ibex_Interval.h source file
 For more information read doc from http://www.ibex-lib.org/
 
-Example:
+Examples:
+    >>> a = Interval(1,2)
+    >>> a = Interval(2)
+    >>> a = Interval.ALL_REALS
+    >>> b = Interval(a)
 
-    a = Interval(1,2)
-    a = Interval(2)
-    a = Interval.ALL_REALS
-    b = Interval(a)
-
-Note:
+Warning:
     For C++ user, recall that the assigment operator in python copies only references
-    and not the object. For instance
-        a = Interval(4)
-        b = a
-    a and b are referencing the same object. To make a copy used:
-        b = a.copy() or b = Interval(a)
+    and not the object. a and b are referencing the same object. To make a copy used:
+
+    For instance:
+        >>> a = Interval(4)
+        >>> b = a
+        >>> b = a.copy()
+        >>> b = Interval(a)
 
 It is posible to acess ub and lower bound with lb() and ub() but also with
 an array like syntax.
 
 Example:
-
-    a = Interval(1,4)
-    a.lb()
-    >>> 1
-    a[0]
-    >>> 1
+    >>> a = Interval(1,4)
+    >>> a.lb()
+    1
+    >>> a[0]
+    1
 Note:
     Because intervals are immutable object, it is not possible to set directly
     the upper / lower bounds of the Interval object
@@ -55,10 +56,11 @@ Returns:
 const char* DOCS_INTERVAL_MID =
 R"doc_itv(Returns the midpoint of self.
 
-  The return point is guaranteed to be included in self
-  but not necessarily to be the closest floating point
-  from the real midpoint.
-  Cases are:
+The return point is guaranteed to be included in self
+but not necessarily to be the closest floating point
+from the real midpoint.
+Cases are:
+
     * \emptyset  -> Quiet NaN
     * [-oo, +oo] -> midP = 0.0
     * [-oo, b]   -> midP = -MAXREAL
@@ -86,7 +88,7 @@ R"doc_itv(Returns the mignitude of self:
 
 const char* DOCS_INTERVAL_MAG =
 R"mydelimiter(Returns the magnitude of self:
-mag(self)=max(|lower bound|, |upper bound|).
+mag(self)=max(\|lower bound\|, \|upper bound\|).
 )mydelimiter";
 
 const char* DOCS_INTERVAL_IS_SUBSET =
@@ -116,36 +118,44 @@ Note:
   )doc_itv";
 
 const char* DOCS_INTERVAL_IS_STRICT_INTERIOR_SUBSET =
-R"doc_itv(Returns:
+R"doc_itv(Return:
   bool: True iff this interval is in the interior of \a x and different from x.
 
 Note:
     In particular, (-oo,oo) is not "strictly" in the interior of (-oo,oo)
     and the empty set is not "strictly" in the interior of the empty set.
-  )doc_itv";
+)doc_itv";
 
 const char* DOCS_INTERVAL_IS_SUPERSET =
-R"doc_itv(True iff this interval is a superset of \a x.
+R"doc_itv(Return:
+    bool: True iff this interval is a superset of \a x.
 Note:
     Always return true if x is empty.
-  )doc_itv";
+)doc_itv";
 
 const char* DOCS_INTERVAL_IS_STRICT_SUPERSET =
-R"doc_itv(True iff this interval is a superset of \a x different from x.
-see:
-    #is_strict_subset(const Interval&) const.
-  )doc_itv";
+R"doc_itv(return:
+    bool: True iff this interval is a superset of \a x different from x.
+see also:
+    #pyibex.Interval.is_strict_subset
+)doc_itv";
 
 const char* DOCS_INTERVAL_CONTAINS =
-R"doc_itv(True iff self contains \a d.
+R"doc_itv(Return:
+    True iff self contains d.
 
-Note: d can also be an "open bound", i.e., infinity.
+Args:
+    x (Interval)
+
+Note:
+    d can also be an "open bound", i.e., infinity.
     So this function is not restricted to a set-membership
     interpretation.
   )doc_itv";
 
 const char* DOCS_INTERVAL_INTERIOR_CONTAINS =
-R"doc_itv(True iff the interior of self contains \a d.
+R"doc_itv(Return:
+    True iff the interior of self contains \a d.
 )doc_itv";
 
 const char* DOCS_INTERVAL_INTERSECTS =
@@ -189,25 +199,47 @@ Examples of non bisectable intervals are [0,next_float(0)] or [DBL_MAX,+oo).
 const char* DOCS_INTERVAL_REL_DISTANCE =
 R"doc_itv(Relative Hausdorff distance between self and x.
 The relative distance is basically distance(x)/diam(self).
-See:
+see also:
   #ibex::distance (const ibex::Interval &x1, const ibex::Interval &x2).
 )doc_itv";
 
 const char* DOCS_INTERVAL_COMPLEMENTARY =
-R"doc_itv(Returns:
-    The complementary of x.
+R"doc_itv(Return a tuple of intervals
+Return:
+    tuple : complementarie Intervals of x.
+
+Example:
+    >>> Interval(-2, 3).complementary()
+    ([-inf, -2], [3, inf])
+    >>> Interval(3, float('inf')).complementary()
+    ([-inf, 3], [ empty ])
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_DIFF =
-R"doc_itv(Returns:
-   x\y
+R"doc_itv(Returns the set difference self and  y ( denoted x \\ y)
+
+Args:
+    y (Interval) : interval used for the difference
+
+Return:
+    (tuple) : (c1,c2) intervals representing the difference between x and y
+              ie x = :math: `c1 \cup y \cup c2`
+
+Example:
+    >>> Interval(-2,3).diff(Interval(2,4))
+    ([-2, 2], [ empty ])
+    >>> Interval(-2,3).diff(Interval(2,2.5))
+    ([-2, 2], [2.5, 3])
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_BISECT =
 R"doc_itv(Bisect self into two subintervals.
-  The Interval musts be bisectable (  is_bisectable() must be true.)
+The Interval musts be bisectable (  is_bisectable() must be true.)
+
 Args:
     ratio (float): says where to split (in [0, 1] , 0.5=middle)
-Returns:
-    list: two sub intervals
+Return:
+    list[Interval]: two sub intervals
 )doc_itv";

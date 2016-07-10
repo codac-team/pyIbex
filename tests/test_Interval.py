@@ -121,18 +121,14 @@ class TestInterval(unittest.TestCase):
 		c = Interval(-1, 2)
 
 	def test_complementary(self):
-		c = Interval()
-		b = Interval()
-		self.a.complementary(b,c)
-		self.assertEqual(Interval(float('-inf'), -2),b )
+
+		b, c = self.a.complementary()
+		self.assertEqual(Interval(float('-inf'), -2),b)
 		self.assertEqual(Interval(3, float('inf')), c)
 
 
 	def test_diff(self):
-		c = Interval()
-		d  = Interval()
-		y = Interval(2,4)
-		self.a.diff(y,c,d)
+		c, d = self.a.diff(Interval(2,4))
 		self.assertEqual( Interval(-2, 2), c)
 		self.assertTrue(d.is_empty())
 

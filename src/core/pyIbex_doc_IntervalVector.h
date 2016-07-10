@@ -15,23 +15,24 @@ For more information read doc from http://www.ibex-lib.org/
 
 An IntervalVector can be initialized with:
 
-  + a int (i.e. size) only ( all elements are initialized to [-oo,oo])
-  + a int (i.e. size) and a value for all elements
-  + another IntervalVector (make a copy)
-  + a list of bounds [[lb_1, ub_1], [...], [lb_n, ub_n]]
-  + a tuple of intervals
+    + a int (i.e. size) only ( all elements are initialized to [-oo,oo])
+    + a int (i.e. size) and a value for all elements
+    + another IntervalVector (make a copy)
+    + a list of bounds [[lb_1, ub_1], [...], [lb_n, ub_n]]
+    + a tuple of intervals
 
 Example:
-    a = IntervalVector(2)
-    >>> ([ ENTIRE ] ; [ ENTIRE ])
-    a = IntervalVector(2, Interval(1,5))
-    >>> ([1, 5] ; [1, 5])
-    a = IntervalVector(2, [1,5])
-    >>> ([1, 5] ; [1, 5])
-    a = IntervalVector([[1,2], [3,4]])
-    >>> ([1, 2] ; [3, 4])
-    a = IntervalVector( (Interval(2,4), Interval(5,6) ) )
-    >>> ([2, 4] ; [5, 6])
+    >>> a = IntervalVector(2)
+    ([ ENTIRE ] ; [ ENTIRE ])
+    >>> a = IntervalVector(2, Interval(1,5))
+    ([1, 5] ; [1, 5])
+    >>> a = IntervalVector(2, [1,5])
+    ([1, 5] ; [1, 5])
+    >>> a = IntervalVector([[1,2], [3,4]])
+    ([1, 2] ; [3, 4])
+    >>> a = IntervalVector( (Interval(2,4), Interval(5,6) ) )
+    ([2, 4] ; [5, 6])
+
 )doc_itv";
 
 // const char* DOCS_INTERVALVECTOR_CONSTRUCT_01 =
@@ -184,15 +185,15 @@ R"_docs(Return true iff this IntervalVector is flat.
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_IS_UNBOUNDED=
-R"_docs(true iff this interval vector contains an infinite bound.
+R"_docs(Return True iff this interval vector contains an infinite bound.
 
 Note:
     An empty interval vector is always bounded.
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_IS_SUBSET=
-R"_docs(True iff this interval vector is a subset of \a x.
-    Dimension of \a x must be equal to the dimension of this vector.
+R"_docs(Return True iff this interval vector is a subset of \a x.
+Dimension of \a x must be equal to the dimension of this vector.
 Note:
     Always return true if this interval vector is empty.
 See Also:
@@ -200,8 +201,8 @@ See Also:
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_IS_STRICT_SUBSET=
-R"_docs(True iff this interval vector is inside the interior of \a x.
-    Dimension of \a x must be equal to the dimension of this vector.
+R"_docs(Return Return True iff this interval vector is inside the interior of \a x.
+Dimension of \a x must be equal to the dimension of this vector.
 Note:
     return true if this interval vector is empty and \a x not.
 See Also:
@@ -209,8 +210,8 @@ See Also:
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_IS_INTERIOR_SUBSET=
-R"_docs(True iff this interval vector is a subset of the interior of \a x.
-    Dimension of \a x must be equal to the dimension of this vector.
+R"_docs(Return True iff this interval vector is a subset of the interior of \a x.
+Dimension of \a x must be equal to the dimension of this vector.
 Note:
      Always return true if this interval vector is empty.
 See Also:
@@ -219,8 +220,8 @@ See Also:
 
 
 const char* DOCS_INTERVALVECTOR_IS_STRICT_INTERIOR_SUBSET=
-R"_docs(True iff this interval vector is a subset of the interior of \a x and different from x.
-    Dimension of \a x must be equal to the dimension of this vector.
+R"_docs(Return True iff this interval vector is a subset of the interior of \a x and different from x.
+Dimension of \a x must be equal to the dimension of this vector.
 Args:
     x (IntervalVector): to be compared
 Note:
@@ -231,8 +232,8 @@ Sea Also:
 
 
 const char* DOCS_INTERVALVECTOR_IS_SUPERSET=
-R"_docs(True iff this interval vector is a superset of \a x.
-    Dimension of \a x must be equal to the dimension of this vector.
+R"_docs(Return True iff this interval vector is a superset of \a x.
+Dimension of \a x must be equal to the dimension of this vector.
 Args:
     x (IntervalVector): to be compared
 Note:
@@ -242,8 +243,8 @@ See Also:
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_IS_STRICT_SUPERSET=
-R"_docs(True iff \a x is inside the interior of (self).
-    Dimension of \a x must be equal to the dimension of this vector.
+R"_docs(Return True iff \a x is inside the interior of (self).
+Dimension of \a x must be equal to the dimension of this vector.
 Args:
     x (IntervalVector): to be compared
 Note:
@@ -254,25 +255,25 @@ See Also:
 
 const char* DOCS_INTERVALVECTOR_CONTAINS=
 R"_docs(True iff this interval vector contains \a x.
-    Dimension of \a x must be equal to the dimension of (self).
+Dimension of \a x must be equal to the dimension of (self).
 Args:
     x (IntervalVector): to be compared
 See Also:
-    Interval.contains.
+    pyibex.pyibex.Interval.contains.
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_INTERIOR_CONTAINS=
 R"_docs(True iff \a x is in the interior of this interval vector
-    Dimension of \a x must be equal to the dimension of (self).
+Dimension of \a x must be equal to the dimension of (self).
 Args:
     x (IntervalVector): to be compared
 See Also:
-    Interval.strictly_contains.
+    pyibex.pyibex.Interval.strictly_contain : same for Interval
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_INTERSECTS=
 R"_docs(True iff this interval vector intersects \a x.
-    Dimension of \a x must be equal to the dimension of (self).
+Dimension of \a x must be equal to the dimension of (self).
 Args:
     x (IntervalVector): to be compared
 See Also:
@@ -281,7 +282,7 @@ See Also:
 
 const char* DOCS_INTERVALVECTOR_OVERLAPS=
 R"_docs(True iff this interval vector intersects \a x and the intersection has a non-null volume
-    Dimension of \a x must be equal to the dimension of (self).
+Dimension of \a x must be equal to the dimension of (self).
 Args:
     x (IntervalVector): to be compared
 See Also:
@@ -290,7 +291,7 @@ See Also:
 
 const char* DOCS_INTERVALVECTOR_IS_DISJOINT=
 R"_docs(True iff this interval vector does not intersect \a x.
-    Dimension of \a x must be equal to the dimension of (self).
+Dimension of \a x must be equal to the dimension of (self).
 Args:
     x (IntervalVector): to be compared
 See Also:
@@ -378,10 +379,11 @@ Sea also:
 
 
 const char* DOCS_INTERVALVECTOR_DIFF =
-R"_docs(Return self \ y (set difference).
+R"_docs(Return self \\ y (set difference).
+
 Return:
     list<IntervalVector> : the difference under the form of a union of
-    non-overlapping IntervalVectors
+    non-overlapping IntervalVectors. The lenght of the list is <= 2*n
 Note:
     If the difference is empty, result is an array of one element set
     to the empty box. It is <b>not</b> a zero-sized array containing no element.
@@ -391,26 +393,41 @@ Args:
 
 const char* DOCS_INTERVALVECTOR_COMPLEMENTARY =
 R"_docs(Return the complementary of self.
-    Store the complementary under the form of a union of non-overlapping IntervalVectors,
-    into \a result, and return the size of the union.
-    If (self) is the empty set with n components, the complementary of (self) is
-    the n-dimensional box (-oo,oo)x...(-oo,oo).
-    If the complementary is empty, \a result is an array of one element set to the empty box.
-    It is <b>not</b> a zero-sized array containing no element.
+Store the complementary under the form of a union of non-overlapping IntervalVectors,
+into \a result, and return the size of the union.
+
+If (self) is the empty set with n components, the complementary of (self) is
+the n-dimensional box (-oo,oo)x...(-oo,oo).
+
+If the complementary is empty, \a result is an array of one element set to the empty box.
+It is **not** a zero-sized array containing no element.
+
 Return:
     list<IntervalVector> : complementaries boxes.
+Example:
+    >>> a = IntervalVector([[2,3], [-2, 4]])
+    ([2, 3] ; [-2, 4])
+    >>> a.complementary()
+    [([-inf, 2] ; [ ENTIRE ]),
+     ([3, inf] ; [ ENTIRE ]),
+     ([2, 3] ; [-inf, -2]),
+     ([2, 3] ; [4, inf])]
+
 )_docs";
 
 const char* DOCS_INTERVALVECTOR_BISECT =
 R"_docs(Bisect the box
-    The box is bisected along the dimension \a i
-    and with a ratio \a ratio. If (self)[i] is the interval [a,a+d]:
+The box is bisected along the dimension \a i
+and with a ratio \a ratio. If (self)[i] is the interval [a,a+d]:
 
     + The first box of the result is (self)[0]x...x(self)[i-1]x[a+ratio*d]x...
     + The second box is (self)[0]x...x(self)[i-1]x[a+ratio*d,a+d]x...
+
 Args:
     i (int) : dimension to besect along
     radio (float) : ratio Default  is 0.5. Need to belong to [0, 1]
+
 Return:
     list<IntervalVector> : two sub intervalvectors.
+
 )_docs";

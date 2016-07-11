@@ -1,0 +1,4 @@
+include pybind11/include/pybind11/*.h
+include src/*.h
+include src/core/*.h
+include tests/*.py

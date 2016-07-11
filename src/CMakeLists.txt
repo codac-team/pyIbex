@@ -8,7 +8,7 @@ configure_file(
 # Installation process handled by setup.py
 set(PYTHON_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/python_package")
 file(MAKE_DIRECTORY ${PYTHON_PACKAGE_DIR})
-execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pyibex/" "${PYTHON_PACKAGE_DIR}/pyibex")
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/pyibex/" "${PYTHON_PACKAGE_DIR}/pyibex")
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in
   ${PYTHON_PACKAGE_DIR}/setup.py

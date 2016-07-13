@@ -38,7 +38,17 @@ def get_ibexflags():
 
     return ret
 
-
+# # copied from https://github.com/pierriko/atlaas/blob/master/python/setup.py
+# def pkg_config(*packages, **kw):
+#     flag_map = {'-I': 'include_dirs', '-L': 'library_dirs', '-l': 'libraries'}
+#     command = ['pkg-config', '--libs', '--cflags']+list(packages)
+#     for token in subprocess.check_output(command).decode().split():
+#         kw.setdefault(flag_map.get(token[:2]), []).append(token[2:])
+#     kw.pop(None, None) # in case of unwanted result, eg. -Wl,-rpath,
+#     if 'library_dirs' in kw:
+#       kw['runtime_library_dirs'] = kw['library_dirs'] # configure rpath
+#     print(kw)
+#     return kw
 
 
 ext_modules = [

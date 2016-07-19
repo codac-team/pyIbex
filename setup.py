@@ -148,7 +148,7 @@ setup(
     ext_modules=ext_modules,
     # install_requires=['pybind11>=1.7'],
     cmdclass={'build_ext': BuildExt},
-    packages=['pyibex', 'pyibex.examples'],
+    packages=['pyibex', 'pyibex.examples', 'pyibex.polar', "pyibex.geometry"],
     license="LGPL v3",
 
 

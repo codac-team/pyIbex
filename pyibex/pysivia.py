@@ -74,9 +74,9 @@ def pySIVIA(X0, ops, epsilon, **kwargs):
 	'''
 
 
-	if issubclass(ops.__class__, pyIbex.Ctc):
+	if issubclass(ops.__class__, pyibex.Ctc):
 		return __pySIVIA_ctc(X0, ops, epsilon, **kwargs)
-	elif issubclass(ops.__class__, pyIbex.Sep):
+	elif issubclass(ops.__class__, pyibex.Sep):
 		return __pySIVIA_sep(X0, ops, epsilon, **kwargs)
 
 
@@ -171,7 +171,7 @@ def __pySIVIA_sep(X0, sep, epsilon, color_in='k[r]', color_out='k[b]', color_may
 
 
 if __name__ == '__main__':
-	from pyIbex import *
+	from pyibex import *
 	f = Function('x', 'y', 'x^2 + y^2')
 	ctc = CtcFwdBwd(f, sqr(Interval(3,4)))
 	sep = SepFwdBwd(f, sqr(Interval(3,4)))

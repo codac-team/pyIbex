@@ -45,7 +45,7 @@ void CreateWithList(IntervalMatrix &instance, int nb_rows, int nb_cols,  std::ve
     index++;
   }
   new(&instance) IntervalMatrix(nb_rows, nb_cols, tmp);
-  delete tmp;
+  delete[] tmp;
 }
 
 
@@ -92,20 +92,20 @@ void export_IntervalMatrix(py::module& m){
         .def( self - self )
         .def( self * self)
         .def( self &= self )
-        
+
         .def( -self )
 
         .def( self += self)
-        //TODO .def( self += other<Matrix>()) 
+        //TODO .def( self += other<Matrix>())
 
         .def( self -= self)
-        // TODO .def( self -= other<Matrix>()) 
+        // TODO .def( self -= other<Matrix>())
 
         .def( self *= self)
         .def( self *= double())
-        .def( self *= Interval()) 
-        // TODO .def( self * other<Matrix>()) 
-        // TODO .def( other<Matrix>() * self) 
+        .def( self *= Interval())
+        // TODO .def( self * other<Matrix>())
+        // TODO .def( other<Matrix>() * self)
         .def( "__mul__", [](IntervalMatrix& m, const IntervalVector& x) {return m*x;})
         .def( double() * self)
         .def( Interval() * self)
@@ -114,6 +114,3 @@ void export_IntervalMatrix(py::module& m){
         .def("__repr__", &to_string)
         ;
 };
-
-
-

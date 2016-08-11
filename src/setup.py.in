@@ -15,7 +15,7 @@ elif 'win' in get_platform():
     ext_lib  = [s.split("/")[-1] for s in glob('pyibex/*.pyd')]
 else:
     ext_lib  = [s.split("/")[-1] for s in glob('pyibex/*.dylib')]
-
+    print('find: ', ext_lib)
 
 setup(
   name='pyibex',

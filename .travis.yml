@@ -65,7 +65,7 @@ script:
   - make pip_package
   - export wheel_file=$(ls *.whl)
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
-  - make install_python
+  # - make install_python
 
 deploy:
   skip_cleanup: true

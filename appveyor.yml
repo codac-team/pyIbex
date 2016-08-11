@@ -46,7 +46,7 @@ build_script:
   - msbuild %MSBuildOptions% INSTALL.vcxproj
   - ctest -C %Configuration%
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
-  - msbuild %MSBuildOptions% src/install_python.vcxproj
+  # - msbuild %MSBuildOptions% src/install_python.vcxproj
 #
 # deploy:
 #   release: pyIbex-v$(appveyor_build_version)

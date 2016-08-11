@@ -10,34 +10,35 @@
 
 const char* DOCS_INTERVAL_TYPE =
 R"doc_itv(An Interval represents a closed sub set of R
+
 The docs string is taken from ibex_Interval.h source file
 For more information read doc from http://www.ibex-lib.org/
 
-Example:
+Examples:
+    >>> a = Interval(1,2)
+    >>> a = Interval(2)
+    >>> a = Interval.ALL_REALS
+    >>> b = Interval(a)
 
-    a = Interval(1,2)
-    a = Interval(2)
-    a = Interval.ALL_REALS
-    b = Interval(a)
-
-Note:
+Warning:
     For C++ user, recall that the assigment operator in python copies only references
-    and not the object. For instance
-        a = Interval(4)
-        b = a
-    a and b are referencing the same object. To make a copy used:
-        b = a.copy() or b = Interval(a)
+    and not the object. a and b are referencing the same object. To make a copy used:
+
+    For instance:
+        >>> a = Interval(4)
+        >>> b = a
+        >>> b = a.copy()
+        >>> b = Interval(a)
 
 It is posible to acess ub and lower bound with lb() and ub() but also with
 an array like syntax.
 
 Example:
-
-    a = Interval(1,4)
-    a.lb()
-    >>> 1
-    a[0]
-    >>> 1
+    >>> a = Interval(1,4)
+    >>> a.lb()
+    1
+    >>> a[0]
+    1
 Note:
     Because intervals are immutable object, it is not possible to set directly
     the upper / lower bounds of the Interval object
@@ -49,7 +50,6 @@ const char* DOCS_INTERVAL_INFLATE =
 R"doc_itv(Add [-rad,+rad] to self.
 Returns:
      Return self.
-
 )doc_itv";
 
 const char* DOCS_INTERVAL_MID =

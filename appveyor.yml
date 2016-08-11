@@ -51,10 +51,10 @@ deploy:
   release: pyIbex-v$(appveyor_build_version)
   description: 'pyIbex build'
   provider: GitHub
-  auth_token:
     secure: kfuelei+usQrQv/IZnoepVAx6SU1E8BKoR6rXwXM3grYnvzBQM2P9xMKQ+Nc+BYr
   artifact: pip_wheel
   draft: true
+  auth_token:
   prerelease: false
   on:
     branch: master      # release from master branch only

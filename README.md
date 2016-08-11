@@ -9,8 +9,10 @@ Ibex python binding
 Introduction
 --------------------------
 pyIbex is a python binding of Ibex library. It aims at providing a basic interface
-of Ibex Basic types (Interval, IntervalVector, Ctc, ...), high level functionnalities and
+of Ibex types (Interval, IntervalVector, Ctc, ...),  and high level functionnalities such as
 contractors programming.
+
+Since the version 1.5, pyibex module only contains core functionnalities of ibex.
 
 The version 1.2 uses now uses pyBind11 instead of Boost-Python to link C++ and python code.
 The core fonctionnalities of pyIbex are also reduced and additionnal features are moved to additionnal module.
@@ -19,8 +21,22 @@ As a consequence, the following modules are removed from the core distributes :
  + Pavings ( still under huge developpement)
 
 
+
+# Install
+
+## Ubuntu 16.04 / 14.04
+```bash
+sudo add-apt-repository ppa:ben-ensta/pyibex
+sudo apt-get update
+sudo apt install python3-pyibex
+```
+
+## Mac OSX / Windows
+```python
+>>> pip install pyibex
+```
 --------------------------
-Prerequisites
+Dependancies
 --------------------------
 
 + [CMake](http://www.cmake.org "CMake project page") (>= 2.8.3)
@@ -47,7 +63,6 @@ Binding for :
 - SepInverse, SepTransform
 - SepPolygon, SepPolarXY, SepPolarXYT
 - SepQInterProjF, SepCtcPairProj, SepProj
-
 
 
 -----------------
@@ -180,13 +195,20 @@ TODO
 - [X] inheritance with python objects
 
 --------------------------
-Change Log
+Changelog
 --------------------------
+- 19/0702016 (v1.5.0a0)
+  - only keep ibex core fonctionnalities
+    - Interval,
+    - IntervalVector,
+    - Interval
+    - Ctc,
+    - Sep,
 - 06/07/2016 : use ibex-lib 3.2.0
                update Docstring
                update pybind11 interface
 - 27/01/2016 : Use pybind11 instead of boost python.
-             Remove wip directory
+               Remove wip directory
 - 12/02/2015 : Add SepPolarXY
 - 04/10/2015 : Add predicate, Paving
 - 20/09/2015 : Add Set interface, add contract method with set for Sep

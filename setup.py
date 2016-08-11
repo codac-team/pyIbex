@@ -4,27 +4,31 @@ import sys
 import setuptools
 import subprocess
 # import pkgconfig # helper class to get ibex flags and libs
-__version__ = '1.5.0a'
+__version__ = '1.5.0a8'
 
 
-class get_pybind_include(object):
-    """Helper class to determine the pybind11 include path
-    The purpose of this class is to postpone importing pybind11
-    until it is actually installed, so that the ``get_include()``
-    method can be invoked. """
-
-    def __init__(self, user=False):
-        self.user = user
-
-    def __str__(self):
-        import pybind11
-        return pybind11.get_include(self.user)
+# class get_pybind_include(object):
+#     """Helper class to determine the pybind11 include path
+#     The purpose of this class is to postpone importing pybind11
+#     until it is actually installed, so that the ``get_include()``
+#     method can be invoked. """
+#
+#     def __init__(self, user=False):
+#         self.user = user
+#
+#     def __str__(self):
+#         import pybind11
+#         return pybind11.get_include(self.user)
 
 
 def get_ibexflags():
-    result = subprocess.check_output(["pkg-config", "--cflags", "--libs", "ibex"])
-    result = result.decode('utf-8').rstrip()
-    # print(result)
+    try:
+      result = subprocess.check_output(["pkg-config", "--cflags", "--libs", "ibex"])
+      result = result.decode('utf-8').rstrip()
+    except:
+      print("pkg config failed")
+      result = '-lprim -libex'
+    print(result)
     ret = {'library_dirs': [], 'include_dirs':[], 'libraries': [], 'cpp_flag':[]}
     for s in result.split(' '):
       if '-I' in s:
@@ -104,7 +108,7 @@ def cpp_flag(compiler):
 class BuildExt(build_ext):
     """A custom build extension for adding compiler-specific options."""
     c_opts = {
-        'msvc': ['/EHsc'],
+        'msvc': ['/EHsc', '/MT'],
         'unix': [],
     }
 
@@ -117,8 +121,8 @@ class BuildExt(build_ext):
         if ct == 'unix':
             opts.append('-DVERSION_INFO="%s"' % self.distribution.get_version())
             opts.append(cpp_flag(self.compiler))
-            if has_flag(self.compiler, '-fvisibility=hidden'):
-                opts.append('-fvisibility=hidden')
+            # if has_flag(self.compiler, '-fvisibility=hidden'):
+                # opts.append('-fvisibility=hidden')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
 
@@ -129,8 +133,8 @@ class BuildExt(build_ext):
           self.compiler.add_library_dir(d.replace("-L",""))
         for l in ibex_config['libraries']:
           self.compiler.add_library(l.replace('-l',""))
-        for f in ibex_config['cpp_flag']:
-          opts.append(f)
+        # for f in ibex_config['cpp_flag']:
+          # opts.append(f)
 
         for ext in self.extensions:
             ext.extra_compile_args = opts
@@ -146,10 +150,15 @@ setup(
     description='PyIbex a python interface of ibexlib ',
     long_description='',
     ext_modules=ext_modules,
-    # install_requires=['pybind11>=1.7'],
     cmdclass={'build_ext': BuildExt},
     packages=['pyibex', 'pyibex.examples', 'pyibex.polar', "pyibex.geometry"],
-    license="LGPL v3",
+    test_suite='tests',
+    license="LGPLv3+",
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+    ],
 
 
     # zip_safe=False,

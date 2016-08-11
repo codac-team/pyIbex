@@ -44,6 +44,18 @@ std::string to_string(const Interval& a){
   // return "[" + std::to_string(a.lb()) + "," + std::to_string(a.ub()) + "]" ;
 }
 
+py::tuple diff_wrapper(const Interval& x, const Interval& y){
+  Interval c1, c2;
+  x.diff(y,c1,c2);
+  return py::make_tuple(c1,c2);
+}
+
+py::tuple complementary_wrapper(const Interval&x){
+  Interval c1, c2;
+  x.complementary(c1, c2);
+  return py::make_tuple(c1, c2);
+}
+
 
 void export_Interval(py::module& m){
     py::class_<Interval>(m, "Interval", DOCS_INTERVAL_TYPE)
@@ -102,24 +114,24 @@ void export_Interval(py::module& m){
     .def( "diam",   &Interval::diam, DOCS_INTERVAL_DIAM )
     .def( "mig",    &Interval::mig, DOCS_INTERVAL_MIG )
     .def( "mag",    &Interval::mag, DOCS_INTERVAL_MAG )
-    .def( "is_subset",  &Interval::is_subset, DOCS_INTERVAL_IS_SUBSET)
-    .def( "is_strict_subset",   &Interval::is_strict_subset, DOCS_INTERVAL_IS_STRICT_SUBSET)
-    .def( "is_interior_subset", &Interval::is_interior_subset, DOCS_INTERVAL_IS_INTERIOR_SUBSET )
-    .def( "is_strict_interior_subset",  &Interval::is_strict_interior_subset,DOCS_INTERVAL_IS_STRICT_INTERIOR_SUBSET )
-    .def( "is_superset",    &Interval::is_superset, DOCS_INTERVAL_IS_SUPERSET)
-    .def( "is_strict_superset", &Interval::is_strict_superset, DOCS_INTERVAL_IS_STRICT_SUPERSET)
-    .def( "contains",   &Interval::contains, DOCS_INTERVAL_CONTAINS )
-    .def( "interior_contains",  &Interval::interior_contains, DOCS_INTERVAL_INTERIOR_CONTAINS)
-    .def( "intersects", &Interval::intersects, DOCS_INTERVAL_INTERSECTS )
-    .def( "overlaps",   &Interval::overlaps, DOCS_INTERVAL_OVERLAPS )
-    .def( "is_disjoint",    &Interval::is_disjoint, DOCS_INTERVAL_IS_DISJOINT )
+    .def( "is_subset",  &Interval::is_subset, DOCS_INTERVAL_IS_SUBSET, "x"_a)
+    .def( "is_strict_subset",   &Interval::is_strict_subset, DOCS_INTERVAL_IS_STRICT_SUBSET, "x"_a)
+    .def( "is_interior_subset", &Interval::is_interior_subset, DOCS_INTERVAL_IS_INTERIOR_SUBSET, "x"_a )
+    .def( "is_strict_interior_subset",  &Interval::is_strict_interior_subset,DOCS_INTERVAL_IS_STRICT_INTERIOR_SUBSET, "x"_a)
+    .def( "is_superset",    &Interval::is_superset, DOCS_INTERVAL_IS_SUPERSET, "x"_a)
+    .def( "is_strict_superset", &Interval::is_strict_superset, DOCS_INTERVAL_IS_STRICT_SUPERSET, "x"_a)
+    .def( "contains",   &Interval::contains, DOCS_INTERVAL_CONTAINS, "x"_a)
+    .def( "interior_contains",  &Interval::interior_contains, DOCS_INTERVAL_INTERIOR_CONTAINS, "x"_a)
+    .def( "intersects", &Interval::intersects, DOCS_INTERVAL_INTERSECTS, "x"_a )
+    .def( "overlaps",   &Interval::overlaps, DOCS_INTERVAL_OVERLAPS, "x"_a )
+    .def( "is_disjoint",    &Interval::is_disjoint, DOCS_INTERVAL_IS_DISJOINT, "x"_a )
     .def( "is_empty",   &Interval::is_empty, DOCS_INTERVAL_IS_EMPTY )
     .def( "is_degenerated",     &Interval::is_degenerated, DOCS_INTERVAL_IS_DEGENERATED )
     .def( "is_unbounded",   &Interval::is_unbounded, DOCS_INTERVAL_IS_UNBOUNDED )
     .def( "is_bisectable",  &Interval::is_bisectable,DOCS_INTERVAL_IS_BISECTABLE )
-    .def( "rel_distance",   &Interval::rel_distance, DOCS_INTERVAL_REL_DISTANCE )
-    .def( "complementary",  &Interval::complementary, DOCS_INTERVAL_COMPLEMENTARY )
-    .def( "diff",   &Interval::diff, DOCS_INTERVAL_DIFF )
+    .def( "rel_distance",   &Interval::rel_distance, DOCS_INTERVAL_REL_DISTANCE, "x"_a )
+    .def( "complementary",  &complementary_wrapper, DOCS_INTERVAL_COMPLEMENTARY )
+    .def( "diff",   &diff_wrapper, DOCS_INTERVAL_DIFF, "y"_a)
 
     .def( "bisect", &Interval::bisect, DOCS_INTERVAL_BISECT, py::arg("ratio")=0.5)
     .def("__getitem__", getitem, "self[0] returns the lb and self[1] return ub")

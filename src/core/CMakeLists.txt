@@ -1,6 +1,6 @@
 file(GLOB CORE_SRCS "pyIbex_*.cpp")
 
-PYBIND11_ADD_MODULE(pyibex SHARED
+pybind11_add_module(pyibex SHARED
     pyIbex.cpp
     pyIbex_Interval.cpp
     pyIbex_IntervalVector.cpp

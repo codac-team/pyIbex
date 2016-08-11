@@ -1,4 +1,4 @@
-language: c++
+language: cpp
 sudo: false
 
 
@@ -38,7 +38,7 @@ matrix:
 before_install:
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install python3; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then pip install --user wheel; fi
-  # - if [ $TRAVIS_OS_NAME == osx ]; then brew install clang-omp; fi
+#  - if [ $TRAVIS_OS_NAME == osx ]; then brew install clang-omp; fi
 
 install:
   - bash ./travis_script/build_Ibex4pyIbex.sh
@@ -54,7 +54,6 @@ script:
   - ls ${HOME}/ibex
   - ls ${HOME}/ibex/lib
   - if [ $TRAVIS_OS_NAME == osx ]; then
-      # CC=clang-omp CXX=clang-omp++ cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} ../ ;
       cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} ../ ;
     fi
   - if [ $TRAVIS_OS_NAME == linux ]; then

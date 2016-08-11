@@ -1,6 +1,7 @@
 from setuptools import setup, Distribution
 import distutils
 from distutils.util import get_platform
+from glob import glob
 # force External module
 class BinaryDistribution(Distribution):
     def has_ext_modules(self):
@@ -8,23 +9,35 @@ class BinaryDistribution(Distribution):
 
 # select the file to copy
 if 'linux' in get_platform():
-    ext_lib  = '.so'
+    ext_lib  = [s.split("/")[-1] for s in glob('pyibex/*.so')]
+    print('find: ', ext_lib)
 elif 'win' in get_platform():
     ext_lib  = '.pyd'
 else:
     ext_lib  = '.dylib'
 
-    
-setup(
-    name='pyibex',
-    version='${PACKAGE_VERSION}',
-    distclass=BinaryDistribution,
-    description='python binding for ibex',
-    packages=['pyibex', 'pyibex'],
-    package_data={
-        'pyibex': ['pyibex'+ext_lib],
 
-    },
-    ext_modules = [],
-    include_package_data=True
+setup(
+  name='pyibex',
+  version='${PACKAGE_VERSION}',
+  author='Benoit Desrochers',
+  author_email='ben.ensta@gmail.com',
+  url='https://github.com/benEnsta/pyIbex',
+  description='PyIbex a python interface of ibexlib ',
+  long_description='',
+  ext_modules=[],
+  packages=['pyibex', 'pyibex.examples', 'pyibex.polar', "pyibex.geometry", "pyibex.tests"],
+  package_data={
+      'pyibex': [ext_lib[0]],
+
+  },
+  test_suite='pyibex.tests',
+  license="LGPLv3+",
+  classifiers=[
+      "Development Status :: 3 - Alpha",
+      "Topic :: Scientific/Engineering :: Mathematics",
+      "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+  ],
+  include_package_data=True,
+  zip_safe=False
 )

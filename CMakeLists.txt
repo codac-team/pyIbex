@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 2.8.12)
 
 project(pyIbex)
-set(PACKAGE_VERSION "1.3.1-dev0")
+set(PACKAGE_VERSION "1.5.0a10")
 
 # build type
 IF(NOT CMAKE_BUILD_TYPE)
@@ -29,19 +29,19 @@ if(NOT WIN32)
 endif()
 
 # set ( PYBIND11_PYTHON_VERSION "3.5")
-# add_subdirectory(pybind11)
-#
-# FIND_PACKAGE(IbexLib)
-# if(IBEX_FOUND)
-#   INCLUDE_DIRECTORIES(${IBEX_INCLUDE_DIRS})
-#   SET(LIBS ${LIBS} ${IBEX_LIBRARIES} )
-# else()
-#   MESSAGE(WARNING "Unable to find IbexLib. Maybe you need to set IBEX_ROOT ${IBEX_ROOT}")
-#   MESSAGE(WARNING "If ibex is not installer run : \n\t sh travis_script/install_ibexlib.sh /path/to/your/install/dir")
-#   #MESSAGE(FATAL_ERROR "where ")
-# endif()
+add_subdirectory(pybind11)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/check_dependancies.cmake)
+FIND_PACKAGE(IbexLib)
+if(IBEX_FOUND)
+  INCLUDE_DIRECTORIES(${IBEX_INCLUDE_DIRS})
+  SET(LIBS ${LIBS} ${IBEX_LIBRARIES} )
+else()
+  MESSAGE(WARNING "Unable to find IbexLib. Maybe you need to set IBEX_ROOT ${IBEX_ROOT}")
+  MESSAGE(WARNING "If ibex is not installer run : \n\t sh travis_script/install_ibexlib.sh /path/to/your/install/dir")
+  #MESSAGE(FATAL_ERROR "where ")
+endif()
+
+# include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/check_dependancies.cmake)
 # Find python install path (from morse install script)
 
 EXECUTE_PROCESS(COMMAND
@@ -78,7 +78,7 @@ endif()
 # set(ONLY_PYTHON_BINDINGS ON)
 # add_subdirectory(ibex-robotics/src)
 # include_directories(${CMAKE_CURRENT_BINARY_DIR}/ibex-robotics/include)
-add_subdirectory(src)	
+add_subdirectory(src)
 
 if (BUILD_TESTS)
 	ENABLE_TESTING()

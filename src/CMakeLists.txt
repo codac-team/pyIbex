@@ -9,6 +9,8 @@ configure_file(
 set(PYTHON_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/python_package")
 file(MAKE_DIRECTORY ${PYTHON_PACKAGE_DIR})
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/pyibex/" "${PYTHON_PACKAGE_DIR}/pyibex")
+execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/tests/" "${PYTHON_PACKAGE_DIR}/pyibex/tests")
+
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in
   ${PYTHON_PACKAGE_DIR}/setup.py
@@ -27,5 +29,8 @@ add_custom_command(TARGET pip_package PRE_BUILD
     WORKING_DIRECTORY ${PYTHON_PACKAGE_DIR}
 )
 
-# add_dependencies(pip_package pyIbex)
-# add_dependencies(pip_package wip)
+add_custom_target(install_python)
+add_custom_command(TARGET install_python PRE_BUILD
+    COMMAND pip install --upgrade .
+    WORKING_DIRECTORY ${PYTHON_PACKAGE_DIR}
+)

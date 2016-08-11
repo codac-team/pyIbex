@@ -12,9 +12,9 @@ if 'linux' in get_platform():
     ext_lib  = [s.split("/")[-1] for s in glob('pyibex/*.so')]
     print('find: ', ext_lib)
 elif 'win' in get_platform():
-    ext_lib  = '.pyd'
+    ext_lib  = [s.split("/")[-1] for s in glob('pyibex/*.pyd')]
 else:
-    ext_lib  = '.dylib'
+    ext_lib  = [s.split("/")[-1] for s in glob('pyibex/*.dylib')]
 
 
 setup(

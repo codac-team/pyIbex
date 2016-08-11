@@ -10,7 +10,7 @@ pybind11_add_module(pyibex SHARED
     pyIbex_Bsc.cpp
     pyIbex_IntervalMatrix.cpp
 )
-target_link_libraries(pyibex ${LIBS})
+target_link_libraries(pyibex PRIVATE ${LIBS})
 
 # install( TARGETS _core DESTINATION "${PYTHON_INSTDIR}/pyIbex/core")
 add_custom_command(TARGET pyibex POST_BUILD

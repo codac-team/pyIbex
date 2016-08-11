@@ -8,6 +8,7 @@ addons:
     - deadsnakes
     - ubuntu-toolchain-r-test
     - chef-current-precise
+    - kubuntu-backports # cmake 2.8.12
 
     packages:
     - cmake

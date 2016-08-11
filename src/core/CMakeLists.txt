@@ -1,4 +1,4 @@
-file(GLOB CORE_SRCS "pyIbex_*.cpp")
+# file(GLOB CORE_SRCS "pyIbex_*.cpp")
 
 pybind11_add_module(pyibex SHARED
     pyIbex.cpp

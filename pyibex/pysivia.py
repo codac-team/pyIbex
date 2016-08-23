@@ -127,7 +127,7 @@ def __pySIVIA_ctc(X0, ctc, epsilon, color_out='k[b]', color_maybe='k[y]', draw_b
 			stack.append(X2)
 
 
-	print('nb contraction %d / nombre de boite %d'%(k,len(res_out)+len(res_y)))
+	print('number of contraction %d / number of boxes %d'%(k,len(res_out)+len(res_y)))
 
 	return (res_out, res_y)
 
@@ -165,7 +165,7 @@ def __pySIVIA_sep(X0, sep, epsilon, color_in='k[r]', color_out='k[b]', color_may
 			stack.append(X1)
 			stack.append(X2)
 
-	print('nb contraction %d / nombre de boite %d'%(k,len(res_in)+len(res_out)+len(res_y)))
+	print('number of separation %d / number of boxes %d'%(k,len(res_in)+len(res_out)+len(res_y)))
 
 	return (res_in , res_out, res_y)
 

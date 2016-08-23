@@ -13,9 +13,6 @@ ENDIF()
 
 # option declaration
 option(BUILD_TESTS "Build tests" ON)
-option(BUILD_EXAMPLE "Build example" OFF)
-option(BUILD_STATIC "make standalone lib" OFF)
-# option(WITH_IBEX_ROBOTICS "use ibex-robotics additionnal lib" ON)
 
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
@@ -74,21 +71,15 @@ if(WIN32)
     string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
   endforeach()
 endif()
-# INCLUDE_DIRECTORIES (pybind11/include)
-# set(ONLY_PYTHON_BINDINGS ON)
-# add_subdirectory(ibex-robotics/src)
-# include_directories(${CMAKE_CURRENT_BINARY_DIR}/ibex-robotics/include)
+
 add_subdirectory(src)
 
 if (BUILD_TESTS)
 	ENABLE_TESTING()
 	include( CTest )
-	add_subdirectory(tests)
+	add_subdirectory(pyibex/tests)
 endif(BUILD_TESTS)
 
-if (BUILD_EXAMPLE)
-	add_subdirectory(examples)
-endif(BUILD_EXAMPLE)
 
 
 

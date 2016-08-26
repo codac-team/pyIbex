@@ -10,17 +10,20 @@ configuration:
     # - master
 environment:
   matrix:
-    # - CMAKE_PLATFORM: "Visual Studio 14 2015"
-      # PYTHON_DIR: "C:\\Python34"
+    - CMAKE_PLATFORM: "Visual Studio 14 2015"
+      PYTHON_DIR: "C:\\Python34"
+      IBEX_FILES: 2.3.0-win32
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python34-x64"
+      IBEX_FILES: 2.3.0-win64
 
 install:
   - cinstall: python
   - ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
   - "%PYTHON_DIR%/python.exe C:/get-pip.py"
   - ps: >-
-      (new-object net.webclient).DownloadFile('https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.51/ibex-lib-2.3.0-win64.zip', 'C:\projects\pyIbex\ibex-lib.zip')
+
+      (new-object net.webclient).DownloadFile('https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.51/ibex-lib-$(env:IBEX_FILES).zip', 'C:\projects\pyIbex\ibex-lib.zip')
 
       ls C:\projects\pyIbex
 
@@ -40,7 +43,8 @@ build_script:
   - git submodule init
   - git submodule update
   # - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
-  - cmake -G "%CMAKE_PLATFORM%" -DPYTHON_INCLUDE_DIR:PATH=%PYTHON_DIR%/include -DPYTHON_LIBRARY:FILEPATH=%PYTHON_DIR%/libs/python34.lib -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DIBEX_ROOT=C:\projects\pyIbex\ibex-lib\ibex-lib-2.3.0-win64
+
+  - cmake -G "%CMAKE_PLATFORM%" -DPYTHON_INCLUDE_DIR:PATH=%PYTHON_DIR%/include -DPYTHON_LIBRARY:FILEPATH=%PYTHON_DIR%/libs/python34.lib -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DIBEX_ROOT=C:\projects\pyIbex\ibex-lib\ibex-lib-"%IBEX_FILES%"
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
   - msbuild %MSBuildOptions% INSTALL.vcxproj

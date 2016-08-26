@@ -19,10 +19,17 @@ The core fonctionnalities of pyIbex are also reduced and additionnal features ar
 As a consequence, the following modules are removed from the core distributes :
  + Polar contractors (CtcAngle, CtcPolar, SepPolarXY, ...)
  + Pavings ( still under huge developpement)
+ + Tubes
 
-
+ See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyIbex/) for more informations.
 
 # Install
+
+## With Conda
+```bash
+conda install -c benensta pyibex
+```
+
 
 ## Ubuntu 16.04 / 14.04
 ```bash
@@ -33,8 +40,9 @@ sudo apt install python3-pyibex
 
 ## Mac OSX / Windows
 ```python
->>> pip install pyibex
+>>> python -m pip install pyibex
 ```
+
 --------------------------
 Dependancies
 --------------------------
@@ -44,25 +52,6 @@ Dependancies
 + [pybind11](https://github.com/wjakob/pybind11) required C++11 support
 + [ibex-lib](http://www.ibex-lib.org/) custom version from [github](https://github.com/benEnsta/ibex-lib/tree/pyIbex_version_3)
 + a C++ compiler for your platform , e.g. [GCC](http://gcc.gnu.org "GCC home") (>= 4.8), [MSVS 13](https://www.visualstudio.com "Visual Studio 2014"), [llvm](http://llvm.org "llvm")
-
-
---------------------------
-Features
---------------------------
-Binding for :
-- Interval, IntervalVector, IntervalMatrix (Partial)
-- Bsc, LargestFirst
-- Function (only text constructors)
-- Ctc, CtcFwdBwd, CtcIn, CtcNotIn
-- CtcUnion, CtcCompo
-- CtcInverse
-- CtcSegment (need ibex modification !!!)
-- CtcQInterProjF
-- SepUnion, SepInter
-- SepCtcPair , SepFwdBwd, SepNot (negation of a separator)
-- SepInverse, SepTransform
-- SepPolygon, SepPolarXY, SepPolarXYT
-- SepQInterProjF, SepCtcPairProj, SepProj
 
 
 -----------------
@@ -83,8 +72,7 @@ Sometime, you will have to manualy specify python executable, include and libs d
 
   -using -DPYTHON_EXECUTABLE to specify python executable path.
 
-
-Alternatively, run the provided `build.sh` script.
+Alternatively, run the provided `install.sh` script.
 remark : If Ibex isn't installed on the current machine, it will be download, build an installed.
 
 
@@ -92,33 +80,34 @@ remark : If Ibex isn't installed on the current machine, it will be download, bu
 --------------------------------------
 
 To install pyIbex run the following commands:
-
-+ Build pyIbex + Ibex4pyIbex
 ```bash
 git clone https://github.com/benEnsta/pyIbex.git
 cd pyIbex
 git submodule init
-sh ./build_Ibex4pyIbex.sh
-sh ./build.sh
+mkdir -p build && cd build
+make
+# if pip is installed run
+make install_python
+# otherwise
+make install
 ```
-Add `/home/${user}/lib/python3/dist-packages` to PYTHONPATH
+If you used a non stantdart install preifx (-DCMAKE_INSTALL_PREFIX),
+add `${PREFIX}/lib/python3/dist-packages` to your PYTHONPATH
 
 ###For Windows Users (Win64 version) (Not ready Yet)
 --------------------------------------
 + Build Ibex
   Open the developer command prompt and compile ibex-lib
 ```bash
-git clone https://github.com/benEnsta/ibex-lib.git
+git clone -b with_cmake https://github.com/benEnsta/ibex-lib.git
 cd ibex-lib
-git checkout pyIbex_version
 mkdir build
 cd build
 cmake -G "Visual Studio 12 2013 Win64" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF ../
 msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease PACKAGE.vcxproj
 ```
-The last command generates a installer for ibex-lib
 
-+ build pyIbex with pyzo2015a
+The last command generates a installer for ibex-lib
 ```bash
 cd pyIbex
 mkdir build
@@ -126,8 +115,6 @@ cd build
 cmake -G "Visual Studio 12 2013 Win64" -DBOOST_ROOT=$$$$$$$$ -DIBEX_ROOT=$$$$$$$$ -DPYTHON_EXECUTABLE=$$$$$$$$ ../
 msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease INSTALL.vcxproj
 ```
-
-
 
 --------------------------
 Tutorial
@@ -179,8 +166,8 @@ ctc1 = CtcUnion([ctcIn, ctcOut, ctc1])
 --------------------------
 TODO
 --------------------------
-- [ ] Write the documentation !!!
-- [ ] Add IntervalMatrix support
+- [X] Write the documentation !!!
+- [X] Add IntervalMatrix support
 	- [ ] Add IntervalMatrix support
 	- [ ] Add Jacobian and gradient
 - [ ] Add numpy array support for interval Vector class

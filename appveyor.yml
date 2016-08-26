@@ -12,10 +12,10 @@ environment:
   matrix:
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python34"
-      IBEX_FILES: 2.3.0-win32
+      IBEX_FILES: "2.3.0-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python34-x64"
-      IBEX_FILES: 2.3.0-win64
+      IBEX_FILES: "2.3.0-win64"
 
 install:
   - cinstall: python
@@ -23,7 +23,7 @@ install:
   - "%PYTHON_DIR%/python.exe C:/get-pip.py"
   - ps: >-
 
-      (new-object net.webclient).DownloadFile('https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.51/ibex-lib-$(env:IBEX_FILES).zip', 'C:\projects\pyIbex\ibex-lib.zip')
+      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.54/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
 
       ls C:\projects\pyIbex
 

@@ -1,7 +1,5 @@
 from setuptools import setup, Distribution, Extension
-import distutils
-from distutils.util import get_platform
-from glob import glob
+
 # force External module
 class BinaryDistribution(Distribution):
     def has_ext_modules(self):
@@ -20,7 +18,7 @@ setup(
   url='https://github.com/benEnsta/pyIbex',
   description='PyIbex a python interface of ibexlib ',
   long_description='',
-  ext_modules=[Extension("pyibex.fake", sources=["fake.c"])],
+  # ext_modules=[Extension("pyibex.fake", sources=["fake.c"])],
   packages=['pyibex', 'pyibex.examples', 'pyibex.polar',
             'pyibex.geometry', 'pyibex.tests'],
   package_data={

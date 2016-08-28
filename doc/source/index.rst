@@ -6,10 +6,10 @@
 Welcome to pyIbex's documentation!
 ==================================
 
-pyIbex is a python library, based on Ibex-lib, for solving non linear problem using Interval Arithmetic tools.
-It aims at providing fast access to the core part of Ibex ( Interval, Contractors, Separators ,...) and facilitating the development and the integration of experimental algorithm.
+pyIbex is a python library, based on Ibex-lib, for solving non linear problems using Interval Arithmetic tools.
+It aims at providing fast access to the core part of Ibex ( Interval, Contractors, Separators ,...) and facilitating the development and the integration of experimental algorithms.
 
-.. warning:: Since version 1.5, *pyIbex* module have been renamed to *pyibex*
+.. warning:: Since version 1.5, *pyIbex* module has been renamed *pyibex*
 
 
 Contents:
@@ -19,7 +19,7 @@ Contents:
    :maxdepth: 2
 
    intro
-   quickstart
+   tuto01
    api
 
 

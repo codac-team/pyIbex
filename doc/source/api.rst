@@ -1,7 +1,7 @@
 .. _api:
 
 ==========
-python API
+Python API
 ==========
 
 Interval
@@ -133,4 +133,3 @@ SepQInter
   :members:
   :show-inheritance:
   :no-undoc-members:
-

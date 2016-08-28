@@ -1,14 +1,17 @@
 .. _tuto01:
 
-Tutorial 01
+Get Started
 ###########
 
-PyIbex functionnalyties and object are under the pyibex namepace.
+PyIbex functionalities and objects are under the pyibex namespace.
 
 .. code-block:: python
 
     from pyibex import Interval
 
+================================
+Interval and IntervalVector
+================================
 
 The type Interval represents a closed set of :math:`\mathbb{R}^2`
 
@@ -25,7 +28,7 @@ The type Interval represents a closed set of :math:`\mathbb{R}^2`
     a  = Interval(-2, 3)   # create [-2, 3]
 
 
-An IntervalVector or a Box is a cartesion product of intervals. With pyibex it can be created :
+An IntervalVector or a *Box* is a cartesian product of intervals. With *pyibex* it can be created :
  - with the dimension and an initial interval [x_lb, x_ub].
  - with a point passed as a list [x1, x2, ..., xn]
  - with a list of list of bounds [[x1_lb, x1_ub], [x2_lb, x2_ub], ..., [xn_lb, xn_ub]]
@@ -34,16 +37,68 @@ An IntervalVector or a Box is a cartesion product of intervals. With pyibex it c
 .. code-block:: python
 
     # Create IntervalVector
-    # Create the box
-    >>> IntervalVector( 2, a) # ==> box [1, 3]x[1,3]
+    >>> IntervalVector( 2, [1,3]) # ==> box [1, 3]x[1,3]
+    >>> IntervalVector( 2, Interval(1,3)) # ==> box [1, 3]x[1,3]
     >>> IntervalVector([1,2,3]) # ==> box [1,1]x[2,2]x[3,3]
     >>> IntervalVector([[-1,3], [3,10], [-3, -1]]) # ==> box  [-1,3]x[
     >>> IntervalVector( (a, Interval(-1,0), Interval(0)) )
 
 
-======================================
-Functions and contractors manipulation
-======================================
+=========
+Functions
+=========
+Ibex-lib provides a very powerful framework to build *inclusion function*. See http://www.ibex-lib.org/doc/tutorial.html#functions
+
+With *pyibex*, functions are defined with strings.  First arguments define variables
+while the last one represents the expression of the function.
+Vector argument can be defined with an array like syntax.
+
+For instance, the function :math:`f:(x,y) \longrightarrow x\cdot\sin(x+y)-2`
+can be defined with:
+
+.. code-block:: python
+
+  from pyibex import Function
+  # define f
+  f1 = Function("x", "y", "x*sin(x+y)-2")
+  # or with an array like syntax
+  f2 = Function("x[2]", "x[1]*sin(x[1]+x[2])-2")
+  # Evaluation with x=[1,3], y = [1,4]
+  f.eval(IntervalVector([[1,3], [1,4]]))
+
+
+Vector valued function can be written by using parentesis syntax "( ..., ..., ...)".
+For instance :
+
+.. math::
+
+  f:(x,y,z)\longrightarrow \left\{\begin{array}{c} x^2-y \\  y-2z \\ z^3-\sqrt{y-x}\end{array}\right.
+
+is defined in python by:
+
+.. code-block:: python
+
+  f = Function("x","y","z", "( x^2-y, y-2*z, z^3-sqrt(y-x))")
+
+Using the **minibex** syntxe (see http://www.ibex-lib.org/doc/tutorial.html#using-the-minibex-syntax)
+function can be defined from a text file.
+
+for instance:
+.. code-block::
+
+  /* myfunction.txt */
+  function f(x,y,z)
+    return (x^2-y, y-2*z, z^3-sqrt(y-x));
+  end
+
+.. code-block:: python
+
+  f = Function("myfunction.txt")
+
+========================
+contractors manipulation
+========================
+
 .. code-block:: python
 
     # Define a Function from an equation

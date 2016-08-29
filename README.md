@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/benEnsta/pyIbex.svg?branch=master)](https://travis-ci.org/benEnsta/pyIbex)
 [![Build status](https://ci.appveyor.com/api/projects/status/ughoj13u2rve6mw0?svg=true)](https://ci.appveyor.com/project/benEnsta/pyibex)
-
+[![Conda_Statux](https://anaconda.org/benensta/pyibex/badges/installer/conda.svg)](https://ci.appveyor.com/project/benEnsta/pyibex)
 ==========================
 Ibex python binding
 ==========================
@@ -9,17 +9,17 @@ Ibex python binding
 Introduction
 --------------------------
 pyIbex is a python binding of Ibex library. It aims at providing a basic interface
-of Ibex types (Interval, IntervalVector, Ctc, ...),  and high level functionnalities such as
+of Ibex types (Interval, IntervalVector, Ctc, ...),  and high level functionalities such as
 contractors programming.
 
-Since the version 1.5, pyibex module only contains core functionnalities of ibex.
+Since the version 1.5, pyibex module only contains core functionalities of ibex.
 
 The version 1.2 uses now uses pyBind11 instead of Boost-Python to link C++ and python code.
-The core fonctionnalities of pyIbex are also reduced and additionnal features are moved to additionnal module.
+The core functionalities of pyIbex are also reduced and additionnal features are moved to additionnal module.
 As a consequence, the following modules are removed from the core distributes :
- + Polar contractors (CtcAngle, CtcPolar, SepPolarXY, ...)
- + Pavings ( still under huge developpement)
- + Tubes
+ + [geometry](https://github.com/benEnsta/ibex-geometry) (CtcAngle, CtcPolar, SepPolarXY, ...)
+ + Thickset ( still under huge developpement)
+ + [Tubes](https://github.com/SimonRohou/tube-lib)
 
  See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyIbex/) for more informations.
 

@@ -13,6 +13,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <sstream>
+
 namespace py = pybind11;
 
 using py::self;
@@ -29,6 +30,17 @@ std::string to_string(const Function& f){
 // typedef void (Function::*backward_1) (const IntervalVector&, IntervalVector&) const;
 
 void export_Function(py::module& m){
+
+  py::register_exception_translator([](std::exception_ptr p) {
+    try {
+        if (p) std::rethrow_exception(p);
+    } catch (const ibex::SyntaxError &e) {
+      std::stringstream ss;
+      ss << e;
+      PyErr_SetString(PyExc_RuntimeError, ss.str().c_str());
+    }
+  });
+
 
   py::class_<Function>(m, "Function")
 
@@ -47,7 +59,7 @@ void export_Function(py::module& m){
     .def( "backward", ( bool(Function::*) (const Interval& , IntervalVector&) const) &Function::backward)
     .def( "backward", ( bool(Function::*) (const IntervalVector& , IntervalVector&) const) &Function::backward)
     .def( "backward", ( bool(Function::*) (const IntervalMatrix& , IntervalVector&) const) &Function::backward)
-    
+
     .def( "nb_arg", &Function::nb_arg)
     // .def( "gradient" , &Function::gradient)
     // .def( "jacobian" , &Function::jacobian)

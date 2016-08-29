@@ -17,10 +17,9 @@ class TestContractors(unittest.TestCase):
 		# generate memory leak !!!
 		try:
 			f = Function("x", "y", "sqr(x) + sqr(y)")
-		except:
-			print("Unexpected error:", sys.exc_info()[0])
-		# # except SyntaxError:
-		# 	print("Get syntaxError exeption")
+		except RuntimeError as err:
+			self.assertTrue(str(err) == "Syntax error near \"sqr\" line 2: unknown symbol")
+
 
 	def test_Function_vector(self):
 		f = Function("x[2]", "y[3]", "(x[1]^2 - y[1]*y[0], y[0])")

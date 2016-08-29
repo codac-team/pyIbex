@@ -149,12 +149,17 @@ void CreateWithTuple(IntervalVector &instance, py::tuple & tup)
 }
 
 
-Interval& getitem(IntervalVector& X, int i){
-      return X[i];
+Interval& getitem(IntervalVector& X, size_t i){
+  if (i >= X.size())
+      throw py::index_error();
+  return X[i];
+
 }
 
-void setitem(IntervalVector& X, int i, Interval& itv){
-      X[i] = itv;
+void setitem(IntervalVector& X, size_t i, Interval& itv){
+  if (i >= X.size())
+      throw py::index_error();
+  X[i] = itv;
 }
 
 std::vector<IntervalVector> complementary_wrapper(IntervalVector& X){
@@ -209,9 +214,16 @@ void export_IntervalVector(py::module& m){
             .def("__init__", &CreateWithIntAndList, "dim"_a, "list"_a)
             .def("__init__", &CreateWithTuple, "list"_a)
 
-
+            // Bare bon interface
+            .def("__len__", &IntervalVector::size )
             .def("__getitem__", getitem, py::return_value_policy::reference_internal)
             .def("__setitem__", setitem)
+
+             // sequence protocol operations
+             .def("__iter__", [](const IntervalVector &s) { return py::make_iterator(&s[0], &s[0]+s.size()); },
+                              py::keep_alive<0, 1>() /* Essential: keep object alive while iterator exists */)
+            //  .def("__contains__", [](const IntervalVector &s, float v) { return s.contains(v); })
+            //  .def("__reversed__", [](const IntervalVector &s) -> IntervalVector { return s.reversed(); })
 
             .def("assign", &assignItv)
             .def( self == self )
@@ -286,7 +298,8 @@ void export_IntervalVector(py::module& m){
             // .def(repr(self))
             .def("__repr__", &to_string)
             .def("copy", &my_copy)
-            .def("__len__", &IntervalVector::size )
+
+
             .def("size", &IntervalVector::size )
             .def_static( "empty", &IntervalVector::empty, DOCS_INTERVALVECTOR_EMPTY, py::arg("n") )
             .def( "set_empty", &IntervalVector::set_empty, DOCS_INTERVALVECTOR_SET_EMPTY)

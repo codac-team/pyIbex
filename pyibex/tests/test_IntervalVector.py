@@ -61,6 +61,19 @@ class TestIntervalVector(unittest.TestCase):
 		self.assertEqual(b, Interval(-1, 2))
 
 
+	def test_bounds(self):
+		x = IntervalVector(4)
+		with self.assertRaises(IndexError):
+			x[5]
+		with self.assertRaises(TypeError):
+			x[-1]
+
+	def test_iterable(self):
+		x = IntervalVector(list(range(10)))
+		for b,i in zip(x, range(10)):
+			self.assertEqual(b,Interval(i))
+
+
 	def test_assignement(self):
 		a = IntervalVector(2)
 		a[1] = Interval(2,1)

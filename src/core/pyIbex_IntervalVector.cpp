@@ -30,124 +30,43 @@ using ibex::IntervalVector;
 using ibex::IntervalMatrix;
 using ibex::Vector;
 
-template <typename T>
-bool check_cvt(py::object& obj){
-  try{
-    obj.cast<T>();
-  } catch (py::cast_error){
-    return false;
-  }
-  return true;
-}
 
-template<typename T>
-std::vector<T> pyList2Vector(py::list &lst){
-  std::vector<T> v;
-  for (auto item : lst)
-    v.push_back(item.cast<T>());
-  return v;
-}
-
-template<typename T>
-std::vector<T> pyTuple2Vector(py::tuple &tup){
-  std::vector<T> v;
-  for (auto item : tup)
-    v.push_back(item.cast<T>());
-  return v;
-}
-
-void CreateWithList(IntervalVector &instance,  py::list & lst){
-
-  int size_n1 = lst.size();
-  if (size_n1 < 1){
+void CreateWithList(IntervalVector &instance,  const std::vector< std::vector< double > >& lst){
+  if (lst.size() < 1){
     throw std::invalid_argument("Size of the input list is 0");
   }
-  py::object obj = lst[0];
-  if (check_cvt<py::list>(obj)){
-    double (*tmp)[2] = new double[size_n1][2];
-    int i = 0;
-    for (auto item : lst){
-      int j = 0;
-      for (auto val : item){
-        tmp[i][j] = val.cast<double>();
-        j++;
-      }
-      i++;
+  double (*tmp)[2] = new double[lst.size()][2];
+  for (size_t i = 0; i < lst.size(); i++){
+    if (lst[i].size() != 2){
+      delete tmp;
+      throw std::invalid_argument("sub list must contain only two elements");
     }
-    new(&instance) IntervalVector(size_n1, tmp);
-    delete tmp;
-  } else if (check_cvt<double>(obj)){
-    Vector v(size_n1, &pyList2Vector<double>(lst)[0]);
-    new(&instance) IntervalVector(v);
-  } else {
-    throw std::invalid_argument("Invalid arguments type");
+    tmp[i][0] = lst[i][0];
+    tmp[i][1] = lst[i][1];
+  }
+  new(&instance) IntervalVector(lst.size(), tmp);
+  delete tmp;
+}
+
+void CreateWithListOfInterval(IntervalVector &instance, const std::vector<Interval>& lst){
+  new(&instance) IntervalVector(lst.size());
+  for (size_t i = 0; i < lst.size(); i++){
+    instance[i] = lst[i];
   }
 }
-// boost::shared_ptr<ibex::IntervalVector> CreateWithList(const py::list & lst)
-// {
-//   // construct with a list here
-//   extract<double> get_double(lst[0]);
-//   if (get_double.check()){
-//       std::vector<double> v = to_std_vector<double>(lst);
-//       return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( Vector(v.size(), &v[0])));
-//   } else {
-//         double (*tmp)[2] = new double[len(lst)][2];
-//         for(int i = 0; i < len(lst); i++){
-//             extract<list> get_list(lst[i]);
-//             if (get_list.check()){
-//                 assert(len(lst[i]) == 2);
-//                 for(int j = 0; j < 2;j++){
-//                     tmp[i][j] = extract<double>(lst[i][j]);
-//                 }
-//             }
-//         }
-//         boost::shared_ptr<ibex::IntervalVector> ptr =  shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector( len(lst), tmp));
-//         delete[] tmp;
-//         return ptr;
-//     }
-// }
-void CreateWithIntAndList(IntervalVector &instance, int ndim, py::list & lst){
-    // construct with a list here
-  py::object obj = lst[0];
-  if (check_cvt<double>(obj) && lst.size() == 2){
-    std::vector<double> v = pyList2Vector<double>(lst);
-    new(&instance) IntervalVector(ndim, Interval(v[0], v[1]));
-  } else {
+
+void CreateWithIntAndList(IntervalVector &instance, int ndim, std::vector<double>& v){
+  if (v.size() != 2){
     throw std::invalid_argument("syntax is IntervalVector(2, [1,2])");
   }
+  new(&instance) IntervalVector(ndim, Interval(v[0], v[1]));
 }
 
-// boost::shared_ptr<ibex::IntervalVector> CreateWithIntAndList(int ndim, const py::list & lst){
-//     // construct with a list here
-//     extract<double> get_double(lst[0]);
-//     if (get_double.check()){
-//         std::vector<double> v = to_std_vector<double>(lst);
-//         return shared_ptr<ibex::IntervalVector>(new ibex::IntervalVector(ndim, Interval(v[0], v[1])));
-//     }
+
+
+// void CreateWithTuple(IntervalVector &instance, vector<double>& tub){
+//   new(&instance) IntervalVector(lst.size(), Interval(v[0], v[1]));
 // }
-
-
-void CreateWithTuple(IntervalVector &instance, py::tuple & tup)
-{
-  int size_n1 = tup.size();
-  if (size_n1 < 1){
-    throw std::invalid_argument("Size of the input list is 0");
-  }
-  py::object obj = tup[0];
-  if (check_cvt<double>(obj)){
-    Vector v(size_n1, &pyTuple2Vector<double>(tup)[0]);
-    new(&instance) IntervalVector(v);
-  } else if(check_cvt<Interval>(obj)){
-    std::vector<Interval> v = pyTuple2Vector<Interval>(tup);
-    new(&instance) IntervalVector(size_n1);
-    for (size_t i = 0; i < v.size(); i++){
-      instance[i] = v[i];
-    }
-  } else {
-    throw std::invalid_argument("Invalid arguments type");
-  }
-}
-
 
 Interval& getitem(IntervalVector& X, size_t i){
   if (i >= X.size())
@@ -210,9 +129,11 @@ void export_IntervalVector(py::module& m){
             .def(py::init<int>(), "dim"_a)
             .def(py::init<int,const Interval>(), "dim"_a, "itv"_a)
             .def(py::init<const IntervalVector&>(), "x"_a )
+            .def(py::init<const Vector&>(), "x"_a)
             .def("__init__", &CreateWithList, "list"_a)
             .def("__init__", &CreateWithIntAndList, "dim"_a, "list"_a)
-            .def("__init__", &CreateWithTuple, "list"_a)
+            .def("__init__", &CreateWithListOfInterval, "list"_a)
+            // .def("__init__", &CreateWithTuple, "list"_a)
 
             // Bare bon interface
             .def("__len__", &IntervalVector::size )

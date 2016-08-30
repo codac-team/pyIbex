@@ -28,9 +28,9 @@ The type Interval represents a closed set of \$\mathbb{R}^2\$
 
 An IntervalVector or a Box is a cartesion product of intervals. With pyibex it can be created :
  - with the dimension and an initial interval [x_lb, x_ub].
- - with a point passed as a list [x1, x2, ..., xn]
+ - with a point passed as a list [x1, x2, ..., xn] or tuple ( x1,x2,...,xn)
  - with a list of list of bounds [[x1_lb, x1_ub], [x2_lb, x2_ub], ..., [xn_lb, xn_ub]]
- - with a tuple of interval ([x1], [x2], ..., x[n])
+ - with a list of interval ([x1], [x2], ..., x[n])
 
 ```python
     # Create IntervalVector
@@ -39,7 +39,7 @@ An IntervalVector or a Box is a cartesion product of intervals. With pyibex it c
     IntervalVector( 2, a) # ==> box [1, 3]x[1,3]
     IntervalVector([1,2,3]) # ==> box [1,1]x[2,2]x[3,3]
     IntervalVector([[-1,3], [3,10], [-3, -1]]) # ==> box  [-1,3]x[3,10]x[-3,-1]
-    IntervalVector( (a, Interval(-1,0), Interval(0)) )
+    IntervalVector( [a, Interval(-1,0), Interval(0) ] )
 ```
 
 

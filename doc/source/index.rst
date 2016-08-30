@@ -6,10 +6,29 @@
 Welcome to pyIbex's documentation!
 ==================================
 
-pyIbex is a python library, based on Ibex-lib, for solving non linear problems using Interval Arithmetic tools.
-It aims at providing fast access to the core part of Ibex ( Interval, Contractors, Separators ,...) and facilitating the development and the integration of experimental algorithms.
+Introduction
+-------------
 
-.. warning:: Since version 1.5, *pyIbex* module has been renamed *pyibex*
+PyIbex is a python module providing an easy-to-use interface of `Ibex-lib`_
+with high level functionalities such as Interval Arithmetics, Contractors programming
+and Sets manipulation.
+
+Core part of algorithm is generally written in C++ and bind with python using `pybind11`_
+
+.. _`Ibex-lib`: http://www.ibex-lib.org
+.. _`pybind11`: https://github.com/wjakob/pybind11
+
+Modules description
+--------------------
+
+*PyIbex* is composed on severals sub-modules:
+
+- `core <api.html>`_ ( mainly direct binding of Ibex-lib)
+- `geometry <https://github.com/benensta/ibex-geometry/>`_
+- `tubes <https://github.com/SimonRohou/tube-lib/>`_
+- thickset (under developpement)
+
+
 
 
 Contents:
@@ -18,8 +37,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   intro
-   tuto01
+   quickstart
+   installation
    api
 
 

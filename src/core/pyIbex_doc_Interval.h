@@ -59,6 +59,7 @@ R"doc_itv(Returns the midpoint of self.
   but not necessarily to be the closest floating point
   from the real midpoint.
   Cases are:
+
     * \emptyset  -> Quiet NaN
     * [-oo, +oo] -> midP = 0.0
     * [-oo, b]   -> midP = -MAXREAL

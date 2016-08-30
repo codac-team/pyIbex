@@ -1,19 +1,6 @@
-# Introduction
-
-PyIbex is a python module providing an easy-to-use interface of [Ibex-lib](www.ibexlib.org)
-with high level functionalities such as Interval Arithmetics, Contractors programming
-and Sets manipulation.
-
-Core part of algorithm is generally written in C++ and bind with python using [pybind11](https://github.com/wjakob/pybind11)
-
-PyIbex is composed on severals sub-modules:
-  + [core](api.html) ( mainly direct binding of Ibex-lib)
-  + [geometry](#geometry)
-  + tubes
-
 # Installation
 
-## Best way to install
+## Conda (Best way to install)
 
 Best way to get pyibex is to install via **[conda](http://conda.pydata.org/docs/)**
 Builds for osx-64,linux-64,linux-32,win-64,win-32 for Python 2.7, Python 3.4, and Python 3.5 are all available.
@@ -23,16 +10,17 @@ conda install -c BenEnsta pyibex
 ```
 
 ## Using pip
+
 ``` python
 pip install pyibex
 ```
 
-## Ubuntu 16.04 / 14.04
+<!-- ## Using apt-get (Ubuntu 16.04 / 14.04)
 ```bash
 sudo add-apt-repository ppa:ben-ensta/pyibex
 sudo apt-get update
 sudo apt install python3-pyibex
-```
+``` -->
 
 ## Build from sources
 
@@ -45,7 +33,7 @@ sudo apt install python3-pyibex
 
 
 ### Linux/Mac OSX
---------------------------------------
+
 
 To build pyIbex from source with python 3.4 run the following commands:
 
@@ -60,7 +48,7 @@ and add `/home/${PREFIX}/lib/python3/dist-packages` to PYTHONPATH
 
 
 ### For Windows Users (Win64 version)
---------------------------------------
+
 + Build Ibex
   Open the developer command prompt and compile ibex-lib
 ```bash

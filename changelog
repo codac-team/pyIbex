@@ -1,0 +1,34 @@
+--------------------------
+Changelog
+--------------------------
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+2016-08-31 Benoit Desrochers <ben.ensta@gmail.com>
+  * write phinx doc
+  * [added] register syntax error exception
+  * [fix] simplify IntervalVector constructor
+
+2016-07-19 Benoit Desrochers <ben.ensta@gmail.com>
+  * remove ibex-robotitcs part
+  * Keep core functionalities of ibex
+  * Move geometry tools to ibex-geometry project
+  * remove predicate and sets. Will be integrated into pyibex-thickset
+
+2016-07-06 Benoit Desrochers <ben.ensta@gmail.com>
+  * use ibex-lib 3.2.0
+  * update pybind11 to version 2.0 (not yet released )
+
+2016-01-27 Benoit Desrochers <ben.ensta@gmail.com>
+  * Use pybind11 instead of Boost-Python
+  * Remove wip directory
+
+2015-02-2015 Benoit Desrochers <ben.ensta@gmail.com>
+  * Add SepPolarXY
+
+2015-10-04 Benoit Desrochers <ben.ensta@gmail.com>
+  * add predicate and Paving class
+  * add Set interface

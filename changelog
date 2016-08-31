@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * write phinx doc
   * [added] register syntax error exception
   * [fix] simplify IntervalVector constructor
+  * [fix] copy contrutor not required anymore for static interval( ALL_REALS, ...)
+  * [added] reference to module thickset and tube
 
 2016-07-19 Benoit Desrochers <ben.ensta@gmail.com>
   * remove ibex-robotitcs part

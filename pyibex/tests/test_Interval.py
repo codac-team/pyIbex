@@ -27,6 +27,24 @@ class TestInterval(unittest.TestCase):
 		c2 = Interval(-2)
 		c3 = Interval(-2,4)
 
+
+	def test_ConstantItv(self):
+		L = [	"PI",
+					"TWO_PI",
+					"HALF_PI",
+					"ALL_REALS",
+					"ZERO",
+					"ONE",
+					"POS_REALS",
+					"NEG_REALS"]
+		for name in L:
+			a = getattr(Interval, name)
+			a.set_empty()
+			self.assertEqual(a, Interval.EMPTY_SET)
+			self.assertFalse(getattr(Interval, name).is_empty())
+
+
+
 	def test_inflate(self):
 		c1 = Interval(0).inflate(1)
 		self.assertTrue(c1 == Interval(-1, 1))

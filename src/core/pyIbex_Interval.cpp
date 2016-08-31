@@ -59,6 +59,7 @@ py::tuple complementary_wrapper(const Interval&x){
 
 void export_Interval(py::module& m){
     py::class_<Interval>(m, "Interval", DOCS_INTERVAL_TYPE)
+
     .def(py::init<>())
     .def(py::init<double, double>(), "\tbuild Interval [lb, ub]", "lb"_a, "ub"_a)
     .def(py::init<double>(), "\tbuild singleton [val,val]", "val"_a)
@@ -137,15 +138,17 @@ void export_Interval(py::module& m){
     .def("__getitem__", getitem, "self[0] returns the lb and self[1] return ub")
     .def( "copy", &my_copy, "return a new objec which is the copy of self")
     // .def( "__pow__", pow__)
-    .def_readonly_static("PI", &Interval::PI )
-    .def_readonly_static("TWO_PI", &Interval::TWO_PI )
-    .def_readonly_static("HALF_PI", &Interval::HALF_PI )
-    .def_readonly_static("EMPTY_SET", &Interval::EMPTY_SET )
-    .def_readonly_static("ALL_REALS", &Interval::ALL_REALS )
-    .def_readonly_static("ZERO", &Interval::ZERO )
-    .def_readonly_static("ONE", &Interval::ONE )
-    .def_readonly_static("POS_REALS", &Interval::POS_REALS )
-    .def_readonly_static("NEG_REALS", &Interval::NEG_REALS )
+    .def_property_readonly_static("PI", [](py::object) { return Interval(Interval::PI); } )
+    .def_property_readonly_static("TWO_PI", [](py::object) { return Interval(Interval::TWO_PI); } )
+    .def_property_readonly_static("HALF_PI", [](py::object) { return Interval(Interval::HALF_PI); } )
+    .def_property_readonly_static("EMPTY_SET", [](py::object) { return Interval(Interval::EMPTY_SET); } )
+    .def_property_readonly_static("ALL_REALS", [](py::object) { return Interval(Interval::ALL_REALS); } )
+    .def_property_readonly_static("ZERO", [](py::object) { return Interval(Interval::ZERO); } )
+    .def_property_readonly_static("ONE", [](py::object) { return Interval(Interval::ONE); } )
+    .def_property_readonly_static("POS_REALS", [](py::object) { return Interval(Interval::POS_REALS); } )
+    .def_property_readonly_static("NEG_REALS", [](py::object) { return Interval(Interval::NEG_REALS); } )
+
+    // .def_property_readonly_static("ALL_REALS", [](py::object /*self */){ return Interval(Interval::ALL_REALS) ;} )
     ;
 
     // External functions

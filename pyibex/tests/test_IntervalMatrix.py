@@ -26,7 +26,7 @@ class TestIntervalVector(unittest.TestCase):
 	def test_contructor(self):
 		lst = [Interval(i) for i in range(0,9)]
 		M = IntervalMatrix(3,3,lst)
-		print(M)
+		# print(M)
 
 	def test_get_set(self):
 		a = IntervalMatrix(3,3, Interval(3,4))

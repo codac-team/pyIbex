@@ -14,14 +14,14 @@ public:
 
     type_caster<ibex::Vector>() :  value(1) { }
     bool load(PyObject *src, bool convert) {
-        std::cerr << value << "\n";
         if (!PyList_Check(src) && !PyTuple_Check(src))
             return false;
         size_t size = (size_t) ( PyList_Check(src) ? PyList_GET_SIZE(src) : PyTuple_GET_SIZE(src) );
         // value.reserve(size);
         // value.clear();
         value_conv conv;
-        double *tmp = new double[size];
+        // double *tmp = new double[size];
+        value.resize(size);
         for (size_t i=0; i<size; ++i) {
             if (PyList_Check(src)) {
               if (!conv.load(PyList_GetItem(src, (ssize_t) i), convert))
@@ -30,12 +30,12 @@ public:
               if (!conv.load(PyTuple_GetItem(src, (ssize_t) i), convert))
                   return false;
             }
-            tmp[i] = (double) conv;
+            value[i] = (double) conv;
             // value.push_back((Value) conv);
         }
-        value.resize(size);
-        value = ibex::Vector(size, tmp);
-        delete tmp;
+        // value.resize(size);
+        // value = ibex::Vector(size, tmp);
+        // delete tmp;
         return true;
     }
 

@@ -172,6 +172,7 @@ void export_IntervalVector(py::module& m){
 
             .def( "__mul__", [](IntervalVector& a, const Vector& x){return a*x;})
             .def( "__rmul__", [](IntervalVector& a, const Vector& x){return x*a;})
+            .def( "__rmul__", [](IntervalVector& a, const Interval& x){return x*a;})
 
 
             // .def( self *= Interval())

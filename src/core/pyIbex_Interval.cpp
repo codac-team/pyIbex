@@ -11,7 +11,6 @@
 #include "ibex_Interval.h"
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
-#include "ibex_IntervalVector.h"
 #include "pyIbex_doc_Interval.h"
 namespace py = pybind11;
 using py::self;
@@ -95,7 +94,7 @@ void export_Interval(py::module& m){
     .def( self / double())
     .def( double() / self)
 
-    .def( "__mul__", [](Interval& x, IntervalVector& a){return x*a;})
+    // .def( "__mul__", [](Interval& x, IntervalVector& a){return x*a;})
 
     .def( -self )
 

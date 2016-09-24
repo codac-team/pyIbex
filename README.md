@@ -21,7 +21,7 @@ As a consequence, the following modules are removed from the core distributes :
  + Thickset ( still under huge developpement)
  + [Tubes](https://github.com/SimonRohou/tube-lib)
 
- See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyIbex/) for more informations.
+ See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyibex/) for more informations.
 
 # Install
 

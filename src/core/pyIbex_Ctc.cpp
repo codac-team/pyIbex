@@ -81,6 +81,7 @@ void export_Ctc(py::module& m){
     .value( "EQ", 	ibex::EQ)
     .value( "GEQ", 	ibex::GEQ)
     .value( "GT", 	ibex::GT)
+    .export_values()
   ;
 
   // Export CtcUnion

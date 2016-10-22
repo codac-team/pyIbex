@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * [fix] update pybind11 code to support reflected operator (__radd__, ...)
   * [fix] remove print in tests.
   * [fix] export LEQ, GEQ, ... directly (no need to CmpOp.LEQ)
+  * [update] update pybind11 to last version ( tuple and list => vector)
+  * [update] use last version of ibex
 
 2016-08-31 Benoit Desrochers <ben.ensta@gmail.com>
   * write phinx doc

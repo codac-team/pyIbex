@@ -32,7 +32,8 @@ using ibex::IntervalMatrix;
 using ibex::Vector;
 
 
-void CreateWithList(IntervalVector &instance,  const std::vector< std::vector< double > >& lst){
+
+void CreateWithList(IntervalVector &instance,  const std::vector< py::list >& lst){
   if (lst.size() < 1){
     throw std::invalid_argument("Size of the input list is 0");
   }
@@ -42,15 +43,15 @@ void CreateWithList(IntervalVector &instance,  const std::vector< std::vector< d
       delete tmp;
       throw std::invalid_argument("sub list must contain only two elements");
     }
-    tmp[i][0] = lst[i][0];
-    tmp[i][1] = lst[i][1];
+    tmp[i][0] = lst[i][0].cast<double>();
+    tmp[i][1] = lst[i][1].cast<double>();
   }
   new(&instance) IntervalVector(lst.size(), tmp);
-  delete tmp;
+  delete[] tmp;
 }
 
 void CreateWithListOfInterval(IntervalVector &instance, const std::vector<Interval>& lst){
-  // std::cerr<< "ICI !!\n";
+  std::cerr<< "ICI !!\n";
   new(&instance) IntervalVector(lst.size());
 
   for (size_t i = 0; i < lst.size(); i++){

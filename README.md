@@ -12,6 +12,8 @@ pyIbex is a python binding of Ibex library. It aims at providing a basic interfa
 of Ibex types (Interval, IntervalVector, Ctc, ...),  and high level functionalities such as
 contractors programming.
 
+See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyibex/) for more informations.
+
 Since the version 1.5, pyibex module only contains core functionalities of ibex.
 
 The version 1.2 uses now uses pyBind11 instead of Boost-Python to link C++ and python code.
@@ -21,7 +23,7 @@ As a consequence, the following modules are removed from the core distributes :
  + Thickset ( still under huge developpement)
  + [Tubes](https://github.com/SimonRohou/tube-lib)
 
- See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyibex/) for more informations.
+
 
 # Install
 

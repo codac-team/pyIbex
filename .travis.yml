@@ -67,12 +67,12 @@ script:
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
   # - make install_python
 
-#deploy:
-#  skip_cleanup: true
-#  provider: releases
-#  api_key:
-#    secure: CuUogABlVRxUKWchoCT9PI7YwEmTRBhSjTEx+8Vi5HAb9Eq4nAR+Nc3bMHM0mSmxZn9lDGTjWDOMOdpg8nw80rZi1mCepO3fYa2eVrK6YlFIvZNLbAx2u4MUCXTYmsurpUiV7Du8LSbKA942y0RDCOX27pCyDCO5jfSOj7xlQWOgoryxfjFwsuBQntHMCWp/AH1HxlmJ40KZgQl4Nha2xuIJPBt2fYSBkjsWot0nd1hVhDUFxgi7zzOMAzC+vYrdmo89EVb4PfMPDlc+2LHnT7MMo7T7KrG1muRAryoOqsVsUfKXP9QUjGzpcjNKKimhB1ZikS/3ncEpQtO4/60TUY+cUJcw/22Idn5iReBnME21kpNUxiN7PvhirAs5g9Yic2f0uCIsLHXeqSWOTkwHZKyyyPKsDH/0/0SFYSihPawPOwqUPujLBAkIeHRf1REgsWyAFgxoSEgIs8r5/8Buj8ow7Ho/kR/QTJ5IZpgg806EOd8yxMa9C4H9LprK0J9el/pOFrgYBreQjTrxNyQhnnLSqUEumkH7atG5RRRW4pUCFMtO3pJp7EvgCWgFYlxU7NXLsjTcoNE6Juhu1RrkAdbpya90FqSobQ//cmaidMZNqqwbimH7XtUPO1iS/OuselmbcgsnD3QzgMwP0V4+XWfgWdg4On9QTUG/CS0LWec=
-#  file: $TRAVIS_BUILD_DIR/$wheel_file
-#  on:
-#    repo: benEnsta/pyIbex
-#    tags: true
+deploy:
+ skip_cleanup: true
+ provider: releases
+ api_key:
+   secure: CuUogABlVRxUKWchoCT9PI7YwEmTRBhSjTEx+8Vi5HAb9Eq4nAR+Nc3bMHM0mSmxZn9lDGTjWDOMOdpg8nw80rZi1mCepO3fYa2eVrK6YlFIvZNLbAx2u4MUCXTYmsurpUiV7Du8LSbKA942y0RDCOX27pCyDCO5jfSOj7xlQWOgoryxfjFwsuBQntHMCWp/AH1HxlmJ40KZgQl4Nha2xuIJPBt2fYSBkjsWot0nd1hVhDUFxgi7zzOMAzC+vYrdmo89EVb4PfMPDlc+2LHnT7MMo7T7KrG1muRAryoOqsVsUfKXP9QUjGzpcjNKKimhB1ZikS/3ncEpQtO4/60TUY+cUJcw/22Idn5iReBnME21kpNUxiN7PvhirAs5g9Yic2f0uCIsLHXeqSWOTkwHZKyyyPKsDH/0/0SFYSihPawPOwqUPujLBAkIeHRf1REgsWyAFgxoSEgIs8r5/8Buj8ow7Ho/kR/QTJ5IZpgg806EOd8yxMa9C4H9LprK0J9el/pOFrgYBreQjTrxNyQhnnLSqUEumkH7atG5RRRW4pUCFMtO3pJp7EvgCWgFYlxU7NXLsjTcoNE6Juhu1RrkAdbpya90FqSobQ//cmaidMZNqqwbimH7XtUPO1iS/OuselmbcgsnD3QzgMwP0V4+XWfgWdg4On9QTUG/CS0LWec=
+ file: $TRAVIS_BUILD_DIR/$wheel_file
+ on:
+   repo: benEnsta/pyIbex
+  #  tags: true

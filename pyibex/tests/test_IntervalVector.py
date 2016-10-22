@@ -38,6 +38,14 @@ class TestIntervalVector(unittest.TestCase):
 		self.assertEqual(c[0], Interval(1, 3))
 		self.assertEqual(c[1], Interval(float('-inf'), 4))
 
+
+	def test_constructor33(self):
+		c = IntervalVector( (Interval(1, 3), Interval(float('-inf'), 4) ) )
+		self.assertEqual(c[0], Interval(1, 3))
+		self.assertEqual(c[1], Interval(float('-inf'), 4))
+
+
+
 	def test_constructor4(self):
 		with self.assertRaises(ValueError):
 			x = IntervalVector([list(range(10))])

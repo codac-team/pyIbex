@@ -10,6 +10,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
+#include <pybind11/stl_bind.h>
 #include <pybind11/stl.h>
 #include <pyIbex_type_caster.h>
 
@@ -49,7 +50,9 @@ void CreateWithList(IntervalVector &instance,  const std::vector< std::vector< d
 }
 
 void CreateWithListOfInterval(IntervalVector &instance, const std::vector<Interval>& lst){
+  // std::cerr<< "ICI !!\n";
   new(&instance) IntervalVector(lst.size());
+
   for (size_t i = 0; i < lst.size(); i++){
     instance[i] = lst[i];
   }
@@ -227,7 +230,9 @@ void export_IntervalVector(py::module& m){
             .def( "set_empty", &IntervalVector::set_empty, DOCS_INTERVALVECTOR_SET_EMPTY)
             .def( "clear", &IntervalVector::clear, DOCS_INTERVALVECTOR_CLEAR)
             .def( "init", &IntervalVector::init, DOCS_INTERVALVECTOR_INIT, py::arg("x"))
-            .def( "inflate", &IntervalVector::inflate, DOCS_INTERVALVECTOR_INFLATE, py::return_value_policy::reference_internal, py::arg("rad"))
+            .def( "inflate", (IntervalVector& (IntervalVector::*) (double) ) &IntervalVector::inflate, DOCS_INTERVALVECTOR_INFLATE, "rad"_a)
+            .def( "inflate", (IntervalVector& (IntervalVector::*) (double, double) ) &IntervalVector::inflate, DOCS_INTERVALVECTOR_INFLATE, "rad"_a, "chi"_a)
+            // .def( "inflate", &IntervalVector::inflate, DOCS_INTERVALVECTOR_INFLATE, py::return_value_policy::reference_internal, py::arg("rad"))
             .def( "resize", &IntervalVector::resize, DOCS_INTERVALVECTOR_RESIZE, py::arg("n"))
             .def( "subvector", &IntervalVector::subvector, DOCS_INTERVALVECTOR_SUBVECTOR, "start_index"_a, "end_index"_a) //, return_value_policy<return_by_value>())
             .def( "put", &IntervalVector::put, DOCS_INTERVALVECTOR_PUT)

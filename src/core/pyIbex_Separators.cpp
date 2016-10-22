@@ -119,7 +119,7 @@ void export_Separators(py::module& m){
   class_<SepQInter>(m, "SepQInter", sep, DOCS_SEP_SEPQINTER)
     .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
     .def("separate", &SepQInter::separate)
-    .def_property("q", &SepQInter::get_q, &SepQInter::set_q)
+    .def_property("q", py::cpp_function(&SepQInter::get_q), py::cpp_function(&SepQInter::set_q))
   ;
 
   class_<SepInverse>(m, "SepInverse", sep, DOCS_SEP_SEPINVERSE)

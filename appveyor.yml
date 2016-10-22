@@ -1,4 +1,4 @@
-version: 1.5.{build}
+version: 1.5.0rc{build}
 os: Visual Studio 2015
 clone_folder: C:\projects\pyIbex
 test: off
@@ -15,10 +15,17 @@ environment:
   matrix:
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python34"
+      PYTHON_EXE: "C:\\Python34/python.exe"
       IBEX_FILES: "2.3.0-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python34-x64"
+      PYTHON_EXE: "C:\\Python34-x64/python.exe"
       IBEX_FILES: "2.3.0-win64"
+
+  USERNAME:
+    secure: x/KrtKQDdjxKhvPlvfdiMQ==
+  PASWORD:
+    secure: C5uWvbl1OHCVoprbRYTGD7LLzuUMtj18MtxytCqLmh8=
 
 install:
   - cmd: '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
@@ -27,7 +34,7 @@ install:
   - "%PYTHON_DIR%/python.exe C:/get-pip.py"
   - ps: >-
 
-      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.54/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
+      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.57/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
 
       ls C:\projects\pyIbex
 
@@ -36,6 +43,7 @@ install:
       7z x -tzip -oC:"ibex-lib" "C:\projects\pyIbex\ibex-lib.zip"
 
       ls C:\projects\pyIbex\ibex-lib
+  - cmd: "%PYTHON_DIR%/python.exe -m pip install twine"
 
 artifacts:
   - path: '**\*.whl'
@@ -55,18 +63,34 @@ build_script:
   - ctest -C %Configuration%
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
   # - msbuild %MSBuildOptions% src/install_python.vcxproj
-#
+
+
+deploy:
+
+- provider: GitHub
+
+  auth_token:
+
+    secure: wIeJZ9xcTslfsgvqCGez8oOC0YxhmM8LI0iJ7gBgsI7ykVeWWLEFfAQSIHgbac6k
+
+  artifact: pip_wheel
+
+  draft: true
+  # - ps: >-
+  #
+  #     $env:PYTHON_EXE -m twine upload --skip-existing -m $env:USERNAME -p $env:PASSWORD $artifacts[pip_wheel].path
+# https://ci.appveyor.com/api/projects/benEnsta/pyIbex/artifacs/pyibex-1.5.0rc3-cp34-cp34m-win32.whl
 # deploy:
 #   release: pyIbex-v$(appveyor_build_version)
 #   description: 'pyIbex build'
 #   provider: GitHub
-#     secure: kfuelei+usQrQv/IZnoepVAx6SU1E8BKoR6rXwXM3grYnvzBQM2P9xMKQ+Nc+BYr
+#   secure: pGwTVUGtTWvmeUVLEVifu3BP2Bxu++BMAKFSs2jt3hdrsEOgvv+XgJx/W+cPFdFl
 #   artifact: pip_wheel
 #   draft: true
 #   auth_token:
 #   prerelease: false
 #   on:
-#     branch: master      # release from master branch only
+#     branch: appveyor      # release from master branch only
 #     appveyor_repo_tag: false        # deploy on tag push only
 
 

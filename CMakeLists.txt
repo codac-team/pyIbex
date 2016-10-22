@@ -14,8 +14,8 @@ ENDIF()
 # option declaration
 option(BUILD_TESTS "Build tests" ON)
 set(PYBIND11_PYTHON_VERSION "" CACHE STRING "Python version to use for compiling modules")
-if (defined PYTHON_VERSION)
-	set(PYBIND11_PYTHON_VERSION PYTHON_VERSION)
+if (DEFINED PYTHON_VERSION)
+	set(PYBIND11_PYTHON_VERSION ${PYTHON_VERSION})
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)

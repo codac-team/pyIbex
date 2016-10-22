@@ -36,8 +36,9 @@ matrix:
     compiler: gcc-4.8
 
 before_install:
+  - if [ $TRAVIS_OS_NAME == linux ]; then python -m pip install auditwheel twine; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install python3; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then pip install --user wheel; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then pip install --user wheel twine; fi
 #  - if [ $TRAVIS_OS_NAME == osx ]; then brew install clang-omp; fi
 
 install:
@@ -65,14 +66,33 @@ script:
   - make pip_package
   - export wheel_file=$(ls *.whl)
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
-  # - make install_python
-
+  
 deploy:
- skip_cleanup: true
- provider: releases
- api_key:
-   secure: CuUogABlVRxUKWchoCT9PI7YwEmTRBhSjTEx+8Vi5HAb9Eq4nAR+Nc3bMHM0mSmxZn9lDGTjWDOMOdpg8nw80rZi1mCepO3fYa2eVrK6YlFIvZNLbAx2u4MUCXTYmsurpUiV7Du8LSbKA942y0RDCOX27pCyDCO5jfSOj7xlQWOgoryxfjFwsuBQntHMCWp/AH1HxlmJ40KZgQl4Nha2xuIJPBt2fYSBkjsWot0nd1hVhDUFxgi7zzOMAzC+vYrdmo89EVb4PfMPDlc+2LHnT7MMo7T7KrG1muRAryoOqsVsUfKXP9QUjGzpcjNKKimhB1ZikS/3ncEpQtO4/60TUY+cUJcw/22Idn5iReBnME21kpNUxiN7PvhirAs5g9Yic2f0uCIsLHXeqSWOTkwHZKyyyPKsDH/0/0SFYSihPawPOwqUPujLBAkIeHRf1REgsWyAFgxoSEgIs8r5/8Buj8ow7Ho/kR/QTJ5IZpgg806EOd8yxMa9C4H9LprK0J9el/pOFrgYBreQjTrxNyQhnnLSqUEumkH7atG5RRRW4pUCFMtO3pJp7EvgCWgFYlxU7NXLsjTcoNE6Juhu1RrkAdbpya90FqSobQ//cmaidMZNqqwbimH7XtUPO1iS/OuselmbcgsnD3QzgMwP0V4+XWfgWdg4On9QTUG/CS0LWec=
- file: $TRAVIS_BUILD_DIR/$wheel_file
- on:
-   repo: benEnsta/pyIbex
-  #  tags: true
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: PLxHkV8vz8cdPMQKOm6BDAPUZgScq3frcuWUQ0PVsB66gu2mW+tnvIQzg0duom7rv9wrOksblkAhLRh2kNh7coLnlAD5AT7Y74PUjYv6sFsv9Obh0Kvc97v4/7eVg4xOcdcvPYEiYCQ/ZfXPzpkOcUF7IRYx4KKXN9CbVpbU/W8=
+  file: $TRAVIS_BUILD_DIR/$wheel_file
+  prerelease: true
+  on:
+    branch: appveyor
+    # repo: benEnsta/pyIbex
+
+
+# deploy:
+#   provider: script
+#   skip_cleanup: true
+#   script: travis_script/deploy.sh
+#   on:
+#     branch: appveyor
+#     tag: false
+
+#deploy:
+#  skip_cleanup: true
+#  provider: releases
+#  api_key:
+#    secure: CuUogABlVRxUKWchoCT9PI7YwEmTRBhSjTEx+8Vi5HAb9Eq4nAR+Nc3bMHM0mSmxZn9lDGTjWDOMOdpg8nw80rZi1mCepO3fYa2eVrK6YlFIvZNLbAx2u4MUCXTYmsurpUiV7Du8LSbKA942y0RDCOX27pCyDCO5jfSOj7xlQWOgoryxfjFwsuBQntHMCWp/AH1HxlmJ40KZgQl4Nha2xuIJPBt2fYSBkjsWot0nd1hVhDUFxgi7zzOMAzC+vYrdmo89EVb4PfMPDlc+2LHnT7MMo7T7KrG1muRAryoOqsVsUfKXP9QUjGzpcjNKKimhB1ZikS/3ncEpQtO4/60TUY+cUJcw/22Idn5iReBnME21kpNUxiN7PvhirAs5g9Yic2f0uCIsLHXeqSWOTkwHZKyyyPKsDH/0/0SFYSihPawPOwqUPujLBAkIeHRf1REgsWyAFgxoSEgIs8r5/8Buj8ow7Ho/kR/QTJ5IZpgg806EOd8yxMa9C4H9LprK0J9el/pOFrgYBreQjTrxNyQhnnLSqUEumkH7atG5RRRW4pUCFMtO3pJp7EvgCWgFYlxU7NXLsjTcoNE6Juhu1RrkAdbpya90FqSobQ//cmaidMZNqqwbimH7XtUPO1iS/OuselmbcgsnD3QzgMwP0V4+XWfgWdg4On9QTUG/CS0LWec=
+#  file: $TRAVIS_BUILD_DIR/$wheel_file
+#  on:
+#    repo: benEnsta/pyIbex
+#    tags: true

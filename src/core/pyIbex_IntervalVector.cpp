@@ -51,7 +51,6 @@ void CreateWithList(IntervalVector &instance,  const std::vector< py::list >& ls
 }
 
 void CreateWithListOfInterval(IntervalVector &instance, const std::vector<Interval>& lst){
-  std::cerr<< "ICI !!\n";
   new(&instance) IntervalVector(lst.size());
 
   for (size_t i = 0; i < lst.size(); i++){

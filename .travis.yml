@@ -15,6 +15,7 @@ addons:
     - time
     - pkg-config
     - g++-4.8
+    - patchelf
 
 cache:
   directories:
@@ -61,12 +62,17 @@ script:
       cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} -DCMAKE_CXX_COMPILER=g++-4.8 ../ ;
     fi
   - make && make install
-# - export PYTHONPATH=$PYTHONPATH:/home/travis/lib/python${version}/site-packages
+
   - make test
   - make pip_package
   - export wheel_file=$(ls *.whl)
+  # - if [  $TRAVIS_OS_NAME == linux ]; then
+      # auditwheel repair $(ls *.whl);
+      # export wheel_file=$(ls wheelhouse/*.whl);
+    # fi
+
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
-  
+
 deploy:
   skip_cleanup: true
   provider: releases
@@ -75,7 +81,8 @@ deploy:
   file: $TRAVIS_BUILD_DIR/$wheel_file
   prerelease: true
   on:
-    branch: appveyor
+    branch: master
+    tag: true
     # repo: benEnsta/pyIbex
 
 

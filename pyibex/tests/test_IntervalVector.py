@@ -223,6 +223,7 @@ class TestIntervalVector(unittest.TestCase):
 	def test_contains(self):
 		a = IntervalVector(list(range(0,7))).inflate(1)
 		self.assertTrue(a.contains(list(range(0,7))))
+		self.assertTrue(list(range(0,7)) in a )
 
 	def test_interior_contains(self):
 		a = IntervalVector(list(range(0,7))).inflate(1)

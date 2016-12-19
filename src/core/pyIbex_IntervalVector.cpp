@@ -252,6 +252,7 @@ void export_IntervalVector(py::module& m){
             .def( "is_superset" , &IntervalVector::is_superset, DOCS_INTERVALVECTOR_IS_SUPERSET, "x"_a )
             .def( "is_strict_superset" , &IntervalVector::is_strict_superset, DOCS_INTERVALVECTOR_IS_STRICT_SUPERSET, "x"_a )
             .def( "contains" , &IntervalVector::contains, DOCS_INTERVALVECTOR_CONTAINS, "x"_a)
+            .def( "__contains__", &IntervalVector::contains, DOCS_INTERVALVECTOR_CONTAINS, "x"_a)
             .def( "interior_contains" , &IntervalVector::interior_contains, DOCS_INTERVALVECTOR_INTERIOR_CONTAINS, "x"_a )
             .def( "intersects" , &IntervalVector::intersects, DOCS_INTERVALVECTOR_INTERSECTS, "x"_a )
             .def( "overlaps" , &IntervalVector::overlaps, DOCS_INTERVALVECTOR_OVERLAPS, "x"_a )

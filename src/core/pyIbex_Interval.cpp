@@ -123,6 +123,7 @@ void export_Interval(py::module& m){
     .def( "is_superset",    &Interval::is_superset, DOCS_INTERVAL_IS_SUPERSET, "x"_a)
     .def( "is_strict_superset", &Interval::is_strict_superset, DOCS_INTERVAL_IS_STRICT_SUPERSET, "x"_a)
     .def( "contains",   &Interval::contains, DOCS_INTERVAL_CONTAINS, "x"_a)
+    .def( "__contains__", &Interval::contains, DOCS_INTERVAL_CONTAINS, "x"_a)
     .def( "interior_contains",  &Interval::interior_contains, DOCS_INTERVAL_INTERIOR_CONTAINS, "x"_a)
     .def( "intersects", &Interval::intersects, DOCS_INTERVAL_INTERSECTS, "x"_a )
     .def( "overlaps",   &Interval::overlaps, DOCS_INTERVAL_OVERLAPS, "x"_a )

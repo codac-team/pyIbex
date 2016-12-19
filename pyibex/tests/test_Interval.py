@@ -102,6 +102,7 @@ class TestInterval(unittest.TestCase):
 
 	def test_contains(self):
 		self.assertTrue(self.a.contains(0))
+		self.assertTrue( 0 in self.a)
 
 	def test_interior_contains(self):
 		self.assertTrue(self.a.interior_contains(0))

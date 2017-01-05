@@ -122,6 +122,15 @@ std::string to_string(const IntervalVector& a){
 }
 
 
+IntervalVector max_intevalVector (const IntervalVector& a, const IntervalVector& b){
+  assert(a.size() == b.size());
+  IntervalVector res(a.size());
+  for (int i=0; i < res.size(); i++){
+    res[i] = max(a[i], b[i]);
+  }
+  return res;
+}
+
 // BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 1,2);
 
 void export_IntervalVector(py::module& m){
@@ -292,5 +301,7 @@ void export_IntervalVector(py::module& m){
             // bool (*bwd_mul_2) (const Interval&, IntervalVector&, IntervalVector&) = &ibex::bwd_mul;
             m.def( "bwd_mul", (bool (*) (const IntervalVector&, Interval&, IntervalVector&)) &ibex::bwd_mul);
             m.def( "bwd_mul", (bool (*) (const Interval&, IntervalVector&, IntervalVector&)) &ibex::bwd_mul);
+
+            m.def("max", ( IntervalVector(*) (const IntervalVector&, const IntervalVector&)) &max_intevalVector);
 
 };

@@ -57,7 +57,7 @@ py::tuple complementary_wrapper(const Interval&x){
 
 
 void export_Interval(py::module& m){
-    py::class_<Interval>(m, "Interval", DOCS_INTERVAL_TYPE)
+    py::class_<Interval>(m, "Interval",py::metaclass(), DOCS_INTERVAL_TYPE)
 
     .def(py::init<>())
     .def(py::init<double, double>(), "\tbuild Interval [lb, ub]", "lb"_a, "ub"_a)

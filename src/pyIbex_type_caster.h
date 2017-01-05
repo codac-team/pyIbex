@@ -42,7 +42,9 @@ public:
     static handle cast(const ibex::Vector &src, return_value_policy policy, handle parent) {
         list l(src.size());
         for (size_t i = 0; i < src.size(); i++){
-            object value_ = object(value_conv::cast(src[i], policy, parent), false);
+            // object value_ = object(value_conv::cast(src[i], policy, parent), false);
+            auto value_ = reinterpret_steal<object>(value_conv::cast(src[i], policy, parent));
+
             if (!value_) {
                 return handle();
             }
@@ -60,9 +62,9 @@ template <typename Value> struct type_caster<ibex::Array<Value> > {
 public:
     // Vector_caster() :  value(0) { }
     bool load(PyObject *src, bool convert) {
-        list l(src, true);
-        if (!l.check())
+      if (!isinstance<list>(src))
             return false;
+        auto l = reinterpret_borrow<list>(src);
         size_t size = (size_t) PyList_GET_SIZE(src);
         value.resize(size);
         value_conv conv;

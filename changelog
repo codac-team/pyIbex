@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 2017-01-04 Benoit Desrochers <ben.ensta@gmail.com>
   * [update] upgrade pybind11 to version 2.0.0
-  * [added] __contains__ for Interval and IntervalVector
-  
+  * [added]  __contains__ for Interval and IntervalVector
+  * [fix]    add version number in python module __version__
+
 2016-09-15 Benoit Desrochers <ben.ensta@gmail.com>
   * [fix] update pybind11 code to support reflected operator (__radd__, ...)
   * [fix] remove print in tests.

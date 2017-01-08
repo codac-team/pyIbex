@@ -9,6 +9,7 @@ configure_file(
 set(PYTHON_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/python_package")
 file(MAKE_DIRECTORY ${PYTHON_PACKAGE_DIR})
 execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/pyibex/" "${PYTHON_PACKAGE_DIR}/pyibex")
+FILE(GENERATE OUTPUT "${PYTHON_PACKAGE_DIR}/pyibex/version.py" CONTENT "__version__=\"${PACKAGE_VERSION}\"")
 
 
 configure_file(

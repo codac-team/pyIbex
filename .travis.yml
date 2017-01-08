@@ -15,12 +15,10 @@ addons:
     - time
     - pkg-config
     - g++-4.8
-    - patchelf
 
 cache:
   directories:
   - $HOME/ibex
-  #- $HOME/boost_1_58_0
   - $HOME/Downloads
 
 matrix:
@@ -81,6 +79,7 @@ deploy:
   file: $TRAVIS_BUILD_DIR/$wheel_file
   prerelease: true
   on:
+    overwrite: true
     branch: master
     tag: true
     # repo: benEnsta/pyIbex

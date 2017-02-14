@@ -75,6 +75,7 @@ void export_Interval(py::module& m){
     // .def( self += self)
     .def("__iadd__", [](Interval& self,Interval& o ) {return self+=o;})
     .def("__isub__", [](Interval& self,Interval& o ) {return self-=o;})
+    .def("__isub__", [](Interval& self,double& o ) {return self-=o;})
     .def("__imul__", [](Interval& self,Interval& o ) {return self*=o;})
     .def("__ifloordiv__", [](Interval& self,Interval& o ) {return self/=o;})
 

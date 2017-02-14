@@ -1,64 +1,87 @@
 language: cpp
 sudo: false
-
-
-addons:
-  apt:
-    sources:
-    - deadsnakes
-    - ubuntu-toolchain-r-test
-    - chef-current-precise
-    - kubuntu-backports # cmake 2.8.12
-
-    packages:
-    - cmake
-    - time
-    - pkg-config
-    - g++-4.8
+matrix:
+  include:
+  - os: linux
+    env: PYTHON=2.7 CPP=11 GCC=4.8
+    addons:
+      apt:
+        sources: [ubuntu-toolchain-r-test, kubuntu-backports]
+        packages: [g++-4.8, cmake, pkg-config]
+  - os: linux
+    env: PYTHON=3.5 CPP=11 GCC=4.8
+    addons:
+      apt:
+        sources: [ubuntu-toolchain-r-test, kubuntu-backports, deadsnakes]
+        packages: [g++-4.8, cmake, python3.5-dev, pkg-config]
+  - os: osx
+    osx_image: xcode7.3
+    env: PYTHON=2.7 CPP=14 CLANG
+  - os: osx
+    osx_image: xcode7.3
+    env: PYTHON=3.6 CPP=14 CLANG
 
 cache:
   directories:
   - $HOME/ibex
   - $HOME/Downloads
 
-matrix:
-  include:
-  - os: osx
-    compiler: clang
-  - os: linux
-    language: python
-    python: "3.4"
-    compiler: gcc-4.8
-  - os: linux
-    language: python
-    python: "3.5"
-    compiler: gcc-4.8
+# matrix:
+#   include:
+#   - os: osx
+#     compiler: clang
+#   - os: linux
+#     language: python
+#     python: "3.4"
+#     compiler: gcc-4.8
+#   - os: linux
+#     language: python
+#     python: "3.5"
+    # compiler: gcc-4.8
 
 before_install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then python -m pip install auditwheel twine; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install python3; fi
-  - if [ $TRAVIS_OS_NAME == osx ]; then pip install --user wheel twine; fi
+  # - if [ $TRAVIS_OS_NAME == linux ]; then python -m pip install auditwheel twine; fi
+  # - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install python3; fi
+  # - if [ $TRAVIS_OS_NAME == osx ]; then pip install --user wheel twine; fi
 #  - if [ $TRAVIS_OS_NAME == osx ]; then brew install clang-omp; fi
-
-install:
   - bash ./travis_script/build_Ibex4pyIbex.sh
   - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ibex
+  - |
+    # Configure build variables
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      if [ -z "$GCC" ]; then export GCC=4.8; fi
+      export CXX=g++-$GCC CC=gcc-$GCC;
+    elif [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      export CXX=clang++ CC=clang;
+    fi
+    if [ -n "$CPP" ]; then export CPP=-std=c++$CPP; fi
+    if [ "${PYTHON:0:1}" = "3" ]; then export PY=3; fi
+    if [ "${PYTHON:0:1}" = "3" ]; then export PY=3; fi
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+        pip install --user --upgrade pip virtualenv auditwheel twine
+        virtualenv -p python$PYTHON venv;
+    elif [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      if [ "$PY" = "3" ]; then
+        brew update; brew install python$PY;
+      else
+        curl -fsSL -O https://bootstrap.pypa.io/get-pip.py;
+        sudo -H python get-pip.py;
+      fi
+      pip$PY install --user --upgrade pip virtualenv auditwheel twine;
+      python$PY -m virtualenv venv;
+    fi
+    source venv/bin/activate;
+
 
 # command to run tests
 script:
   # - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
   - mkdir build
   - cd build
-  - export version=$(python -c "import sys; print(sys.version[:3])")
-  - echo $version
   - ls ${HOME}/ibex
   - ls ${HOME}/ibex/lib
-  - if [ $TRAVIS_OS_NAME == osx ]; then
-      cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} ../ ;
-    fi
-  - if [ $TRAVIS_OS_NAME == linux ]; then
-      cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} -DCMAKE_CXX_COMPILER=g++-4.8 ../ ;
-    fi
+
+  - cmake -DCMAKE_INSTALL_PREFIX=${HOME} -DIBEX_ROOT=${HOME}/ibex -DPYTHON_VERSION=${version} -DPYBIND11_PYTHON_VERSION=$PYTHON -DPYBIND11_CPP_STANDARD=$CPP ../ ;
   - make && make install
 
   - make test
@@ -70,18 +93,19 @@ script:
     # fi
 
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
+after_failure: cat tests/test_cmake_build/*.log
 
-deploy:
-  skip_cleanup: true
-  provider: releases
-  api_key:
-    secure: PLxHkV8vz8cdPMQKOm6BDAPUZgScq3frcuWUQ0PVsB66gu2mW+tnvIQzg0duom7rv9wrOksblkAhLRh2kNh7coLnlAD5AT7Y74PUjYv6sFsv9Obh0Kvc97v4/7eVg4xOcdcvPYEiYCQ/ZfXPzpkOcUF7IRYx4KKXN9CbVpbU/W8=
-  file: $TRAVIS_BUILD_DIR/$wheel_file
-  prerelease: true
-  on:
-    overwrite: true
-    branch: master
-    tag: true
+# deploy:
+#   skip_cleanup: true
+#   provider: releases
+#   api_key:
+#     secure: PLxHkV8vz8cdPMQKOm6BDAPUZgScq3frcuWUQ0PVsB66gu2mW+tnvIQzg0duom7rv9wrOksblkAhLRh2kNh7coLnlAD5AT7Y74PUjYv6sFsv9Obh0Kvc97v4/7eVg4xOcdcvPYEiYCQ/ZfXPzpkOcUF7IRYx4KKXN9CbVpbU/W8=
+#   file: $TRAVIS_BUILD_DIR/$wheel_file
+#   prerelease: true
+#   on:
+#     overwrite: true
+#     branch: master
+#     tag: true
     # repo: benEnsta/pyIbex
 
 

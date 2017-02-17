@@ -21,6 +21,11 @@ matrix:
     osx_image: xcode7.3
     env: PYTHON=3.6 CPP=14 CLANG
 
+env:
+  global:
+  - secure: QMtC7zYxU4pPwZrQ4OX2bjgPoei+2PYZPxuTOGewgI11HlbM7xFbryhloHeIeoeKXjKgUhCSY32lUiAP4NlT1ZkQVVr30m7FF+6hZkw6/bFvernOdr9kAd99Hg3uiunHCKoce7tTkIpo/eLTGAmr1Vbcc0FTZNagAWZmNClGOIw=
+  - secure: cKkW9x5L4KFuq3bzb9uCsYSiXo/V55m96Ua122Wo7J5BfiagJqXoPc8PcWwx/qgLrCiT2xzW4fTp1DFDq97LsaXxEp/TWvzI+zPhB4tfUDzF95Dbvkl7A+sgmmSYkBiD146WP4KjmMGEv65RzIS9nFaRikF1X790Sxy/pEAhjLY=
+
 cache:
   directories:
   - $HOME/ibex
@@ -94,7 +99,8 @@ script:
 
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
 after_failure: cat tests/test_cmake_build/*.log
-
+after_success:
+  - curl --ftp-create-dirs --ftp-ssl -p -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.homenet.org/gittmp/$(date +"%Y%m%d")/
 # deploy:
 #   skip_cleanup: true
 #   provider: releases

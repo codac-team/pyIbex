@@ -26,6 +26,8 @@ environment:
     secure: x/KrtKQDdjxKhvPlvfdiMQ==
   PASWORD:
     secure: C5uWvbl1OHCVoprbRYTGD7LLzuUMtj18MtxytCqLmh8=
+  FTP_PASSWD:
+    secure: U58Tazcrcj6n+oP1CxfRCQ==
 
 install:
   - cmd: '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
@@ -64,16 +66,27 @@ build_script:
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
   # - msbuild %MSBuildOptions% src/install_python.vcxproj
 
-
 deploy:
-
-- provider: GitHub
-
-  auth_token:
-
-    secure: wIeJZ9xcTslfsgvqCGez8oOC0YxhmM8LI0iJ7gBgsI7ykVeWWLEFfAQSIHgbac6k
-
+  provider: FTP
+  protocol: ftps
+  host: bdesroch.homenet.org
+  username: git
+  password:
+    secure: U58Tazcrcj6n+oP1CxfRCQ==
+  folder: win
   artifact: pip_wheel
 
-  draft: true
-  appveyor_repo_tag: true        # deploy on tag push only
+#
+#
+# deploy:
+#
+# - provider: GitHub
+#
+#   auth_token:
+#
+#     secure: wIeJZ9xcTslfsgvqCGez8oOC0YxhmM8LI0iJ7gBgsI7ykVeWWLEFfAQSIHgbac6k
+#
+#   artifact: pip_wheel
+#
+#   draft: true
+#   appveyor_repo_tag: true        # deploy on tag push only

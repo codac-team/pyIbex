@@ -9,18 +9,33 @@ matrix:
         sources: [ubuntu-toolchain-r-test, kubuntu-backports]
         packages: [g++-4.8, cmake, pkg-config]
   - os: linux
+    env: PYTHON=3.4 CPP=11 GCC=4.8
+    addons:
+      apt:
+        sources: [ubuntu-toolchain-r-test, kubuntu-backports, deadsnakes]
+        packages: [g++-4.8, cmake, python3.4-dev, pkg-config]
+
+  - os: linux
     env: PYTHON=3.5 CPP=11 GCC=4.8
     addons:
       apt:
         sources: [ubuntu-toolchain-r-test, kubuntu-backports, deadsnakes]
         packages: [g++-4.8, cmake, python3.5-dev, pkg-config]
+  - os: linux
+    env: PYTHON=3.6 CPP=11 GCC=4.8
+    addons:
+      apt:
+        sources: [ubuntu-toolchain-r-test, kubuntu-backports, deadsnakes]
+        packages: [g++-4.8, cmake, python3.6-dev, pkg-config]
   - os: osx
     osx_image: xcode7.3
     env: PYTHON=2.7 CPP=14 CLANG
   - os: osx
     osx_image: xcode7.3
     env: PYTHON=3.6 CPP=14 CLANG
-
+  - os: osx
+    osx_image: xcode7.3
+    env: PYTHON=3.5 CPP=14 CLANG
 env:
   global:
   - secure: QMtC7zYxU4pPwZrQ4OX2bjgPoei+2PYZPxuTOGewgI11HlbM7xFbryhloHeIeoeKXjKgUhCSY32lUiAP4NlT1ZkQVVr30m7FF+6hZkw6/bFvernOdr9kAd99Hg3uiunHCKoce7tTkIpo/eLTGAmr1Vbcc0FTZNagAWZmNClGOIw=

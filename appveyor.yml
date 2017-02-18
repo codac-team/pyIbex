@@ -73,7 +73,7 @@ deploy:
   username: git
   password:
     secure: U58Tazcrcj6n+oP1CxfRCQ==
-  folder: win
+  folder: gittmp/win
   artifact: pip_wheel
 
 #

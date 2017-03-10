@@ -45,7 +45,7 @@ cd $curr_path
 echo " ibex_lib installation"
 git clone https://github.com/benEnsta/ibex-lib.git
 cd ibex-lib
-git checkout pyIbex_version_3
+git checkout with_cmake
 mkdir -p build
 cd build
 cmake ${prefix} -DBUILD_TESTS=OFF  ../

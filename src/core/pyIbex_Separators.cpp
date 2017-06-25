@@ -93,21 +93,21 @@ void export_Separators(py::module& m){
   ;
 
 
-  class_<SepCtcPair>(m, "SepCtcPair", sep, DOCS_SEP_SEPCTCPAIR)
-    .def(init<Ctc&, Ctc&>(), keep_alive<1,2>(), keep_alive<1,3>(), py::arg("ctc_in"), py::arg("ctc_out"))
+  class_<SepCtcPair> sepCtcPair(m, "SepCtcPair", sep, DOCS_SEP_SEPCTCPAIR);
+    sepCtcPair.def(init<Ctc&, Ctc&>(), keep_alive<1,2>(), keep_alive<1,3>(), py::arg("ctc_in"), py::arg("ctc_out"))
     .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepCtcPair::separate)
-    .def("ctc_in", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_in;})
-    .def("ctc_out", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_out;})
+    .def("ctc_in", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_in;}, py::return_value_policy::reference_internal)
+    .def("ctc_out", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_out;}, py::return_value_policy::reference_internal)
   ;
 
 
-  class_<SepFwdBwd>(m, "SepFwdBwd", sep, DOCS_SEP_SEPFWDBWD)
+  class_<SepFwdBwd>(m, "SepFwdBwd", sepCtcPair, DOCS_SEP_SEPFWDBWD)
     .def(init< Function&, CmpOp >(), keep_alive<1,2>(), py::arg("f"), py::arg("op"))
     .def(init<Function&, Interval& >(), keep_alive<1,2>(), py::arg("f"), py::arg("itv_y"))
     .def(init<Function&, IntervalVector& >(), keep_alive<1,2>(), py::arg("f"), py::arg("box_y"))
     .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepFwdBwd::separate)
-    .def("ctc_in", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_in;})
-    .def("ctc_out", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_out;})
+    // .def("ctc_in", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_in;}, py::return_value_policy::reference)
+    // .def("ctc_out", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_out;}, py::return_value_policy::reference)
   ;
 
   class_<SepNot>(m, "SepNot", sep, DOCS_SEP_SEPNOT)

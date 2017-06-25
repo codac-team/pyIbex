@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+2017-06-24 Benoit Desrochers <ben.ensta@gmail.com>
+  * [fix] add ratio argument to CtcFixPoint contrator
+
 2017-01-04 Benoit Desrochers <ben.ensta@gmail.com>
   * [update] upgrade pybind11 to version 2.0.0
   * [added]  __contains__ for Interval and IntervalVector

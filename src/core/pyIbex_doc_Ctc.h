@@ -104,7 +104,7 @@ Example:
     >>> ctc = CtcFwdBwd(f, LEQ)
     >>> # Constaint f(x) <= [0, 1]
     >>> ctc = CtcFwdBwd(f, Interval(0, 1))
-    
+
 )_doc";
 
 const char* DOC_CTCINVERSE_TYPE=
@@ -127,8 +127,12 @@ Note:
 
 const char* DOC_CTCFIXPOINT_TYPE=
 R"_doc(Fix point of a contractor
+When the Hausdorff distance between
+two iterations is less than ratio*diameter
+the fix-point is considered to be reached.
 Args:
     ctc  (Ctc): a contractor
+    ratio (double) : stop ratio between two iterationl
 )_doc";
 
 const char* DOC_CTCQINTER_TYPE=

@@ -119,7 +119,7 @@ void export_Ctc(py::module& m){
 
   // Export CtcNotIn
   py::class_<CtcFixPoint>(m, "CtcFixPoint", ctc, DOC_CTCFIXPOINT_TYPE)
-    .def(py::init<Ctc&>(), py::keep_alive<1,2>())
+    .def(py::init<Ctc&, double>(), py::keep_alive<1,2>(), "ctc"_a, "ratio"_a)
     .def("contract", &CtcFixPoint::contract)
     ;
 

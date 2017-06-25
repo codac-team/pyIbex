@@ -148,14 +148,51 @@ const char* DOCS_SEP_SEPQINTER=
 R"_docs(Exact relaxed intersection of a list of separators
 Args:
     list (list<Ctc>) : list of separators
-    q (int) : The number of separators which have to intersect the result)_docs";
+    q (int) : The number of separators which have to intersect the result
+)_docs";
 
 const char* DOCS_SEP_SEPINVERSE=
-R"_docs(Image of a separator by a function in a forward-backaward manner
+R"_docs(Image of a separator by a function in a forward-backward manner
 Args:
     sep (Sep) : Separator to use
     f (Function): Function to use
 See Also
     pyibex.CtcInverse
 
+)_docs";
+
+
+const char* DOCS_SEP_SEPTRANSFORM=
+R"_docs(Image of a separator by a function in a forward-backward manner with
+  the analytical expression of f and f^{-1}
+  It will return f(S) = { f o S_in o f^{-1}, f o S_out o f^{-1}}
+Args:
+    sep (Sep) : Separator to use
+    ffwd (Function): forward expression of f
+    fbwd (Function): reverse expression of f
+See Also
+    pyibex.CtcInverse, pyibex.SepInverse
+)_docs";
+
+
+const char* DOCS_SEP_SEPPROJ=
+R"_docs(Projection of separator using the complementarity of the inner and outer
+  contractor of the separator.
+  Given a separator S and a box y_init, the projection of S is:
+  ProjS(x)  <=> \exists y in [y_init] , S(x,y)
+Args:
+  sep (Sep): Separator to use
+  y_init (IntervalVector): inital box for y
+
+)_docs";
+const char* DOCS_SEP_SEPCTCPAIRPROJ=
+R"_docs(Projection of separator using the ibex implementation with CtcExist and ctcForAll
+  ProjS = { CtcForAll(ctc_in), CtcExist(ctc_out)}
+  Given a separator S={Sin, Sout} and a box y_init, the projection of ProjS is:
+  ProjS = {ProjS_in, ProjS_out}, with
+  + ProjS_out  <=> \exists y in [y_init] , Sout(x, y)
+  + ProjS_in  <=> \forall y in [y_init], Sin(x, y)
+Args:
+  sep (Sep): Separator to use
+  y_init (IntervalVector): inital box for y
 )_docs";

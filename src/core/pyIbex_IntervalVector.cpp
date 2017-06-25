@@ -58,6 +58,7 @@ void CreateWithListOfInterval(IntervalVector &instance, const std::vector<Interv
   }
 }
 
+
 void CreateWithIntAndList(IntervalVector &instance, int ndim, std::vector<double>& v){
   if (v.size() != 2){
     throw std::invalid_argument("syntax is IntervalVector(2, [1,2])");
@@ -92,9 +93,9 @@ std::vector<IntervalVector> complementary_wrapper(IntervalVector& X){
       return v;
 }
 
-std::vector<IntervalVector> diff_wrapper(IntervalVector& X, IntervalVector& Y){
+std::vector<IntervalVector> diff_wrapper(IntervalVector& X, IntervalVector& Y, bool compactness){
     IntervalVector* result;
-    int n = X.diff(Y, result);
+    int n = X.diff(Y, result, compactness);
     std::vector<IntervalVector> v;
     v.assign(result, result+n);
     return v;
@@ -142,6 +143,7 @@ void export_IntervalVector(py::module& m){
             .def(py::init<int,const Interval>(), "dim"_a, "itv"_a)
             .def(py::init<const IntervalVector&>(), "x"_a )
             .def(py::init<const Vector&>(), "x"_a)
+            .def("__init__", [](IntervalVector &instance, const Interval& a) { new(&instance) IntervalVector(1); instance[0] = a;}, "itv"_a)
             .def("__init__", &CreateWithList, "list"_a)
             .def("__init__", &CreateWithIntAndList, "dim"_a, "list"_a)
             .def("__init__", &CreateWithListOfInterval, "list"_a)
@@ -278,7 +280,7 @@ void export_IntervalVector(py::module& m){
             .def( "perimeter",  &IntervalVector::perimeter, DOCS_INTERVALVECTOR_PERIMETER )
             .def( "rel_distance",   &IntervalVector::rel_distance, DOCS_INTERVALVECTOR_REL_DISTANCE, "x"_a )
 
-            .def( "diff",   &diff_wrapper , DOCS_INTERVALVECTOR_DIFF, "y"_a)
+            .def( "diff",   &diff_wrapper , DOCS_INTERVALVECTOR_DIFF, "y"_a, "compactness"_a=true)
             .def( "complementary",  &complementary_wrapper , DOCS_INTERVALVECTOR_COMPLEMENTARY)
             .def( "bisect",   &IntervalVector::bisect, DOCS_INTERVALVECTOR_BISECT,  py::arg("i"), py::arg("ratio")=0.5)
             ;
@@ -303,5 +305,5 @@ void export_IntervalVector(py::module& m){
             m.def( "bwd_mul", (bool (*) (const Interval&, IntervalVector&, IntervalVector&)) &ibex::bwd_mul);
 
             m.def("max", ( IntervalVector(*) (const IntervalVector&, const IntervalVector&)) &max_intevalVector);
-
+            py::implicitly_convertible<Interval, IntervalVector>();
 };

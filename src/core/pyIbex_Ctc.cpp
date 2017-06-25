@@ -24,7 +24,7 @@ using namespace pybind11::literals;
 #include <ibex_CtcInverse.h>
 #include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
-
+#include <pyibex_QInterProjF.h>
 #include "pyIbex_doc_Ctc.h"
 
 // #include <ibex_CtcSegment.h>
@@ -44,6 +44,8 @@ using ibex::IntervalVector;
 using ibex::Function;
 using ibex::Array;
 using ibex::Interval;
+
+using pyibex::CtcQInterProjF;
 
 class pyCtc : public Ctc {
 public:
@@ -119,7 +121,7 @@ void export_Ctc(py::module& m){
 
   // Export CtcNotIn
   py::class_<CtcFixPoint>(m, "CtcFixPoint", ctc, DOC_CTCFIXPOINT_TYPE)
-    .def(py::init<Ctc&, double>(), py::keep_alive<1,2>(), "ctc"_a, "ratio"_a)
+    .def(py::init<Ctc&, double>(), py::keep_alive<1,2>(), "ctc"_a, "ratio"_a=1e-3)
     .def("contract", &CtcFixPoint::contract)
     ;
 
@@ -130,5 +132,9 @@ void export_Ctc(py::module& m){
     .def("contract", &CtcQInter::contract)
     ;
 
-
+  // Export CtcQInterProjF
+  py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc, DOC_CTCQINTERPROJF_TYPE)
+    .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
+    .def("contract", &CtcQInterProjF::contract)
+    ;
 }

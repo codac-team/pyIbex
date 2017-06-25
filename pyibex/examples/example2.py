@@ -1,6 +1,25 @@
-#example 1, simple sivia
+#!/usr/bin/env python
+#============================================================================
+#                                P Y I B E X
+# File        : example2.py
+# Author      : Benoit Desrochers
+# Copyright   : Benoit Desrochers
+# License     : See the LICENSE file
+# Created     : May 28, 2015
+#============================================================================
 
-from pyIbex import *
+#example 2, Custom contractor
+
+"""
+Write a custom contractor for the equation
+(x - x0)^2 + (y - y0)^2 \in R^2
+
+This example uses:
+    - Interval and IntervalVector
+    - Ctc
+    - pySIVIA
+"""
+from pyibex import *
 from vibes import *
 
 class myCtc(Ctc):
@@ -13,10 +32,10 @@ class myCtc(Ctc):
 	def contract(self, X):
 		a1 = X[0] - Interval(self.x0)
 		a2 = X[1] - Interval(self.y0)
-		
+
 		a3 = sqr(a1)
 		a4 = sqr(a2)
-		
+
 		a5 = a3 + a4
 		a5 &= sqr(self.R)
 
@@ -28,11 +47,17 @@ class myCtc(Ctc):
 		bwd_sub(a2, X[1], (self.y0))
 
 
+# instanciate out new contractor
 ctc = myCtc(1, 2, Interval(1, 2))
+# set the inital box
 box = IntervalVector(2, [-10, 10])
 
+# init vibes display and resize the new figure
 vibes.beginDrawing()
+vibes.newFigure("Example 2")
+vibes.setFigureSize(500,500)
 
+# run the paver
 pySIVIA(box, ctc, 0.3)
 
 vibes.endDrawing()

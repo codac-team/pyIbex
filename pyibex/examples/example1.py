@@ -1,6 +1,16 @@
+#!/usr/bin/env python
+#============================================================================
+#                                P Y I B E X
+# File        : example1.py
+# Author      : Benoit Desrochers
+# Copyright   : Benoit Desrochers
+# License     : See the LICENSE file
+# Created     : May 28, 2015
+#============================================================================
+
 #example 1, simple sivia
 
-from pyIbex import *
+from pyibex import *
 from vibes import *
 
 f = Function('x', 'y', 'x*cos(x-y)+y')

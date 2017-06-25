@@ -7,12 +7,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-2017-06-24 Benoit Desrochers <ben.ensta@gmail.com>
-  * [fix] add ratio argument to CtcFixPoint contrator
+2017-07-02 Benoit Desrochers <ben.ensta@gmail.com>
+  * [fix] add default arguement ratio for CtcFixPoint
+  * [update] add automoatic conversion from Interval to IntervalVector
+  * [fix] bug in SepProj when y is empty
+
+2017-06-29 Benoit Desrochers <ben.ensta@gmail.com>
+  * RELEASE V1.6
+  * [new] add SepFixpoint to handle fix point of a separator
+  * [new] add SepTransform -> f(S(f^1(X)))
+  * [new] add SepProj projection of a sepatator
+  * [new] add SepCtcPair projection of a separator based on CtcExist/CtcForAll
+  * [new] add CtcQInterProjF and SepQInterProjF
+  * [new] add ibex-geometry content with SepPolygon and CtcPolar
+  * [update] add "compactness" option on diff method (IntervalVector)
+  * [update] add "ratio" argument to CtcFixPoint contrator
+
 
 2017-01-04 Benoit Desrochers <ben.ensta@gmail.com>
   * [update] upgrade pybind11 to version 2.0.0
-  * [added]  __contains__ for Interval and IntervalVector
+  * [new]  __contains__ for Interval and IntervalVector
   * [fix]    add version number in python module __version__
 
 2016-09-15 Benoit Desrochers <ben.ensta@gmail.com>

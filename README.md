@@ -8,57 +8,53 @@ Ibex python binding
 --------------------------
 Introduction
 --------------------------
-pyIbex is a python binding of Ibex library. It aims at providing a basic interface
-of Ibex types (Interval, IntervalVector, Ctc, ...),  and high level functionalities such as
-contractors programming.
+pyIbex is a python binding of [ibex-lib](http://www.ibex-lib.org/). It aims at providing a basic interface
+of Ibex types (Interval, IntervalVector, Function, Ctc, Sep, ...),  and high level functionalities such as
+contractors and separators programming.
+
+It uses [pybind11](https://github.com/wjakob/pybind11) to link C++ code to python.
+It contains core functionalities of ibex and additional modules:
+  + **geometry** to deal with geometrical constraints
+    + Polygon separator "SepPolygon" [article](http://www.sciencedirect.com/science/article/pii/S0952197614000864)
+    + Separator transformation "SepTransform"
+    + Sepatator fix point "SepFixPpoint"
+    + Polar contractor and separators "CtcPolar, SepPolarXY" [article](http://www.sciencedirect.com/science/article/pii/S0952197616301129)
+
 
 See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyibex/) for more informations.
 
-Since the version 1.5, pyibex module only contains core functionalities of ibex.
 
-The version 1.2 uses now uses pyBind11 instead of Boost-Python to link C++ and python code.
-The core functionalities of pyIbex are also reduced and additionnal features are moved to additionnal module.
-As a consequence, the following modules are removed from the core distributes :
- + [geometry](https://github.com/benEnsta/ibex-geometry) (CtcAngle, CtcPolar, SepPolarXY, ...)
- + Thickset ( still under huge developpement)
- + [Tubes](https://github.com/SimonRohou/tube-lib)
-
-
-
-# Install
+# Install with a precompiled version
 
 ## With Conda
 ```bash
-conda install -c benensta pyibex
+>>> conda install -c benensta pyibex
 ```
 
-
-## Ubuntu 16.04 / 14.04
-```bash
-sudo add-apt-repository ppa:ben-ensta/pyibex
-sudo apt-get update
-sudo apt install python3-pyibex
-```
-
-## Mac OSX / Windows
+## With pip
 ```python
 >>> python -m pip install pyibex
 ```
 
---------------------------
-Dependancies
---------------------------
+## try it.
+A set of example can be found in the pyibex/example directory. to run them enter:
+```python
+>>> python -m pyibex.example.main
+```
 
-+ [CMake](http://www.cmake.org "CMake project page") (>= 2.8.3)
-+ [Python](http://www.python.org "Python home page") (tested with 3.4, but should work with >= 2.7)
+
+# Build From Source
+
+
+
+## Dependancies
+
++ [CMake](http://www.cmake.org "CMake project page") (>= 2.8.12)
++ [Python](http://www.python.org "Python home page") (tested with 3.4, 3.5, 3.6, but should work with >= 2.7)
 + [pybind11](https://github.com/wjakob/pybind11) required C++11 support
-+ [ibex-lib](http://www.ibex-lib.org/) custom version from [github](https://github.com/benEnsta/ibex-lib/tree/pyIbex_version_3)
++ [ibex-lib](http://www.ibex-lib.org/) custom version from [github](https://github.com/benEnsta/ibex-lib/tree/with_cmake)
 + a C++ compiler for your platform , e.g. [GCC](http://gcc.gnu.org "GCC home") (>= 4.8), [MSVS 13](https://www.visualstudio.com "Visual Studio 2014"), [llvm](http://llvm.org "llvm")
 
-
------------------
-Build From Source
------------------
 
 ###Building
 --------------------------------------
@@ -70,12 +66,12 @@ The build process is entirely based on cmake with the following options:
 	- use -DIBEX_ROOT= if ibex is installed in a non-standard directory
   - use -DPYTHON_VERSION= to set the target python version.
 
-Sometime, you will have to manualy specify python executable, include and libs dir using:
+Sometime, you will have to manually specify python executable, include and libs directory using:
 
   -using -DPYTHON_EXECUTABLE to specify python executable path.
 
 Alternatively, run the provided `install.sh` script.
-remark : If Ibex isn't installed on the current machine, it will be download, build an installed.
+remark : If Ibex isn't installed on the current machine, it will be downloaded, build and installed.
 
 
 ### Linux/Mac OS X
@@ -114,7 +110,7 @@ The last command generates a installer for ibex-lib
 cd pyIbex
 mkdir build
 cd build
-cmake -G "Visual Studio 12 2013 Win64" -DBOOST_ROOT=$$$$$$$$ -DIBEX_ROOT=$$$$$$$$ -DPYTHON_EXECUTABLE=$$$$$$$$ ../
+cmake -G "Visual Studio 12 2013 Win64" -DIBEX_ROOT=$$$$$$$$ -DPYTHON_EXECUTABLE=$$$$$$$$ ../
 msbuild /P:Configuration=Release /p:RuntimeLibrary=MT_StaticRelease INSTALL.vcxproj
 ```
 
@@ -164,21 +160,3 @@ ctc = ctcIn & ctcOut
 ctc1 = CtcUnion([ctcIn, ctcOut, ctc1])
 
 ```
-
---------------------------
-TODO
---------------------------
-- [X] Write the documentation !!!
-- [X] Add IntervalMatrix support
-	- [ ] Add IntervalMatrix support
-	- [ ] Add Jacobian and gradient
-- [ ] Add numpy array support for interval Vector class
-- [ ] Add ratio option for LargestFirst(Vector, double )
-- [X] Simplify Wrapper interface
-- [X] Add n_var in separator
-- [ ] fix exceptions
-- [X] Improve ItervalVectorinterface
-	- [X] Initialisation with X = IntervalVector(2, [2,3])
-	- [ ] Iterate over dimension of an IntervalVector
-- [ ] add Function / Ctc / Sep Properties ( nb_vars, ...)
-- [X] inheritance with python objects

@@ -23,7 +23,7 @@ setup(
             'pyibex.thickset', 'pyibex.tube',
             'pyibex.geometry', 'pyibex.tests'],
   package_data={
-      'pyibex': ['pyibex${PYTHON_MODULE_EXTENSION}'],
+      'pyibex': ['pyibex${PYTHON_MODULE_EXTENSION}', 'geometry/geometry${PYTHON_MODULE_EXTENSION}'],
   },
   test_suite='pyibex.tests',
   license="LGPLv3+",

@@ -18,6 +18,7 @@ using py::self;
 using py::class_;
 using py::init;
 using py::keep_alive;
+using namespace pybind11::literals;
 
 
 #include "ibex_IntervalVector.h"
@@ -31,6 +32,13 @@ using py::keep_alive;
 #include "ibex_SepInverse.h"
 #include "ibex_SepQInter.h"
 
+#include "pyibex_QInterProjF.h"
+#include "pyibex_SepTransform.h"
+#include "pyibex_SepFixPoint.h"
+#include "pyibex_SepProj.h"
+#include "pyibex_SepCtcPairProj.h"
+
+
 #include "pyIbex_doc_Separators.h"
 
 // #include "ibex_SepPolygon.h"
@@ -40,6 +48,13 @@ using py::keep_alive;
 // #include "ibex_Set.h"
 // #include "ibex_SetInterval.h"
 using namespace ibex;
+using pyibex::SepTransform;
+using pyibex::SepFixPoint;
+using pyibex::SepProj;
+using pyibex::SepCtcPairProj;
+using pyibex::SepQInterProjF;
+
+
 
 
 
@@ -122,9 +137,45 @@ void export_Separators(py::module& m){
     .def_property("q", py::cpp_function(&SepQInter::get_q), py::cpp_function(&SepQInter::set_q))
   ;
 
+  class_<SepQInterProjF>(m, "SepQInterProjF", sep, DOCS_SEP_SEPQINTER)
+    .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
+    .def("separate", &SepQInterProjF::separate)
+    .def_property("q", py::cpp_function(&SepQInterProjF::get_q), py::cpp_function(&SepQInterProjF::set_q))
+  ;
+
+
+
   class_<SepInverse>(m, "SepInverse", sep, DOCS_SEP_SEPINVERSE)
     .def(init<Sep&, Function& >(), keep_alive<1,2>(), keep_alive<1,3>(), py::arg("sep"), py::arg("f"))
     .def("separate", &SepInverse::separate)
+  ;
+
+  // Export SepProj
+  py::class_<pyibex::SepProj>(m, "SepProj", sep, DOCS_SEP_SEPPROJ)
+    .def(py::init<ibex::Sep&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
+          py::arg("sep"), py::arg("y_init"), py::arg("prec") )
+    .def("separate", &pyibex::SepProj::separate)
+  ;
+
+  // Export SepCtcPairProj
+  py::class_<pyibex::SepCtcPairProj>(m, "SepCtcPairProj", sep, DOCS_SEP_SEPCTCPAIRPROJ)
+    .def(py::init<ibex::Ctc&, ibex::Ctc&,const IntervalVector&, double>(), py::keep_alive<1,2>(), py::keep_alive<1,3>(),
+          py::arg("ctc_in"), py::arg("ctc_out"), py::arg("y_init"), py::arg("prec"))
+    .def(py::init<ibex::Sep&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
+          py::arg("sep"), py::arg("y_init"), py::arg("prec") )
+    .def("separate", &pyibex::SepCtcPairProj::separate)
+  ;
+
+  // Export SepTransform
+  py::class_<pyibex::SepTransform>(m, "SepTransform", sep)
+    .def(py::init<ibex::Sep&, ibex::Function&, ibex::Function& >(), py::keep_alive<1,2>(), py::keep_alive<1,3>(), py::keep_alive<1,4>())
+    .def("separate", &pyibex::SepTransform::separate)
+  ;
+
+  // Export SepFixPoint
+  py::class_<pyibex::SepFixPoint>(m, "SepFixPoint", sep)
+    .def(py::init<ibex::Sep&, double >(), py::keep_alive<1,2>(), "sep"_a, "ratio"_a=0.01)
+    .def("separate", &pyibex::SepFixPoint::separate)
   ;
 
 }

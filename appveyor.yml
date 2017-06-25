@@ -16,27 +16,27 @@ environment:
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python34"
       PYTHON_EXE: "C:\\Python34/python.exe"
-      IBEX_FILES: "2.3.0-win32"
+      IBEX_FILES: "2.4.2-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python35"
       PYTHON_EXE: "C:\\Python35/python.exe"
-      IBEX_FILES: "2.3.0-win32"
+      IBEX_FILES: "2.4.2-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python36"
       PYTHON_EXE: "C:\\Python36/python.exe"
-      IBEX_FILES: "2.3.0-win32"
+      IBEX_FILES: "2.4.2-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python34-x64"
       PYTHON_EXE: "C:\\Python34-x64/python.exe"
-      IBEX_FILES: "2.3.0-win64"
+      IBEX_FILES: "2.4.2-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python35-x64"
       PYTHON_EXE: "C:\\Python35-x64/python.exe"
-      IBEX_FILES: "2.3.0-win64"
+      IBEX_FILES: "2.4.2-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python36-x64"
       PYTHON_EXE: "C:\\Python36-x64/python.exe"
-      IBEX_FILES: "2.3.0-win64"
+      IBEX_FILES: "2.4.2-win64"
 
   USERNAME:
     secure: x/KrtKQDdjxKhvPlvfdiMQ==
@@ -52,7 +52,7 @@ install:
   - "%PYTHON_DIR%/python.exe C:/get-pip.py"
   - ps: >-
 
-      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.3.57/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
+      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.4.2/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
 
       ls C:\projects\pyIbex
 

@@ -141,3 +141,10 @@ Args:
     list (list<Ctc>) : list of contractors
     q (int) : The number of contractors which have to intersect the result
 )_doc";
+
+const char* DOC_CTCQINTERPROJF_TYPE=
+R"_doc(Exact relaxed intersection of a list of contractors using projection algorithm
+Args:
+    list (list<Ctc>) : list of contractors
+    q (int) : The number of contractors which have to intersect the result
+)_doc";

@@ -21,7 +21,10 @@ configure_file(
 
 set( pip_dir "${CMAKE_CURRENT_BINARY_DIR}/pip_package")
 include_directories(.)
+include_directories(pyibexlib)
+add_subdirectory(pyibexlib)
 add_subdirectory(core)
+add_subdirectory(geometry)
 
 
 

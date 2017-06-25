@@ -85,13 +85,14 @@ def drawBoxDiff(X0, X, color, use_patch=False, **kwargs):
 	if X0 == X: return
 	if not X.is_empty():
 		if use_patch == True:
-			vibes.drawBoxDiff([X0[0].lb(), X0[0].ub(), X0[1].lb(), X0[1].ub()],
-			 [X[0].lb(), X[0].ub(), X[1].lb(), X[1].ub()], color)
+			vibes.drawBoxDiff(X0, X, color, **kwargs)
+			# vibes.drawBoxDiff([ X0[0].lb(), X0[0].ub(), X0[1].lb(), X0[1].ub()],
+			#  [X[0].lb(), X[0].ub(), X[1].lb(), X[1].ub()], color)
 		else:
 			for b in X0.diff(X):
-				vibes.drawBox(b[0].lb(), b[0].ub(), b[1].lb(), b[1].ub(), color)
+				vibes.drawBox(b[0].lb(), b[0].ub(), b[1].lb(), b[1].ub(), color, **kwargs)
 	else:
-		vibes.drawBox(X0[0].lb(), X0[0].ub(), X0[1].lb(), X0[1].ub(), color)
+		vibes.drawBox(X0[0].lb(), X0[0].ub(), X0[1].lb(), X0[1].ub(), color, **kwargs)
 
 
 def __pySIVIA_ctc(X0, ctc, epsilon, color_out='k[b]', color_maybe='k[y]', draw_boxes=True, save_result=True, **kwargs):

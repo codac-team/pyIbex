@@ -45,4 +45,4 @@ add_custom_command(TARGET install_python PRE_BUILD
     WORKING_DIRECTORY ${PYTHON_PACKAGE_DIR}
 )
 
-add_dependencies(install_python pyibex)
+add_dependencies(install_python pyibex geometry)

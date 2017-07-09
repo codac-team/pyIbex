@@ -48,7 +48,12 @@ bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVecto
     sep.separate(XinFull, XoutFull);
     nbx++;
 
+    if (!((XinFull | XoutFull)  == cart_prod(x, y))){
+      std::cerr << XinFull << " " << XoutFull << "\n";
+      assert((XinFull | XoutFull)  == x);
 
+
+    }
 
     // Handle error case
     if (XinFull.is_empty() && XoutFull.is_empty()){
@@ -99,6 +104,7 @@ bool SepProj::fixpoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVect
         x_old = x;
         IntervalVector x_out0(x_out);
         stop = process(x_in, x_out, y, impact);
+
         if (!stop){
             IntervalVector y_mid(y.mid());
             IntervalVector x_out_mid(x_out0);
@@ -145,6 +151,8 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
     while(!l.empty()){
         IntervalVector x_out_save(l.front().first);
         IntervalVector y = l.front().second;
+        IntervalVector x_out0(x_out);
+
         l.pop();
         if (x_out_save.is_subset(x_res))
           continue;
@@ -156,17 +164,22 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
         IntervalVector y0(y);
         fixpoint(x_in, x_out_save, y0);
         IntervalVector x = x_in & x_out_save;
-        // std::cerr << "x: " << x << " x_in: " << x_in << " x_out: " << x_out << "\n"
-                  // << "x_out_save: " << x_out_save <<  " x_res :" <<  x_res <<  "y: "  << y << "\n";
+        // assert( ( x_in | x_out_save ) == ( x_in | x_out0));
+        // std::cerr << x_in << " " << x_out_save << "\n";
+        // std::cerr << "##########################################################################\n";
+        // std::cerr << "x0: " << x_out0 << "\n";
+        // std::cerr << "x: " << x << " x_in: " << x_in << " x_out: " << x_out_save << "\n"
+        //           << "x_res " << x_res  <<  " y: "  << y << "\n";
         // std::cerr << x.is_empty() << " " << (x.max_diam()) << " " << prec << " " << y.is_empty() << " " << y.max_diam() << " " << x.max_diam() << " " << l.size()<< "\n";
         if (x.is_empty() || x.max_diam() < prec || y0.is_empty() || y.max_diam() < 0.1*x.max_diam()){
             x_res |= x_out_save;
+            // std::cerr << "------> end y besection\n";
         } else {
           if (!y.is_empty() && !x_out_save.is_subset(x_res) ){
             try{
               TwoItv cut = bsc->bisect(y);
-              l.push(TwoItv(x_out_save, cut.first));
-              l.push(TwoItv(x_out_save, cut.second));
+              l.push(TwoItv(x_out0, cut.first));
+              l.push(TwoItv(x_out0, cut.second));
               // std::cout << "la \n";
             } catch (ibex::NoBisectableVariableException& e){
                 std::cout << "Error while trying to bisect y\n";

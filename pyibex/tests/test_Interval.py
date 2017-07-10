@@ -9,7 +9,7 @@
 #============================================================================
 import unittest
 import pyibex
-from pyibex import Interval
+from pyibex import Interval, oo
 class TestInterval(unittest.TestCase):
 
 	def setUp(self):
@@ -44,7 +44,14 @@ class TestInterval(unittest.TestCase):
 			self.assertFalse(getattr(Interval, name).is_empty())
 
 
+	def test_constructor_oo(self):
+		self.assertEqual(oo, float('inf'))
+		self.assertEqual(Interval(0, oo), Interval.POS_REALS)
+		self.assertEqual(Interval(-oo, 0), Interval.NEG_REALS)
 
+	def test_constructor_with_list(self):
+		self.assertEqual( Interval([1,2]), Interval(1,2))
+		
 	def test_inflate(self):
 		c1 = Interval(0).inflate(1)
 		self.assertTrue(c1 == Interval(-1, 1))

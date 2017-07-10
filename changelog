@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+2017-07-10 Benoit Desrochers <ben.ensta@gmail.com>
+  * [update] add "oo" to represent infinit number in order to write [0, oo]
+  * [fix] conversion of [lb, ub] to Interval. ex: SepFwdBwd(f, [1, 2])
+
 2017-07-02 Benoit Desrochers <ben.ensta@gmail.com>
   * [fix] add default arguement ratio for CtcFixPoint
   * [update] add automoatic conversion from Interval to IntervalVector

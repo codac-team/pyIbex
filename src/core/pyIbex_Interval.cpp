@@ -10,6 +10,7 @@
 
 #include "ibex_Interval.h"
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <pybind11/operators.h>
 #include "pyIbex_doc_Interval.h"
 namespace py = pybind11;
@@ -62,6 +63,7 @@ void export_Interval(py::module& m){
     .def(py::init<>())
     .def(py::init<double, double>(), "\tbuild Interval [lb, ub]", "lb"_a, "ub"_a)
     .def(py::init<double>(), "\tbuild singleton [val,val]", "val"_a)
+    .def("__init__", [](Interval &instance,  std::array<double, 2>& bounds) { new(&instance) Interval(bounds[0], bounds[1]);})
     .def(py::init<Interval>(), "\tbuild a  copy of interval itv", "itv"_a)
     .def("assign", &assignItv, "\tassign the value of itv to this", "itv"_a)
     .def( self == self )
@@ -226,5 +228,7 @@ void export_Interval(py::module& m){
     m.def( "bwd_chi",     &ibex::bwd_chi );
     m.def( "bwd_integer", &ibex::bwd_integer );
     m.def( "bwd_imod",    &ibex::bwd_imod );
+    m.attr("oo") =  POS_INFINITY;
+    py::implicitly_convertible< std::array<double, 2>, Interval>();
 
 };

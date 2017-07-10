@@ -78,6 +78,11 @@ class TestSeparator(unittest.TestCase):
     # print(xin)
     self.assertTrue(xin.is_empty())
 
+  def test_SepFwdBwd_IntervalAsList(self):
+    f = Function("x", "y", "x^2 + y^2")
+    sep = SepFwdBwd(f, [0, oo])
+    
+
   def test_SepFwdBwd_IntervalVector(self):
     f = Function("x", "y", "(x^2 + y^2, x^2 + y^2)")
     sep = SepFwdBwd(f, IntervalVector(2, Interval(0, 16)))

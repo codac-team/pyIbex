@@ -51,6 +51,9 @@ class TestIntervalVector(unittest.TestCase):
 		with self.assertRaises(ValueError):
 			x = IntervalVector([list(range(10))])
 
+	def test_constuctor_lst_itv(self):
+		x = IntervalVector([[1,2], [2, 4]])
+		
 
 	def test_gettiem1(self):
 		"""

@@ -18,7 +18,7 @@ class TestContractors(unittest.TestCase):
 		try:
 			f = Function("x", "y", "sqr(x) + sqr(y)")
 		except RuntimeError as err:
-			self.assertTrue(str(err) == "Syntax error near \"sqr\" line 2: unknown symbol")
+			self.assertTrue(str(err) == "\n############# IBEX FUNCTION PARSER ###############\nSyntax error near \"sqr\" line 2: unknown symbol")
 
 
 	def test_Function_vector(self):

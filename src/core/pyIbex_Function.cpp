@@ -36,6 +36,7 @@ void export_Function(py::module& m){
         if (p) std::rethrow_exception(p);
     } catch (const ibex::SyntaxError &e) {
       std::stringstream ss;
+      ss << "\n############# IBEX FUNCTION PARSER ###############\n";
       ss << e;
       PyErr_SetString(PyExc_RuntimeError, ss.str().c_str());
     }

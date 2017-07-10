@@ -7,7 +7,7 @@ try:
 	vibes_available = True
 except ImportError:
 	vibes_available = False
-import time
+
 def pySIVIA(X0, ops, epsilon, **kwargs):
 	'''
 	Execute a SIVIA and generate a paving.
@@ -149,10 +149,6 @@ def __pySIVIA_sep(X0, sep, epsilon, color_in='k[r]', color_out='k[b]', color_may
 		if (draw_boxes==True and vibes_available == True):
 			drawBoxDiff(X, x_in, color_in, **kwargs)
 			drawBoxDiff(X, x_out, color_out, **kwargs)
-		print(k, " ", X)
-		print(k, " ", x_in, x_out)
-		# time.sleep(1)
-		# break
 		if save_result==True:
 			res_in += X.diff(x_in)
 			res_out += X.diff(x_out)

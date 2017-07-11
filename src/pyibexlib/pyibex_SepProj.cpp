@@ -24,6 +24,14 @@ SepProj::SepProj(Sep& sep, const IntervalVector& y_init, double prec) : Sep(sep.
     bsc = new LargestFirst(1e-10*prec);
 }
 
+SepProj::SepProj(Sep& sep, const Interval& y_init, double prec) : Sep(sep.nb_var), sep(sep),
+    y_init(1, y_init), prec(prec), nbx(0)
+{
+    // The LargestFirst minimal size is set to a very small number to avoid
+    //  NoBisectableVariableException to be raised
+    bsc = new LargestFirst(1e-10*prec);
+}
+
 SepProj::~SepProj() {}
 
 

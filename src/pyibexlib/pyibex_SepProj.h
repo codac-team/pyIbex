@@ -20,6 +20,7 @@
 #include <stack>
 
 using ibex::IntervalVector;
+using ibex::Interval;
 using ibex::Sep;
 using ibex::LargestFirst;
 
@@ -228,6 +229,7 @@ class SepProj : public Sep {
 
 public:
     SepProj(Sep& sep, const IntervalVector& y_init, double prec);
+    SepProj(Sep& sep, const Interval& y_init, double prec);
     ~SepProj();
 
     void separate(IntervalVector &x_in, IntervalVector &x_out);

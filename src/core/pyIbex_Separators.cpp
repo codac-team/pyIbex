@@ -154,6 +154,8 @@ void export_Separators(py::module& m){
   py::class_<pyibex::SepProj>(m, "SepProj", sep, DOCS_SEP_SEPPROJ)
     .def(py::init<ibex::Sep&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
           py::arg("sep"), py::arg("y_init"), py::arg("prec")=1e-3 )
+    .def(py::init<ibex::Sep&,const Interval&, double>(), py::keep_alive<1,2>(),
+          py::arg("sep"), py::arg("y_init"), py::arg("prec")=1e-3 )
     .def("separate", &pyibex::SepProj::separate)
   ;
 

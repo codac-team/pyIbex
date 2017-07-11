@@ -81,7 +81,7 @@ class TestSeparator(unittest.TestCase):
   def test_SepFwdBwd_IntervalAsList(self):
     f = Function("x", "y", "x^2 + y^2")
     sep = SepFwdBwd(f, [0, oo])
-    
+
 
   def test_SepFwdBwd_IntervalVector(self):
     f = Function("x", "y", "(x^2 + y^2, x^2 + y^2)")
@@ -222,6 +222,8 @@ class TestSeparator(unittest.TestCase):
     sepfb = SepFwdBwd(f, LEQ)
     yinit = IntervalVector(1, [1, 2])
     sep = SepProj(sepfb, yinit, 0.01)
+
+    sep = SepProj(sepfb, [1, 2])
 
 
 

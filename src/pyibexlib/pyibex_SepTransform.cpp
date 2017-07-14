@@ -12,7 +12,8 @@
 
 namespace pyibex {
 
-SepTransform::SepTransform(Sep& s, Function& ffwd, Function& fbwd) : Sep(s.nb_var), s(s), fbwd(fbwd), ffwd(ffwd), yin(fbwd.image_dim()), yout(fbwd.image_dim()) {
+SepTransform::SepTransform(Sep& s, Function& ffwd, Function& fbwd) :
+  Sep(s.nb_var), s(s), fbwd(fbwd), ffwd(ffwd), yin(fbwd.image_dim()), yout(fbwd.image_dim()) {
 }
 
 SepTransform::~SepTransform() {
@@ -20,24 +21,24 @@ SepTransform::~SepTransform() {
 }
 void SepTransform::separate(IntervalVector& xin, IntervalVector& xout){
 
-	assert(xin.size()==fbwd.nb_var() && xout.size() == fbwd.nb_var());
+  assert(xin.size()==fbwd.nb_var() && xout.size() == fbwd.nb_var());
 
 
-	xin &= xout;
-	yin = fbwd.eval_vector(xin);
-	yout = yin;
+  xin &= xout;
+  yin = ffwd.eval_vector(xin);
+  yout = yin;
 
-	s.separate(yin, yout);
+  s.separate(yin, yout);
 
-	if( yin.is_empty() )
-		xin.set_empty();
-	else
-		xin &= ffwd.eval_vector(yin);
+  if( yin.is_empty() )
+    xin.set_empty();
+  else
+    xin &= fbwd.eval_vector(yin);
 
-	if( yout.is_empty() )
-		xout.set_empty();
-	else
-		xout &= ffwd.eval_vector(yout);
+  if( yout.is_empty() )
+    xout.set_empty();
+  else
+    xout &= fbwd.eval_vector(yout);
 
 }
 

@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+2017-07-14 Benoit Desrochers <ben.ensta@gmail.com>
+  * [change] vertices are passed as [[x1, y1], [x2, y2], ...] to SepPolygon constructor
+  * [fix] inverse fbwd and ffwd arguement in SepTransform
 
 2017-07-10 Benoit Desrochers <ben.ensta@gmail.com>
   * [update] add "oo" to represent infinit number in order to write [0, oo]

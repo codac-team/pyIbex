@@ -59,7 +59,9 @@ class TestPolygon(unittest.TestCase):
 
 class TestSepPolygon(unittest.TestCase):
   def test_SIVIA(self):
-    l = [[-1, 1, 0], [-1, -2, 1]]
+    # l = [[-1, 1, 0], [-1, -2, 1]]
+    l = [[-1, -1], [1, -2], [0, 1]]
+
 
     sep = SepPolygon(l)
     f = Function('x', 'y', '(2*x-y, 2*y - x)')

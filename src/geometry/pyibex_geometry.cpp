@@ -28,19 +28,22 @@ using ibex::IntervalVector;
 
 
 
-void SepPolygonFromList(pyibex::SepPolygon &instance,  std::vector< std::vector<double> >& lst){
-  if (lst.size() != 2){
-    throw std::invalid_argument("Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]");
-  }
-  std::vector<double> &lx = lst[0];
-  std::vector<double> &ly = lst[1];
-  int n = lx.size();
+void SepPolygonFromList(pyibex::SepPolygon &instance,  std::vector< std::array<double, 2> >& lst){
+  // if (lst.size() != 2){
+  //   throw std::invalid_argument("Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]");
+  // }
+  // if (lst.size() != 2){
+  //   throw std::invalid_argument("Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]");
+  // }
+  // std::vector<double> &lx = lst[0];
+  // std::vector<double> &ly = lst[1];
+  int n = lst.size();
   std::vector<double> ax(n), ay(n),bx(n),by(n);
   for(size_t i = 0; i < n; i++){
-      ax[i] = lx[i];
-      ay[i] = ly[i];
-      bx[i] = lx[ (i+1)%n ];
-      by[i] = ly[ (i+1)%n ];
+      ax[i] = lst[i][0];
+      ay[i] = lst[i][1];
+      bx[i] = lst[ (i+1)%n ][0];
+      by[i] = lst[ (i+1)%n ][1];
   }
   new(&instance) pyibex::SepPolygon(ax, ay, bx, by);
 }

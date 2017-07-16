@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 2017-07-14 Benoit Desrochers <ben.ensta@gmail.com>
+  * RELEASE v1.6.2
+  * [new] add image module with CtcRaster
   * [change] vertices are passed as [[x1, y1], [x2, y2], ...] to SepPolygon constructor
   * [fix] inverse fbwd and ffwd arguement in SepTransform
 

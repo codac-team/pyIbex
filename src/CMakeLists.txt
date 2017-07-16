@@ -25,6 +25,7 @@ include_directories(pyibexlib)
 add_subdirectory(pyibexlib)
 add_subdirectory(core)
 add_subdirectory(geometry)
+add_subdirectory(image)
 
 
 
@@ -45,4 +46,4 @@ add_custom_command(TARGET install_python PRE_BUILD
     WORKING_DIRECTORY ${PYTHON_PACKAGE_DIR}
 )
 
-add_dependencies(install_python pyibex geometry)
+add_dependencies(install_python pyibex geometry image)

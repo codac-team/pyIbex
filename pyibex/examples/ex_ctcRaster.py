@@ -19,7 +19,7 @@ img_out = aout.cumsum(0).cumsum(1)
 img_in = (1 - ain).cumsum(0).cumsum(1)
 
 
-img = 127*(aout+ain).T
+img = (127*aout+128*ain).T
 scipy.misc.imsave('test.png', img.astype(np.uint8))
 
 

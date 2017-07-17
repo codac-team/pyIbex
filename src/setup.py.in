@@ -21,9 +21,9 @@ setup(
   # ext_modules=[Extension("pyibex.fake", sources=["fake.c"])],
   packages=['pyibex', 'pyibex.examples', 'pyibex.polar',
             'pyibex.thickset', 'pyibex.tube',
-            'pyibex.geometry', 'pyibex.tests'],
+            'pyibex.geometry', 'pyibex.image', 'pyibex.tests'],
   package_data={
-      'pyibex': ['pyibex${PYTHON_MODULE_EXTENSION}', 'geometry/geometry${PYTHON_MODULE_EXTENSION}'],
+      'pyibex': ['pyibex${PYTHON_MODULE_EXTENSION}', 'geometry/geometry${PYTHON_MODULE_EXTENSION}', 'image/image${PYTHON_MODULE_EXTENSION}'],
   },
   test_suite='pyibex.tests',
   license="LGPLv3+",

@@ -44,8 +44,8 @@ void SepPolarXY::contractIn(IntervalVector &x_in){
 
 	Interval ALLREALS1 = Interval::POS_REALS;
 	Interval ALLREALS2 = Interval::POS_REALS;
-	Interval cmpl1(cmpl);
-	Interval cmpl2(cmpl);
+	Interval cmpl1(theta);
+	Interval cmpl2(theta);
 	Interval theta_m_tmp(theta_m);
 	Interval theta_p_tmp(theta_p);
 	Interval rho_m_tmp(rho_m);

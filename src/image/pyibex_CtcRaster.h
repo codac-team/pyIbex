@@ -31,9 +31,9 @@ class CtcRaster : public ibex::Ctc, public GeoImage {
 
   // Georeferenced image with integral image inclusion test
 public:
-  CtcRaster(py::array_t<DATA_TYPE>  data, double x0, double y0, double dx, double dy) :
+  CtcRaster(py::array_t<DATA_TYPE>  data, double x0, double y0, double dx, double dy, bool inner) :
   Ctc(2),
-  GeoImage(data, x0, y0, dx, dy)
+  GeoImage(data, x0, y0, dx, dy), inner(inner)
   {
     // constructor
   }
@@ -41,7 +41,8 @@ public:
   bool contractDim(PixelCoords& coords, int nPix);
 
   void contract(IntervalVector& box);
-
+  // Boolean to avoid contraction when used as an inner contractor
+  bool inner;
 };
 
 
@@ -77,9 +78,13 @@ inline bool CtcRaster::contractDim(PixelCoords& coords, int nPix){
 
 inline void CtcRaster::contract(IntervalVector& box){
     assert(box.size() == this->nb_var);
+
+    if(box.is_empty()) return;
+    if (inner == true && !box.is_subset(boundingBox) ) return;
+    box &= boundingBox;
     if(box.is_empty()) return;
 
-    box &= boundingBox;
+    // std::cerr << boundingBox << " " << box << "\n";
     // Convert world coordinates into pixel coordinates
     PixelCoords pixel_coords = world_to_grid(box);
     // std::cerr << pixel_coords[0] << " " << pixel_coords[1] << " "<< pixel_coords[2] << " "<< pixel_coords[3] << "\n";
@@ -93,10 +98,11 @@ inline void CtcRaster::contract(IntervalVector& box){
       box.set_empty();
     } else {
       contractDim(pixel_coords, nPix);
-      // std::cerr << pixel_coords[0] << " " << pixel_coords[1] << " "<< pixel_coords[2] << " "<< pixel_coords[3] << " "<< " " << nPix << "\n";
+      // std::cerr << pixel_coords[0] << " " << pixel_coords[1] << " "<< pixel_coords[2] << " "<< pixel_coords[3] << " "<< " " << nPix <<  " " << enclosed_pixels(pixel_coords) << "\n";
+
 
       IntervalVector res = grid_to_world(pixel_coords);
-      // std::cerr << res << std::endl;
+      // std::cerr << " "  << box << " " << res << " " << (box&res) << std::endl;
       box &= res;
     }
 

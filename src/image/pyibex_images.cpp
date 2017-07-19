@@ -60,7 +60,8 @@ PYBIND11_PLUGIN(image)
       ;
 
   class_<CtcRaster>(m, "CtcRaster",ctc)
-      .def(init<py::array_t<DATA_TYPE> , double, double , double , double>())
+      .def(init<py::array_t<DATA_TYPE> , double, double , double , double, bool>(),py::keep_alive<1,2>(),
+                "img"_a, "x0"_a, "y0"_a, "dx"_a, "dy"_a, "inner"_a=false )
       .def("contract", &CtcRaster::contract)
       .def_property_readonly("boundingBox", [](CtcRaster& self){return self.getBoundingBox();})
 

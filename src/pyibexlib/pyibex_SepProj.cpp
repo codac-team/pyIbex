@@ -57,15 +57,19 @@ bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVecto
     nbx++;
 
     if (!((XinFull | XoutFull)  == cart_prod(x, y))){
+      std::cerr << "##########################################################\n";
       std::cerr << XinFull << " " << XoutFull << "\n";
-      assert((XinFull | XoutFull)  == x);
+      std::cerr << cart_prod(x, y) << " "  << (XinFull | XoutFull)  << "\n";
+      std::cerr << "##########################################################\n";
+
+      assert((XinFull | XoutFull)  == cart_prod(x, y));
 
 
     }
 
     // Handle error case
     if (XinFull.is_empty() && XoutFull.is_empty()){
-        cout << "Erreur !!!!" << __LINE__  << "\n ";
+        cout << "Erreur !!!! line" << __LINE__  << "\n ";
         exit(-1);
     }
 
@@ -121,8 +125,8 @@ bool SepProj::fixpoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVect
         x_old = x;
         IntervalVector x_out0(x_out);
         // std::cerr << ">>>> "<< x0 << " " << x_in << " " << x_out << "\n";
+        
         stop = process(x_in, x_out, y, impact);
-
         if (!stop){
             IntervalVector y_mid(y.mid());
             IntervalVector x_out_mid(x_out0);

@@ -1,6 +1,6 @@
 //============================================================================
 //                               P Y I B E X
-// File        : pyIbex_GeoImages.cpp
+// File        : pyibex_CtcRaster.h
 // Author      : Benoit Desrochers, inspired from the work of Jan Sliswka
 // Copyright   : Benoit Desrochers
 // License     : See the LICENSE file

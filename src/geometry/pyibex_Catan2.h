@@ -61,7 +61,7 @@ inline std::tuple<Interval, Interval, Interval> Catan2(const Interval&x, const I
     Interval tanTh = tan_lb | tan_ub;
     // Interval tanTh = tan(th_tmp) & Interval(0, POS_INFINITY);
 
-    Interval xx = x & y/tanTh;
+    Interval xx = ( y != Interval::ZERO) ? x & y/tanTh : x;
     Interval yy = ( x != Interval::ZERO) ? y & x*tanTh : y;
     Interval thr =  th_tmp & ( ( x != Interval::ZERO ) ? atan(y/x) : Interval::HALF_PI );
     // cout << "XX " << xx << " " << tanTh << y/tanTh << "\n";

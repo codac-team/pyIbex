@@ -17,7 +17,7 @@ class TestContractors(unittest.TestCase):
         # generate memory leak !!!
         try:
             f = Function("x", "y", "sqr(x) + sqr(y)")
-        except RuntimeError as err:œ
+        except RuntimeError as err:
             self.assertTrue(str(err) == "\n############# IBEX FUNCTION PARSER ###############\nSyntax error near \"sqr\" line 2: unknown symbol")
 
 

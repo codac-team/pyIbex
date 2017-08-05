@@ -11,8 +11,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/functional.h>
-#include <pyIbex_type_caster.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
+#include <pyIbex_type_caster.h>
 namespace py = pybind11;
 using py::self;
 using py::class_;

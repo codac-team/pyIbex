@@ -38,9 +38,9 @@ using ibex::Interval;
 
 using namespace pybind11::literals;
 
-PYBIND11_PLUGIN(image)
+PYBIND11_MODULE(image, m)
 {
-  py::module m("image", "python binding CtcIMage Class");
+  // py::module m("image", "python binding CtcIMage Class");
 
 
   py::object ctc = (py::object) py::module::import("pyibex").attr("Ctc");
@@ -74,5 +74,5 @@ PYBIND11_PLUGIN(image)
       .def_property_readonly("boundingBox", [](GeoMapper& self){return self.bbox;})
       ;
 
-    return m.ptr();
+    // return m.ptr();
 }

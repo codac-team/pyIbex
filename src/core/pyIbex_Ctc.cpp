@@ -51,8 +51,9 @@ class pyCtc : public Ctc {
 public:
   /* Inherit the constructors */
   using Ctc::Ctc;
+
   /* Trampoline (need one for each virtual function) */
-  virtual void contract(IntervalVector& box){
+  void contract(IntervalVector& box) override {
     PYBIND11_OVERLOAD_PURE(
       void,       /* return type */
       Ctc,        /* Parent class */
@@ -129,7 +130,7 @@ void export_Ctc(py::module& m){
   // Export CtcQInterProjF
   py::class_<CtcQInter>(m, "CtcQInter", ctc, DOC_CTCQINTER_TYPE)
     .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
-    .def("contract", &CtcQInter::contract)
+    .def("contract", &CtcQInter::contract, py::arg("box"))
     ;
 
   // Export CtcQInterProjF

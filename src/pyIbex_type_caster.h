@@ -8,18 +8,18 @@ NAMESPACE_BEGIN(pybind11)
 NAMESPACE_BEGIN(detail)
 
 template <> struct type_caster<ibex::Vector> {
-    typedef ibex::Vector type;
-    typedef type_caster<double> value_conv;
 public:
+    PYBIND11_TYPE_CASTER(ibex::Vector, _("ibex::Vector"));
 
     type_caster<ibex::Vector>() :  value(1) { }
-    bool load(PyObject *src, bool convert) {
+    bool load(handle src_hdl, bool convert) {
+        PyObject *src = src_hdl.ptr();
         if (!PyList_Check(src) && !PyTuple_Check(src))
             return false;
         size_t size = (size_t) ( PyList_Check(src) ? PyList_GET_SIZE(src) : PyTuple_GET_SIZE(src) );
         // value.reserve(size);
         // value.clear();
-        value_conv conv;
+        type_caster<double> conv;
         // double *tmp = new double[size];
         value.resize(size);
         for (size_t i=0; i<size; ++i) {
@@ -41,9 +41,10 @@ public:
 
     static handle cast(const ibex::Vector &src, return_value_policy policy, handle parent) {
         list l(src.size());
+
         for (size_t i = 0; i < src.size(); i++){
             // object value_ = object(value_conv::cast(src[i], policy, parent), false);
-            auto value_ = reinterpret_steal<object>(value_conv::cast(src[i], policy, parent));
+            auto value_ = reinterpret_steal<object>(type_caster<double>::cast(src[i], policy, parent));
 
             if (!value_) {
                 return handle();
@@ -52,16 +53,19 @@ public:
         }
         return l.release();
     }
-    PYBIND11_TYPE_CASTER(type, _("list<") + value_conv::name() + _(">"));
+    // PYBIND11_TYPE_CASTER(type, _("list<") + value_conv::name() + _(">"));
     // PYBIND11_TYPE_CASTER(ibex::Vector, detail::descr("list<") + value_conv::name() + detail::descr(">"));
 };
 
 template <typename Value> struct type_caster<ibex::Array<Value> > {
-    typedef ibex::Array<Value> type;
+    // typedef ibex::Array<Value> type;
     typedef type_caster<Value> value_conv;
 public:
+    PYBIND11_TYPE_CASTER(ibex::Array<Value>, _("ibex::Array<Value>"));
+
     // Vector_caster() :  value(0) { }
-    bool load(PyObject *src, bool convert) {
+    bool load(handle src_hdl, bool convert) {
+      PyObject *src = src_hdl.ptr();
       if (!isinstance<list>(src))
             return false;
         auto l = reinterpret_borrow<list>(src);
@@ -92,7 +96,7 @@ public:
         // }
         return l.release();
     }
-    PYBIND11_TYPE_CASTER(type, _("list<") + value_conv::name() + _(">"));
+    // PYBIND11_TYPE_CASTER(type, _("list<") + value_conv::name() + _(">"));
     // PYBIND11_TYPE_CASTER(ibex::Vector, detail::descr("list<") + value_conv::name() + detail::descr(">"));
 };
 

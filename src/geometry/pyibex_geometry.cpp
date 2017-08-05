@@ -48,9 +48,9 @@ void SepPolygonFromList(pyibex::SepPolygon &instance,  std::vector< std::array<d
   new(&instance) pyibex::SepPolygon(ax, ay, bx, by);
 }
 
-PYBIND11_PLUGIN(geometry)
+PYBIND11_MODULE(geometry, m)
 {
-  py::module m("geometry", "Python binding of ibex-geometry functions");
+  // py::module m("geometry","Python binding of ibex-geometry functions");
 
   py::object ctc = (py::object) py::module::import("pyibex").attr("Ctc");
   py::object sep = (py::object) py::module::import("pyibex").attr("Sep");
@@ -117,6 +117,6 @@ PYBIND11_PLUGIN(geometry)
   m.def("Catan2", &pyibex::Catan2);
   m.def("Cmod", &pyibex::Cmod);
   m.def("Cmod_bwd", &pyibex::Cmod_bwd);
-  return m.ptr();
+  // return m.ptr();
 
 }

@@ -47,6 +47,7 @@ using ibex::Interval;
 
 using pyibex::CtcQInterProjF;
 
+
 class pyCtc : public Ctc {
 public:
   /* Inherit the constructors */
@@ -71,7 +72,7 @@ void export_Ctc(py::module& m){
 
   py::class_<Ctc, std::unique_ptr<Ctc>, pyCtc > ctc(m, "Ctc", DOCS_CTC_TYPE);
   ctc.def(py::init<int>())
-    .def("contract",(void (ibex::Ctc::*)(IntervalVector&)) &Ctc::contract, DOC_CTC_CONTRACT)
+    // .def("contract",(void (ibex::Ctc::*)(IntervalVector&)) &Ctc::contract, DOC_CTC_CONTRACT)
     .def_readonly("nb_var", &Ctc::nb_var, DOC_CTC_NB_VAR)
     .def("__or__", &__or, DOC_CTC_OR, py::return_value_policy::take_ownership, py::keep_alive<0,1>(),py::keep_alive<0,2>()  )
     .def("__and__", &__and, DOC_CTC_AND, py::return_value_policy::take_ownership, py::keep_alive<0,1>(),py::keep_alive<0,2>())
@@ -110,7 +111,7 @@ void export_Ctc(py::module& m){
   // Export CtcInverse
   py::class_<CtcInverse>(m, "CtcInverse", ctc, DOC_CTCINVERSE_TYPE)
     .def(py::init<Ctc&, Function&>(),py::keep_alive<1,2>(), py::keep_alive<1,3>(), "ctc"_a, "f"_a)
-    .def("contract", &CtcInverse::contract)
+    .def("contract", &CtcInverse::contract, py::arg("box").noconvert())
     ;
 
   // Export CtcNotIn
@@ -130,12 +131,12 @@ void export_Ctc(py::module& m){
   // Export CtcQInterProjF
   py::class_<CtcQInter>(m, "CtcQInter", ctc, DOC_CTCQINTER_TYPE)
     .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
-    .def("contract", &CtcQInter::contract, py::arg("box"))
+    .def("contract", &CtcQInter::contract, py::arg("box").noconvert())
     ;
 
   // Export CtcQInterProjF
   py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc, DOC_CTCQINTERPROJF_TYPE)
     .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
-    .def("contract", &CtcQInterProjF::contract)
+    .def("contract", &CtcQInterProjF::contract, py::arg("box").noconvert())
     ;
 }

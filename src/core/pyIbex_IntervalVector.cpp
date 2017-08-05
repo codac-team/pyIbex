@@ -138,7 +138,7 @@ void export_IntervalVector(py::module& m){
 
 
 
-    py::class_<IntervalVector>(m, "IntervalVector", DOCS_INTERVALVECTOR_TYPE)
+    py::class_<IntervalVector >(m, "IntervalVector", DOCS_INTERVALVECTOR_TYPE)
             .def(py::init<int>(), "dim"_a)
             .def(py::init<int,const Interval>(), "dim"_a, "itv"_a)
             .def(py::init<const IntervalVector&>(), "x"_a )

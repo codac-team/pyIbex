@@ -80,7 +80,7 @@ class TestSeparator(unittest.TestCase):
 
   def test_SepFwdBwd_IntervalAsList(self):
     f = Function("x", "y", "x^2 + y^2")
-    sep = SepFwdBwd(f, [0, oo])
+    sep = SepFwdBwd(f, [0., oo])
 
 
   def test_SepFwdBwd_IntervalVector(self):
@@ -206,15 +206,15 @@ class TestSeparator(unittest.TestCase):
 
 
     sep = SepFixPoint(FakeSep())
-    x_in, x_out = IntervalVector(1, [-10,10]), IntervalVector(1, [-10,10])
+    x_in, x_out = IntervalVector(1, [-10, 10]), IntervalVector(1, [-10, 10])
 
     sep.separate(x_in, x_out)
     self.assertTrue([0] in x_out)
     self.assertTrue([0] in x_in)
-    self.assertTrue( (x_in | x_out) == IntervalVector(1, [-10,10]))
-    self.assertTrue( (x_in & x_out) == IntervalVector(1, [0,0]))
-    self.assertTrue(x_out ==  IntervalVector(1, [0, 10]))
-    self.assertTrue(x_in ==  IntervalVector(1, [-10, 0]))
+    self.assertTrue((x_in | x_out) == IntervalVector(1, [-10, 10]))
+    self.assertTrue((x_in & x_out) == IntervalVector(1, [0, 0]))
+    self.assertTrue(x_out == IntervalVector(1, [0, 10]))
+    self.assertTrue(x_in == IntervalVector(1, [-10, 0]))
 
 
   def test_sepproj(self):

@@ -11,8 +11,12 @@
 #include "ibex_Interval.h"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+// #include <pybind11/stl_bind.h>
 #include <pybind11/operators.h>
 #include "pyIbex_doc_Interval.h"
+#include <utility>
+
+#include <tuple>
 namespace py = pybind11;
 using py::self;
 using namespace pybind11::literals;
@@ -58,12 +62,17 @@ py::tuple complementary_wrapper(const Interval&x){
 
 
 void export_Interval(py::module& m){
-    py::class_<Interval>(m, "Interval",py::metaclass(), DOCS_INTERVAL_TYPE)
+    py::class_<Interval, std::unique_ptr<Interval> >(m, "Interval", DOCS_INTERVAL_TYPE)
 
     .def(py::init<>())
     .def(py::init<double, double>(), "\tbuild Interval [lb, ub]", "lb"_a, "ub"_a)
     .def(py::init<double>(), "\tbuild singleton [val,val]", "val"_a)
     .def("__init__", [](Interval &instance,  std::array<double, 2>& bounds) { new(&instance) Interval(bounds[0], bounds[1]);})
+    .def("__init__", [](Interval &instance,  std::array<int, 2>& bounds) { new(&instance) Interval(bounds[0], bounds[1]);})
+    // .def("__init__", [](Interval &instance,  std::pair<int, double>& bounds) { new(&instance) Interval(double(std::getw<0>(bounds)), std::get<1>(bounds[1]));})
+    // .def("__init__", [](Interval &instance,  std::pair<int, double>& bounds) { new(&instance) Interval(double(bounds.first), bounds.second);})
+
+
     .def(py::init<Interval>(), "\tbuild a  copy of interval itv", "itv"_a)
     .def("assign", &assignItv, "\tassign the value of itv to this", "itv"_a)
     .def( self == self )
@@ -229,6 +238,17 @@ void export_Interval(py::module& m){
     m.def( "bwd_integer", &ibex::bwd_integer );
     m.def( "bwd_imod",    &ibex::bwd_imod );
     m.attr("oo") =  POS_INFINITY;
-    py::implicitly_convertible< std::array<double, 2>, Interval>();
+
+    py::implicitly_convertible< std::array<double, 2>&, Interval>();
+    py::implicitly_convertible< std::array<int, 2>&, Interval>();
+    // py::implicitly_convertible< std::pair<int, double>&, Interval>();
+
+    // py::implicitly_convertible< std::tuple<int, double>&, Interval>();
+
+
+
+
+
+
 
 };

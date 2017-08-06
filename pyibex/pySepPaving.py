@@ -88,53 +88,10 @@ class pySetNode:
             return
         if X.is_subset(XX):
             return
-        # if XX.is_subset(X):
+        if not XX.is_subset(X):
+            XX &= X
         return self.bisect_around(bisector, XX)
 
-        # elif not (X.is_subset(XX) or XX.is_subset(X)):
-        #     print(X.diff(XX))
-        #
-        #     # Case where delete children
-        #
-        #
-        #     if (X & XX).is_flat() or (X & XX).is_empty():
-        #         X1, X2 = bisector.bisect(X)
-        #         self.left = pySetNode(X1)
-        #         self.right = pySetNode(X2)
-        #         return True
-        #     else:
-        #
-        #         if self.isLeaf():
-        #             X1, X2 = bisector.bisect(X)
-        #             self.left = pySetNode(X1)
-        #             self.right = pySetNode(X2)
-        #             return True
-        #         self.reunite()
-        #         XX = self.left.xin | self.left.xout | self.right.xin | self.left.xout
-        #         XX1 = (self.left.xin | self.left.xout)
-        #         XX2 = (self.right.xin | self.right.xout)
-        #         if (X & XX1).is_empty() and not (X & XX2).is_empty():
-        #             X1, X2 = X.diff(XX2)[0], X
-        #         elif (X & XX2).is_empty() and not (X & XX1).is_empty():
-        #             X1, X2 = X.diff(XX1)[0], X
-        #         else:
-        #             vibes.drawBox(XX[0][0], XX[0][1], XX[1][0], XX[1][1], 'k')
-        #             vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], 'k')
-        #             print("RROEORO SUBSEST", X, XX, (X & XX).is_flat())
-        #             return
-        #     # self.left = pySetNode(X1)
-        #     # self.right = pySetNode(X2)
-        #     # return
-        #     # exit(-1)
-        #
-        # old_left, old_right = self.left, self.right
-        # self.left = pySetNode(X1)
-        # self.right = pySetNode(X2)
-        #
-        # self.left.left = old_left
-        # self.left.right = old_right
-        # # self.left.reunite()
-        # return True
 
 
     def clear(self):
@@ -395,6 +352,14 @@ class pySepPaving(pyibex.Sep):
                 n.right.xout &= nxout_old
                 n.left.xin &= nxin_old
                 n.right.xin &= nxin_old
+                # if n.left.xout.is_flat():
+                #     n.left.xout.set_empty()
+                # if n.left.xin.is_flat():
+                #     n.left.xin.set_empty()
+                if n.right.xout.is_flat():
+                    n.right.xout.set_empty()
+                if n.right.xin.is_flat():
+                    n.right.xin.set_empty()
 
                 stack.extendleft([n.left, n.right])
             elif X.is_empty() or X.max_diam() < eps:

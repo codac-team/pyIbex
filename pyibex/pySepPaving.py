@@ -70,7 +70,7 @@ class pySetNode:
                 X1, X2 = X2, X1
             else:
                 print("ERROR !!!")
-                exit(-1)
+                # exit(-1)
         old_left, old_right = self.left, self.right
         if X2 is not None:
             self.left = pySetNode(X1)
@@ -83,7 +83,7 @@ class pySetNode:
 
     def bisect_max(self, bisector, xin_old, xout_old):
         X = self.xin & self.xout
-        XX = self.left.xin | self.left.xout | self.right.xin | self.left.xout
+        XX = self.left.xin | self.left.xout | self.right.xin | self.right.xout
         if X == XX:
             return
         if X.is_subset(XX):
@@ -303,14 +303,14 @@ class pySepPaving(pyibex.Sep):
     def sivia_ops(self, sep, eps, union=True):
         stack = deque([self.root])
         k = 0
-        vibes.clearFigure()
+        # vibes.clearFigure()
         # vibes.newGroup("tmp")
         while len(stack) > 0:
             n = stack.pop()
             k = k+1
-            vibes.clearGroup("tmp")
+            # vibes.clearGroup("tmp")
             X0 = (n.xin | n.xout)
-            vibes.drawBox(X0[0][0], X0[0][1], X0[1][0], X0[1][1], '[g]', group="tmp")
+            # vibes.drawBox(X0[0][0], X0[0][1], X0[1][0], X0[1][1], '[g]', group="tmp")
 
 
             xin, xout = IntervalVector(X0), IntervalVector(X0)
@@ -324,11 +324,11 @@ class pySepPaving(pyibex.Sep):
                 n.xout &= xout
 
             X = (n.xin & n.xout)
-            vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], '[orange]', group="tmp")
+            # vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], '[orange]', group="tmp")
 
             # print(n, len(stack), X)
-            vibes.drawBoxDiff(X0, n.xin, 'r[magenta]')
-            vibes.drawBoxDiff(X0, n.xout, 'b[cyan]')
+            # vibes.drawBoxDiff(X0, n.xin, 'r[magenta]')
+            # vibes.drawBoxDiff(X0, n.xout, 'b[cyan]')
 
             if (not X.is_empty()) and X.max_diam() > eps:
                 if n.isLeaf():
@@ -352,10 +352,10 @@ class pySepPaving(pyibex.Sep):
                 n.right.xout &= nxout_old
                 n.left.xin &= nxin_old
                 n.right.xin &= nxin_old
-                # if n.left.xout.is_flat():
-                #     n.left.xout.set_empty()
-                # if n.left.xin.is_flat():
-                #     n.left.xin.set_empty()
+                if n.left.xout.is_flat():
+                    n.left.xout.set_empty()
+                if n.left.xin.is_flat():
+                    n.left.xin.set_empty()
                 if n.right.xout.is_flat():
                     n.right.xout.set_empty()
                 if n.right.xin.is_flat():
@@ -364,8 +364,8 @@ class pySepPaving(pyibex.Sep):
                 stack.extendleft([n.left, n.right])
             elif X.is_empty() or X.max_diam() < eps:
                 n.left, n.right = None, None
-            else:
-                vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], '[y]')
+            # else:
+                # vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], '[y]')
 if __name__ == '__main__':
 
     from pyibex import Function, SepFwdBwd

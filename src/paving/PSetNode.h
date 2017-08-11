@@ -146,6 +146,11 @@ class PSetNode
      */
     void bisect(ibex::Bsc& bisector);
 
+    void bisect_max(ibex::Bsc& bisector);
+    void bisect_around(ibex::Bsc& bisector, IntervalVector& box);
+
+
+
     ibex::BoolInterval isInside(const ibex::Vector& p);
 		/**
 		 * \brief Visit the current Node

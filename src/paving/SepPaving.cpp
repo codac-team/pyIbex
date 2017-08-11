@@ -165,6 +165,8 @@ void SepPaving::separate(IntervalVector& xin, IntervalVector& xout){
       xout |= res[i];
     } else if (isInside == ibex::NO){
       xin |= res[i];
+    } else if (isInside == ibex::EMPTY_BOOL){
+      xin |= res[i];
     } else {
       xin |= res[i];
       xout |= res[i];
@@ -197,6 +199,55 @@ SepPaving& SepPaving::Sivia(Sep &sep, double eps)
     }
     std::cerr << "k = " << k  << "|| j = " << j << std::endl;
     return (*this);
+}
+
+void SepPaving::Sivia_ops(Sep &sep, double eps, bool intersection){
+  list<Node*> L= {&root};
+  // L.push_back(&root);
+  int k = 0, j = 0;
+  while (!L.empty()){
+      k++;
+      Node* n=L.front();    L.pop_front();
+      IntervalVector X0(n->m_box_in | n->m_box_out);
+      IntervalVector xin(X0);
+      IntervalVector xout(X0);
+      sep.separate(xin, xout);
+      IntervalVector nxin_old(n->m_box_in);
+      IntervalVector nxout_old(n->m_box_out);
+      if (intersection == false){
+        n->m_box_in &= xin;
+        n->m_box_out |= xout;
+      } else {
+        n->m_box_in |= xin;
+        n->m_box_out &= xout;
+      }
+
+      IntervalVector X(n->m_box_in & n->m_box_out);
+
+      if ( !X.is_empty() && X.max_diam() > eps){
+        if (n->isLeaf()){
+          n->bisect(bisector);
+        }else{
+          n->bisect_max(bisector);
+        }
+        n->left()->m_box_out &= nxout_old;
+        n->right()->m_box_out &= nxout_old;
+        n->left()->m_box_in &= nxin_old;
+        n->right()->m_box_in &= nxin_old;
+
+        if (n->right()->m_box_out.is_flat()){
+          n->right()->m_box_out.set_empty();
+        }
+        if( n->right()->m_box_in.is_flat()){
+          n->right()->m_box_in.set_empty();
+        }
+
+        L.push_back(n->left());
+        L.push_back(n->right());
+      } else if (X.is_empty() or X.max_diam() < eps) {
+        n->clear();
+      }
+  }
 }
 
 } // end namespace ibex

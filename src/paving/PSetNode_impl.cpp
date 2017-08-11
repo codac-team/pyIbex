@@ -202,6 +202,9 @@ ibex::BoolInterval PSetNode::isInside(const ibex::Vector& p){
           std::cerr << " Underterminated case !!!!\n";
         }
       }
+    } else if (!bin && !bout){
+      // std::cerr << "WARNING !bin && !bout\n";
+      return ibex::EMPTY_BOOL;
     }
     return ibex::MAYBE;
 }
@@ -215,6 +218,54 @@ void PSetNode::bisect(ibex::Bsc &bisector)
     m_left = new PSetNode(boxes.first);
     m_right = new PSetNode(boxes.second);
   }
+}
+
+void PSetNode::bisect_around(ibex::Bsc &bisector, IntervalVector& XX){
+      //
+      // X = self.xin & self.xout
+      // LX = X.diff(XX)
+      // if(len(LX) == 0):
+      //     print("[len(LX) == 0]", X, XX)
+      //     exit()
+      // if len(LX) == 1:
+      //     X1, X2 = XX, LX[0]
+      // else:
+      //     X1, X2 = bisector.bisect(X)
+      //     if not (XX.is_subset(X1) or XX.is_subset(X2)):
+      //         VX1 = reduce(lambda x, y: x*y, (XX & X1).diam(), 1)
+      //         VX2 = reduce(lambda x, y: x*y, (XX & X2).diam(), 1)
+      //         if VX1 > VX2:
+      //             X1 = X1 | XX
+      //             X2 = None if (X & X1).is_empty() else X.diff(X1)[0]
+      //         else:
+      //             X1 = X2 | XX
+      //             X2 = None if (X & X1).is_empty() else X.diff(X1)[0]
+      //     elif (XX.is_subset(X2)){
+      //       X1, X2 = X2, X1
+      //     } else {
+      //       print("ERROR !!!")
+      //       exit(-1)
+      //     }
+      // old_left, old_right = self.left, self.right
+      // if (!X2.is_empty()){
+      //     self.left = pySetNode(X1)
+      //     self.right = pySetNode(X2)
+      //     self.left.left = old_left
+      //     self.left.right = old_right
+      // }
+      //
+      // return;
+}
+
+void PSetNode::bisect_max(ibex::Bsc &bisector){
+      IntervalVector X(m_box_in & m_box_out);
+      IntervalVector XX(left()->m_box_in | left()->m_box_out | right()->m_box_in | right()->m_box_out);
+      if (X == XX)  return;
+      if (X.is_subset(XX)) return;
+      if (!XX.is_subset(X)){
+        XX &= X;
+      }
+      return bisect_around(bisector, XX);
 }
 
 

@@ -66,6 +66,8 @@ public:
 		// Paving algorithms
 		SepPaving& Sivia(ibex::Sep& sep,double eps);
 
+		void Sivia_ops(Sep &sep, double eps, bool intersection=false);
+
     // Paving tests
 		// ThickBoolean contains(const IntervalVector& box);
 

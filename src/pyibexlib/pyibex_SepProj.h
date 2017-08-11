@@ -156,6 +156,13 @@ typedef struct ImpactStatus_{
                 }
             }
         } else {
+            std::cout << "#########################################################\n";
+            std::cout << "x_in " << x_in << " x_out " << x_out << "\n";
+            std::cout << "x_old " << x_old << "n_in " << n_in << " n_out " << n_out;
+            std::cout << " impact_cin " << impact_cin << " ";
+            std::cout << " impact_cout " << impact_cout << " ";
+            std::cout << "\n";
+            std::cout << "#########################################################\n";
             assert(false);
         }
     }
@@ -234,7 +241,7 @@ public:
 
     void separate(IntervalVector &x_in, IntervalVector &x_out);
     bool separate_fixPoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVector &y);
-    bool process(IntervalVector &x_in, IntervalVector &x_out, IntervalVector &y, ImpactStatus &impact);
+    bool process(IntervalVector &x_in, IntervalVector &x_out, IntervalVector &y, ImpactStatus &impact, bool use_point);
     int nbx;
 protected:
 

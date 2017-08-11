@@ -45,7 +45,7 @@ SepProj::~SepProj() {}
  * @param y :  parameter box
  * @return true if x_in or x_out is empty.
  */
-bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVector &y, ImpactStatus& impact){
+bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVector &y, ImpactStatus& impact, bool use_point){
     IntervalVector x = (x_in & x_out);
     if (x.is_empty()) return true;
 
@@ -86,14 +86,14 @@ bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVecto
 
     if( XoutFull.is_empty()){
         x_out.set_empty();
-        if( !y.is_flat())
+        if( use_point == false)
             impact.setCoutFlags(x_out, x);
         y.set_empty();
         return true;
     } else {
         x_out = XoutFull.subvector(0, x_out.size()-1);
         y = XoutFull.subvector(x_out.size(), XoutFull.size()-1);
-        if( !y.is_flat())
+        if( use_point == false)
             impact.setCoutFlags(x_out, x);
     }
     return false;
@@ -125,12 +125,12 @@ bool SepProj::fixpoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVect
         x_old = x;
         IntervalVector x_out0(x_out);
         // std::cerr << ">>>> "<< x0 << " " << x_in << " " << x_out << "\n";
-        
-        stop = process(x_in, x_out, y, impact);
+
+        stop = process(x_in, x_out, y, impact, false);
         if (!stop){
             IntervalVector y_mid(y.mid());
             IntervalVector x_out_mid(x_out0);
-            stop = process(x_in, x_out_mid, y_mid, impact);
+            stop = process(x_in, x_out_mid, y_mid, impact, true);
         }
         x = x_in & x_out;
         break;
@@ -138,7 +138,7 @@ bool SepProj::fixpoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVect
       // The condifion || is more efficient
     } while (!x.is_empty() && ( x_old.rel_distance(x_in)>ratio || x_old.rel_distance(x_out)>ratio ));
 
-
+    // std::cout << x_in << " "  << x_out << " \n";
     impact.reconstrut_v2(x_in, x_out, x0);
     // if (! ((x_in | x_out) == x0)){
     //   std::cerr << x_in << " " << x_out << " " << x0 << "\n";
@@ -198,7 +198,10 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
         // std::cerr << "x0: " << x_out0 << "\n";
         // std::cerr << "x: " << x << " x_in: " << x_in << " x_out: " << x_out_save << "\n"
                   // << "x_res " << x_res  <<  " y: "  << y << "\n";
-        assert( ( x_in | x_out_save ) == x_old0);
+        if ( ! (( x_in | x_out_save ) == x_old0)){
+          std::cerr << x_in << " " << x_out_save << "  " << x_old0 << "\n";
+          assert( ( x_in | x_out_save ) == x_old0);
+        }
         // std::cerr << x.is_empty() << " " << (x.max_diam()) << " " << prec << " " << y.is_empty() << " " << y.max_diam() << " " << x.max_diam() << " " << l.size()<< "\n";
         if (x.is_empty() || x.is_flat() || x.max_diam() < prec || y0.is_empty() || y.max_diam() < 0.1*x.max_diam()){
             x_res |= x_out_save;

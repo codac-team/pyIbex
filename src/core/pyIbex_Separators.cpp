@@ -38,6 +38,7 @@ using namespace pybind11::literals;
 #include "pyibex_SepFixPoint.h"
 #include "pyibex_SepProj.h"
 #include "pyibex_SepCtcPairProj.h"
+#include "pyibex_SepUnionBbox.h"
 
 
 #include "pyIbex_doc_Separators.h"
@@ -54,6 +55,8 @@ using pyibex::SepFixPoint;
 using pyibex::SepProj;
 using pyibex::SepCtcPairProj;
 using pyibex::SepQInterProjF;
+using pyibex::SepUnionBbox;
+
 
 
 
@@ -101,6 +104,11 @@ void export_Separators(py::module& m){
   class_<SepUnion>(m, "SepUnion", sep, DOCS_SEP_SEPUNION)
     .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
     .def("separate", &SepUnion::separate)
+  ;
+
+  class_<SepUnionBbox>(m, "SepUnionBbox", sep)
+    .def(init<Array<Sep>, std::vector<IntervalVector> & >(), keep_alive<1,2>(), py::arg("list"), py::arg("bbox"))
+    .def("separate", &SepUnionBbox::separate)
   ;
 
   class_<SepInter>(m, "SepInter", sep, DOCS_SEP_SEPINTER)

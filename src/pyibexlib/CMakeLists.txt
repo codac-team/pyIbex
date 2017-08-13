@@ -6,12 +6,14 @@ set( SRCS
       pyibex_SepTransform.cpp
       pyibex_CtcTransform.cpp
       pyibex_QInterProjF.cpp
+      pyibex_SepUnionBbox.cpp
 
 		)
 set( HEADERS
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepProj.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepFixPoint.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepCtcPairProj.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepUnionBbox.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepTransform.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_CtcTransform.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_QInterProjF.h

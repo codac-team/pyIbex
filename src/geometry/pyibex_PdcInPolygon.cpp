@@ -55,22 +55,52 @@ Interval argument(Interval mx, Interval my, double xa, double ya, double xb, dou
 
 BoolInterval PdcInPolygon::test(const IntervalVector& x) {
 
-	Interval mx = Interval(x[0].mid());
-	Interval my = Interval(x[1].mid());
+    Interval mx = Interval(x[0].mid());
+    Interval my = Interval(x[1].mid());
 
     Interval theta = Interval(0);
     for(unsigned int i = 0; i < ax.size(); i++) {
         theta += argument(mx,my,ax[i],ay[i],bx[i],by[i]);
     }
+    // if (theta.diam() > 2*M_PI) return ibex::MAYBE;
 
+    // std::cerr <<  x << " "  << theta  << " " << theta.diam() <<  " " << (theta & 2*Interval::PI).is_empty() << " " ;
     if(!theta.contains(0)) {
+        // std::cerr << "YES"<<  "\n";
         return ibex::YES;
-    } else if (!theta.contains(2*M_PI) && theta.contains(0)) {
+    } else if ((theta & 2*Interval::PI).is_empty() && theta.contains(0)) {
+        // std::cerr << "NO"<<  "\n";
         return ibex::NO;
     } else {
         // Undetermined case
+        // std::cerr << "MAYBE"<<  "\n";
+
         return ibex::MAYBE;
     }
 }
+// BoolInterval isIn(const Interval &x, const Interval& y){
+//   if ((x & y).is_empty()) return ibex::NO;
+//   else if (x.is_subset(y)) return ibex::YES;
+//   return ibex::MAYBE;
+// }
+//
+//
+// BoolInterval PdcInPolygon::test(const IntervalVector& x) {
+//
+//     Interval mx = Interval(x[0].mid());
+//     Interval my = Interval(x[1].mid());
+//     int cross = 0;
+//
+//
+//     for(unsigned int i = 0; i < ax.size(); i++) {
+//         Interval tmp = (ay[i]-my)*(by[i]-my);
+//         BoolInterval res = isIn(tmp, Interval::NEG_REALS);
+//         if (res == ibex::YES) cross++;
+//         if (res == ibex::MAYBE) return ibex::MAYBE;
+//     }
+//     std::cerr << cross  << "\n";
+//     if ((cross % 2) == 0) return ibex::NO;
+//     return ibex::YES;
+// }
 
 } // namespace pyibex

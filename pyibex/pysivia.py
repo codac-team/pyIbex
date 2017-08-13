@@ -157,14 +157,23 @@ def __pySIVIA_sep(X0, sep, epsilon, color_in='k[r]', color_out='k[b]', color_may
 
         X = x_in & x_out
 
+
         if (X.is_empty()):
+            b1 = ~x_in.is_empty()
+            b2 = ~x_out.is_empty()
+            if (b1 & b2 & x_in.is_disjoint(x_out)):
+                print(k, "ERREUR", x_in, x_out)
             continue
         if(X.max_diam() < epsilon):
+            res_y.append(X)
             if draw_boxes is True:
+                if X.is_flat():
+                    for i in range(X2.size()):
+                        if X[i].is_degenerated():
+                            X.inflate(0.05)
                 vibes.drawBox(
                     X[0].lb(), X[0].ub(), X[1].lb(), X[1].ub(),
                     color_maybe)
-            res_y.append(X)
         elif (X.is_empty() is False):
             (X1, X2) = lf.bisect(X)
             stack.append(X1)

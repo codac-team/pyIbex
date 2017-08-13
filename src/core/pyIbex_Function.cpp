@@ -62,6 +62,7 @@ void export_Function(py::module& m){
     .def( "backward", ( bool(Function::*) (const IntervalMatrix& , IntervalVector&) const) &Function::backward)
 
     .def( "nb_arg", &Function::nb_arg)
+    .def( "diff", &Function::diff)
     // .def( "gradient" , &Function::gradient)
     // .def( "jacobian" , &Function::jacobian)
     ;

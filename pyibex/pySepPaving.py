@@ -163,8 +163,9 @@ class pySetNode:
             elif x in self.xout:
                 return True
             else:
-                print("ERROR")
-                exit(-1)
+                return None
+                # print("ERROR")
+                # exit(-1)
         else:
             if x in self.left.getX0():
                 return self.left.isInside(x)
@@ -304,11 +305,15 @@ class pySepPaving(pyibex.Sep):
         xin &= xborder
         xout &= xborder
         for b in X0.diff(xborder):
-            if self.root.isInside(b.mid()) is True:
+            isInside = self.root.isInside(b.mid())
+            if isInside is True:
                 xout |= b
+            elif isInside is False:
+                xin |= b
             else:
                 xin |= b
-        # print(k)
+                xout |= b
+        print(k)
 
     def sivia(self, sep, eps):
         stack = deque([self.root])

@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+2017-08-05 Benoit Desrochers <ben.ensta@gmail.com>
+  * Bug with SepBoundary with undeterminated case (need ibex fix)
+  * add SepPaving object to provide a paver
+  
 2017-07-14 Benoit Desrochers <ben.ensta@gmail.com>
   * PATCH v1.6.3
   * [fix] sepProj bugs

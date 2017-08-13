@@ -32,13 +32,17 @@ void SepTransform::separate(IntervalVector& xin, IntervalVector& xout){
 
   if( yin.is_empty() )
     xin.set_empty();
-  else
+  else{
     xin &= fbwd.eval_vector(yin);
+    ffwd.backward(yin, xin);
+  }
 
   if( yout.is_empty() )
     xout.set_empty();
-  else
+  else{
     xout &= fbwd.eval_vector(yout);
+    ffwd.backward(yout, xout);
+  }
 
 }
 

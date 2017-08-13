@@ -23,6 +23,16 @@ CMap_color = {
   "EMPTY": "[g]"
 }
 
+CMap_color = {
+  "IN": "[#FF000022]",
+  "OUT": "[#0000FF22]",
+  "MAYBE": "[orange]",
+  "MAYBE_IN": "[magenta]",
+  "MAYBE_OUT": "[cyan]",
+  "UNK":  "[y]",
+  "EMPTY": "[g]"
+}
+
 # CMap_color2 = {
 #
 #   str(IN): "mangenta[red]",
@@ -77,10 +87,10 @@ class SepToVibes(SepVisitor):
 
     self.figureName = str(figureName)
     if figureName != None:
-      vibes.selectFigure(figureName)
-      vibes.setFigureProperties({'x': 0, 'y': 0, 'width': 500, 'height': 500})
-      if clearFigure == True:
-        vibes.clearFigure()
+        vibes.selectFigure(figureName)
+        vibes.setFigureProperties({'x': 0, 'y': 0, 'width': 500, 'height': 500})
+        if clearFigure == True:
+            vibes.clearFigure()
     self.color_map = color_map
 
   """
@@ -94,7 +104,10 @@ class SepToVibes(SepVisitor):
     vibes.drawBoxDiff(X0, boxIn, self.color_map["IN"])
     vibes.drawBoxDiff(X0, boxOut, self.color_map["OUT"])
     if not X.is_empty():
-      vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], self.color_map["MAYBE"])
+        for i in range(X.size()):
+            if X[i].diam() < 1e-8   :
+                X[i].inflate(0.05)
+        vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], self.color_map["MAYBE"])
     # time.sleep(0.5)
 
   def pre_visit(self, paving):

@@ -15,10 +15,10 @@ siviaParams = {'use_patch': True,
                'color_in': '#FF0000[#BB00FFAA]',
                'color_maybe': '[y]'}
 
-siviaParams = {'use_patch': True,
-               'color_out': 'b[#00AAFF55]',
-               'color_in': '#FF0000[#BB00FF55]',
-               'color_maybe': '[#33003355]'}
+# siviaParams = {'use_patch': True,
+#                'color_out': 'b[#00AAFF55]',
+#                'color_in': '#FF0000[#BB00FF55]',
+#                'color_maybe': '[#33003355]'}
 
 
 class pySetNode:
@@ -47,17 +47,11 @@ class pySetNode:
             return True
         return False
 
-    def bisect_max(self, bisector, xin_old, xout_old):
+    def bisect_around(self, bisector, XX):
         X = self.xin & self.xout
-        XX = self.left.xin | self.left.xout | self.right.xin | self.left.xout
-        if X == XX:
-            return
-        if X.is_subset(XX):
-            return
-        # if XX.is_subset(X):
         LX = X.diff(XX)
         if(len(LX) == 0):
-            print(X, XX)
+            print("[len(LX) == 0]", X, XX)
             exit()
         if len(LX) == 1:
             X1, X2 = XX, LX[0]
@@ -68,33 +62,79 @@ class pySetNode:
                 VX2 = reduce(lambda x, y: x*y, (XX & X2).diam(), 1)
                 if VX1 > VX2:
                     X1 = X1 | XX
-                    X2 = X.diff(X1)[0]
+                    X2 = None if (X & X1).is_empty() else X.diff(X1)[0]
                 else:
                     X1 = X2 | XX
-                    X2 = X.diff(X1)[0]
+                    X2 = None if (X & X1).is_empty() else X.diff(X1)[0]
             elif XX.is_subset(X2):
                 X1, X2 = X2, X1
-        # elif not (X.is_subset(XX) or XX.is_subset(X)):
-            # Case where delete children
-            # if (X & XX).is_empty():
-            #     return self.bisect(bisector)
-            # else:
-            #     X1, X2 = X, XX
-            # print("RROEORO SUBSEST", X, XX, (X & XX).is_flat())
-            # return
-            # self.left = pySetNode(X1)
-            # self.right = pySetNode(X2)
-            # return
-            # exit(-1)
-
+            else:
+                print("ERROR !!!")
+                exit(-1)
         old_left, old_right = self.left, self.right
-        self.left = pySetNode(X1)
-        self.right = pySetNode(X2)
-
-        self.left.left = old_left
-        self.left.right = old_right
-        # self.left.reunite()
+        if X2 is not None:
+            self.left = pySetNode(X1)
+            self.right = pySetNode(X2)
+            self.left.left = old_left
+            self.left.right = old_right
+        else:
+            pass
         return True
+
+    def bisect_max(self, bisector, xin_old, xout_old):
+        X = self.xin & self.xout
+        XX = self.left.xin | self.left.xout | self.right.xin | self.left.xout
+        if X == XX:
+            return
+        if X.is_subset(XX):
+            return
+        # if XX.is_subset(X):
+        return self.bisect_around(bisector, XX)
+
+        # elif not (X.is_subset(XX) or XX.is_subset(X)):
+        #     print(X.diff(XX))
+        #
+        #     # Case where delete children
+        #
+        #
+        #     if (X & XX).is_flat() or (X & XX).is_empty():
+        #         X1, X2 = bisector.bisect(X)
+        #         self.left = pySetNode(X1)
+        #         self.right = pySetNode(X2)
+        #         return True
+        #     else:
+        #
+        #         if self.isLeaf():
+        #             X1, X2 = bisector.bisect(X)
+        #             self.left = pySetNode(X1)
+        #             self.right = pySetNode(X2)
+        #             return True
+        #         self.reunite()
+        #         XX = self.left.xin | self.left.xout | self.right.xin | self.left.xout
+        #         XX1 = (self.left.xin | self.left.xout)
+        #         XX2 = (self.right.xin | self.right.xout)
+        #         if (X & XX1).is_empty() and not (X & XX2).is_empty():
+        #             X1, X2 = X.diff(XX2)[0], X
+        #         elif (X & XX2).is_empty() and not (X & XX1).is_empty():
+        #             X1, X2 = X.diff(XX1)[0], X
+        #         else:
+        #             vibes.drawBox(XX[0][0], XX[0][1], XX[1][0], XX[1][1], 'k')
+        #             vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], 'k')
+        #             print("RROEORO SUBSEST", X, XX, (X & XX).is_flat())
+        #             return
+        #     # self.left = pySetNode(X1)
+        #     # self.right = pySetNode(X2)
+        #     # return
+        #     # exit(-1)
+        #
+        # old_left, old_right = self.left, self.right
+        # self.left = pySetNode(X1)
+        # self.right = pySetNode(X2)
+        #
+        # self.left.left = old_left
+        # self.left.right = old_right
+        # # self.left.reunite()
+        # return True
 
 
     def clear(self):

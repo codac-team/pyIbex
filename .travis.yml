@@ -87,7 +87,7 @@ before_install:
     if [ "${PYTHON:0:1}" = "3" ]; then export PY=3; fi
     if [ "$TRAVIS_OS_NAME" = "linux" ]; then
         if [ "$PY" = "3" ]; then
-          pip install --upgrade pip auditwheel twine;
+          pip install --upgrade pip ;
         else
           pip install --user --upgrade pip auditwheel twine;
         fi
@@ -98,7 +98,7 @@ before_install:
         curl -fsSL -O https://bootstrap.pypa.io/get-pip.py;
         sudo -H python get-pip.py;
       fi
-      pip$PY install --user --upgrade pip virtualenv auditwheel twine;
+      pip$PY install --user --upgrade pip virtualenv;
       python$PY -m virtualenv venv;
       source venv/bin/activate;
     fi
@@ -127,7 +127,7 @@ script:
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
 after_failure: cat tests/test_cmake_build/*.log
 after_success:
-  - curl --ftp-create-dirs --ftp-ssl -p -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.homenet.org/gittmp/$(date +"%Y%m%d")/
+  - curl --ftp-create-dirs --ftp-ssl -p -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
 # deploy:
 #   skip_cleanup: true
 #   provider: releases

@@ -85,7 +85,7 @@ build_script:
 deploy:
   provider: FTP
   protocol: ftps
-  host: bdesroch.homenet.org
+  host: bdesroch.privatedns.org
   username: git
   password:
     secure: U58Tazcrcj6n+oP1CxfRCQ==

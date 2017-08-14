@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   * [add] perftools to measure execution time
   * [fix] bug in Catan2 when x=[0,0]
   * [fix] bug in SepPolarXY when computing the complementary of [rho]x[theta]
+  * [fix] PdcInPolygon can return MAYBE (need ibex update)
   * [add] inner argument in CtcRaster to handle part which is outside the bbox of the image
 
 2017-07-14 Benoit Desrochers <ben.ensta@gmail.com>

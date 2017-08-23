@@ -33,7 +33,7 @@ add_subdirectory(paving)
 install( DIRECTORY "${PYTHON_PACKAGE_DIR}/pyibex" DESTINATION "${PYTHON_INSTDIR}")
 
 # trick to generate a correct wheel.
-file(WRITE "${PYTHON_PACKAGE_DIR}/fake.c" "// empty source file")
+file(WRITE "${PYTHON_PACKAGE_DIR}/empty.c" "// empty source file")
 
 add_custom_target(pip_package)
 add_custom_command(TARGET pip_package PRE_BUILD

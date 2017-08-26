@@ -75,52 +75,45 @@ def drawBoxDiff(X0, X, color, use_patch=False, **kwargs):
 
 
 class SepToVibes(SepVisitor):
-  def __init__(self, figureName=None, color_map=CMap_color, clearFigure=True):
-    """ ToVibes visitor object
-    Args:
-      max (float): bound of the windows centered in (0,0)
-      figureName (string): If None create a new figure else select the existing one
-      BW (bool): Use black and white color map
-    """
-    SepVisitor.__init__(self)
-    # self.frame = IntervalVector(2, max*Interval(-1, 1))
+    def __init__(self, figureName=None, color_map=CMap_color, clearFigure=True):
+        """ ToVibes visitor object
+        Args:
+          max (float): bound of the windows centered in (0,0)
+          figureName (string): If None create a new figure else select the existing one
+          BW (bool): Use black and white color map
+        """
+        SepVisitor.__init__(self)
+        self.figureName = str(figureName)
+        if figureName is not None:
+            vibes.selectFigure(figureName)
+            if clearFigure is True:
+                vibes.clearFigure()
+        self.color_map = color_map
 
-    self.figureName = str(figureName)
-    if figureName != None:
-        vibes.selectFigure(figureName)
-        vibes.setFigureProperties({'x': 0, 'y': 0, 'width': 500, 'height': 500})
-        if clearFigure == True:
-            vibes.clearFigure()
-    self.color_map = color_map
-
-  """
-  Function that will be called automatically on every boxes (leaves) of the set.
-  """
-  def visit_leaf(self, boxIn, boxOut):
-
-    X0 = boxIn | boxOut
-    X = boxIn & boxOut
-    # print(X0, boxIn, boxOut)
-    vibes.drawBoxDiff(X0, boxIn, self.color_map["IN"])
-    vibes.drawBoxDiff(X0, boxOut, self.color_map["OUT"])
-    if not X.is_empty():
-        for i in range(X.size()):
-            if X[i].diam() < 1e-8   :
-                X[i].inflate(0.05)
-        vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], self.color_map["MAYBE"])
+    def visit_leaf(self, boxIn, boxOut):
+        X0 = boxIn | boxOut
+        X = boxIn & boxOut
+        # print(X0, boxIn, boxOut)
+        vibes.drawBoxDiff(X0, boxIn, self.color_map["IN"])
+        vibes.drawBoxDiff(X0, boxOut, self.color_map["OUT"])
+        if not X.is_empty():
+            for i in range(X.size()):
+                if X[i].diam() < 1e-8:
+                    X[i].inflate(0.05)
+            vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], self.color_map["MAYBE"])
     # time.sleep(0.5)
 
-  def pre_visit(self, paving):
-    if(self.figureName != None):
-      vibes.selectFigure(self.figureName)
+    def pre_visit(self, paving):
+        if(self.figureName is not None):
+            vibes.selectFigure(self.figureName)
     # self.frame = paving.X0
 
-  def visit_node(self, boxIn, boxOut):
+    def visit_node(self, boxIn, boxOut):
 
-    X0 = boxIn | boxOut
-    # print(X0, boxIn, boxOut)
-    vibes.drawBoxDiff(X0, boxIn, self.color_map["IN"])
-    vibes.drawBoxDiff(X0, boxOut, self.color_map["OUT"])
+        X0 = boxIn | boxOut
+        # print(X0, boxIn, boxOut)
+        vibes.drawBoxDiff(X0, boxIn, self.color_map["IN"])
+        vibes.drawBoxDiff(X0, boxOut, self.color_map["OUT"])
 
-  def post_visit(self, paving):
-    vibes.axisEqual()
+    def post_visit(self, paving):
+        vibes.axisEqual()

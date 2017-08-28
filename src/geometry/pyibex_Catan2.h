@@ -26,14 +26,14 @@ namespace pyibex {
 inline Interval Cmod(const Interval& x, const Interval& y){
   Interval xx(x);
   Interval yy(y);
-  bwd_imod(xx,yy,2*Interval::PI.ub());
+  bwd_imod(xx,yy,(2*Interval::PI).lb());
   return yy;
 }
 
 inline Interval Cmod_bwd(const Interval& x, const Interval& y){
   Interval xx(x);
   Interval yy(y);
-  bwd_imod(xx,yy,2*Interval::PI.ub());
+  bwd_imod(xx,yy,(2*Interval::PI).lb());
   return xx;
 }
 

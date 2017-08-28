@@ -80,6 +80,7 @@ PYBIND11_MODULE(paving, m)
       .def( "Sivia", ( SepPaving& (SepPaving::*) (Sep& ,double)) &SepPaving::Sivia, py::return_value_policy::take_ownership)
       .def( "visit", &SepPaving::visit, py::arg("visitor"))
       .def( "save", &SepPaving::save)
+      .def( "getBoundingBox", &SepPaving::getBoundingBox)
       ;
 
   class_<SepVisitor, std::unique_ptr<SepVisitor>, pySepVisitor>(m, "SepVisitor")

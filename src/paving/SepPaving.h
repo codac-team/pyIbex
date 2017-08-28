@@ -78,6 +78,7 @@ public:
 
 		void separate(IntervalVector& xin, IntervalVector& xout);
 
+		IntervalVector getBoundingBox();
 
 
     // std::pair<bool, std::vector<IntervalVector> > Intersect(const IntervalVector& Xm, const IntervalVector& Xp);
@@ -100,6 +101,10 @@ inline bool SepPaving::is_empty(){
 		// this->Reunite();
 		// return (root.value() == OUT);
 		return false;
+}
+
+inline IntervalVector SepPaving::getBoundingBox(){
+	return root.m_box_in | root.m_box_out;
 }
 
 // inline ThickBoolean SepPaving::check_empty(){

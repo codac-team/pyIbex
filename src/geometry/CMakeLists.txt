@@ -8,6 +8,7 @@ set( SRCS
       pyibex_CtcSegment.cpp
       pyibex_PdcInPolygon.cpp
       pyibex_SepPolygon.cpp
+      pyibex_SepDiskExists.cpp
   )
 
 set( HEADERS
@@ -20,6 +21,7 @@ set( HEADERS
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_CtcSegment.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_PdcInPolygon.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepPolygon.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepDiskExists.h
   )
 
 # FILE(COPY ${HEADERS} DESTINATION ${HEADERS_DIR})

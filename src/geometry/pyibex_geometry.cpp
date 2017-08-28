@@ -16,6 +16,7 @@
 
 #include "pyibex_SepPolygon.h"
 #include "pyibex_CtcSegment.h"
+#include "pyibex_SepDiskExists.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -111,6 +112,11 @@ PYBIND11_MODULE(geometry, m)
     .def("separate", (void (ibex::Sep::*) (IntervalVector&, IntervalVector&)) &pyibex::SepPolygon::separate)
   ;
 
+  // Export SepDiskExists
+  py::class_<pyibex::SepDiskExists>(m, "SepDiskExists", sep)
+    .def(py::init<Interval, Interval, Interval >())
+    .def("separate", &pyibex::SepDiskExists::separate)
+  ;
   //
   //
   // m.def("bwd_angle", &pyibex::bwd_angle);

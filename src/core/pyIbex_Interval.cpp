@@ -69,8 +69,8 @@ void export_Interval(py::module& m){
     .def(py::init<double>(), "\tbuild singleton [val,val]", "val"_a)
     .def("__init__", [](Interval &instance,  std::array<double, 2>& bounds) { new(&instance) Interval(bounds[0], bounds[1]);})
     .def("__init__", [](Interval &instance,  std::array<int, 2>& bounds) { new(&instance) Interval(bounds[0], bounds[1]);})
-    .def("__init__", [](Interval &instance,  std::pair<int, double> bounds) { new(&instance) Interval(bounds.first, bounds.second);})
-    .def("__init__", [](Interval &instance,  std::pair<double, int> bounds) { new(&instance) Interval(bounds.first, bounds.second);})
+    // .def("__init__", [](Interval &instance,  std::pair<int, double> bounds) { new(&instance) Interval(bounds.first, bounds.second);})
+    // .def("__init__", [](Interval &instance,  std::pair<double, int> bounds) { new(&instance) Interval(bounds.first, bounds.second);})
     // .def("__init__", [](Interval &instance,  std::pair<int, double>& bounds) { new(&instance) Interval(double(std::getw<0>(bounds)), std::get<1>(bounds[1]));})
     // .def("__init__", [](Interval &instance,  std::pair<int, double>& bounds) { new(&instance) Interval(double(bounds.first), bounds.second);})
 
@@ -243,8 +243,8 @@ void export_Interval(py::module& m){
 
     py::implicitly_convertible< std::array<double, 2>&, Interval>();
     py::implicitly_convertible< std::array<int, 2>&, Interval>();
-    py::implicitly_convertible< std::pair<int, double>, Interval>();
-    py::implicitly_convertible< std::pair<double, int>, Interval>();
+    // py::implicitly_convertible< std::pair<int, double>, Interval>();
+    // py::implicitly_convertible< std::pair<double, int>, Interval>();
 
 
     // py::implicitly_convertible< std::tuple<int, double>&, Interval>();

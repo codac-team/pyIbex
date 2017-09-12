@@ -23,6 +23,10 @@ set( HEADERS
 
 add_library(pyibexlib ${SRCS} ${HEADERS})
 target_link_libraries(pyibexlib ${LIBS})
+if(NOT MSVC)
+  # Make sure C++11/14 are enabled
+  target_compile_options(pyibexlib PUBLIC ${PYBIND11_CPP_STANDARD})
+endif()
 
 # INSTALL( TARGETS pyibexlib DESTINATION lib)
 # install(FILES ${HEADERS} DESTINATION "include/ibex-geometry")

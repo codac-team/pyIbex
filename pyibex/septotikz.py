@@ -22,6 +22,33 @@ closing = """\\end{scope}
 """
 
 
+axisDeg = """\begin{axis}[
+    scale only axis,
+    width=10cm,
+    height=10cm,
+    xmin=-11,
+    xmax=11,
+    ymin=-11,
+    ymax=11,
+    % grid=major,
+    % inner axis line style={=>, very thick, red},
+    xlabel=$x$,
+    ylabel=$y$,
+    axis y line=left,
+    axis x line=bottom,
+    axis on top=true,
+    every axis x label/.style={
+    at={(ticklabel* cs:1.)},
+    anchor=south,
+    },
+    every axis y label/.style={
+        at={(ticklabel* cs:1.)},
+        anchor=west,
+    },
+    xticklabel style={anchor=south},
+    yticklabel style={anchor=west}
+]"""
+
 TikzColorMap = {
   "IN": "magenta, fill=red!50",
   "OUT": "cyan, fill=blue!50",

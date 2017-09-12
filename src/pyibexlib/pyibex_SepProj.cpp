@@ -7,7 +7,9 @@
 // Created     : May 04, 2015
 //============================================================================
 #include "pyibex_SepProj.h"
-
+#include <iostream>
+#include <sstream>
+#include <cmath>
 // #include "vibes.h"
 #include "ibex_NoBisectableVariableException.h"
 using namespace std;
@@ -46,13 +48,17 @@ SepProj::~SepProj() {}
  * @return true if x_in or x_out is empty.
  */
 bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVector &y, ImpactStatus& impact, bool use_point){
+    assert(x_in == x_out);
     IntervalVector x = (x_in & x_out);
     if (x.is_empty()) return true;
-
 
     // Separate the product [x].[y]
     IntervalVector XinFull = cart_prod(x, y);
     IntervalVector XoutFull = cart_prod(x, y);
+
+    // IntervalVector XinFull0(XinFull);
+    // IntervalVector XoutFull0(XoutFull);
+    // std::cerr << "XinFull " << XinFull << "\n";
     sep.separate(XinFull, XoutFull);
     nbx++;
 
@@ -63,9 +69,12 @@ bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVecto
       std::cerr << "##########################################################\n";
 
       assert((XinFull | XoutFull)  == cart_prod(x, y));
-
-
     }
+
+    // if (XoutFull.is_empty()) assert(XinFull == XinFull0);
+
+    // std::cerr << "ctcStats " << true << " " << (XinFull == XinFull0) << " " << (XoutFull == XoutFull0) << "\n";
+    // std::cerr << "ctcStats " << (XinFull) << " " << (XoutFull) << "\n";
 
     // Handle error case
     if (XinFull.is_empty() && XoutFull.is_empty()){
@@ -111,11 +120,15 @@ void complementaryUnion(IntervalVector& x, const IntervalVector& y, const Interv
 }
 
 bool SepProj::fixpoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVector& y){
-    double ratio = 0.001;
+    // std::cerr <<  "###########################################\n";
     IntervalVector x0(x_in | x_out);
+    // std::cerr << "X0  "<< x0 << "\nXIN " << x_in << "\nXOUT" << x_out << "\n";
+    double ratio = 0.001;
 
     ImpactStatus impact(x_in, x_out);
+    // std::cerr << "Impact cin " << impact.impact_cin << "cout "<< impact.impact_cout << "\n";
     x_in &= x_out;   x_out &= x_in;
+
 
     IntervalVector x = x_in & x_out;
     IntervalVector x_old(x); // tmporary box use during the fix point.
@@ -123,27 +136,41 @@ bool SepProj::fixpoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVect
 
     do {
         x_old = x;
+        assert(x_in == x_out);
         IntervalVector x_out0(x_out);
-        // std::cerr << ">>>> "<< x0 << " " << x_in << " " << x_out << "\n";
-
+        IntervalVector xin0(x_in);
+        // std::cerr <<  "------------------------------------------------\n";
+        // std::cerr << ">>>> "<< x0 << "\n" << x_in << "\n" << x_out << "\n";
         stop = process(x_in, x_out, y, impact, false);
+        // std::cerr << ">>>> "<< x0 << " " << x_in << " " << x_out << "\n";
+        // std::cerr << "XOUT > " << x_out << " STOP  " << stop << "\n";
+        // std::cerr << "XIN > " << x_in << " OLD  " << xin0 << " " << (x_in == xin0) << "\n";
         if (!stop){
             IntervalVector y_mid(y.mid());
-            IntervalVector x_out_mid(x_out0);
+            IntervalVector x_out_mid(x_out0 & x_in);
             stop = process(x_in, x_out_mid, y_mid, impact, true);
+
+            // IntervalVector y_ub(y.ub());
+            // IntervalVector x_out_ub(x_out0);
+            // stop = process(x_in, x_out_ub, y_ub, impact, true);
+            //
+            // IntervalVector y_lb(y.lb());
+            // IntervalVector x_out_lb(x_out0);
+            // stop = process(x_in, x_out_lb, y_lb, impact, true);
         }
         x = x_in & x_out;
         break;
 
       // The condifion || is more efficient
-    } while (!x.is_empty() && ( x_old.rel_distance(x_in)>ratio || x_old.rel_distance(x_out)>ratio ));
+    } while (false && !x.is_empty() && ( x_old.rel_distance(x_in)>ratio || x_old.rel_distance(x_out)>ratio ));
 
     // std::cout << x_in << " "  << x_out << " \n";
     impact.reconstrut_v2(x_in, x_out, x0);
-    // if (! ((x_in | x_out) == x0)){
-    //   std::cerr << x_in << " " << x_out << " " << x0 << "\n";
-    //   exit(-1);
-    // }
+    if (! ((x_in | x_out) == x0)){
+      std::cerr << "Error in reconstruct_v2\n";
+      std::cerr << x_in << " " << x_out << " " << x0 << "\n";
+      assert(false);
+    }
     return !x.is_empty() ? true : false;
 }
 
@@ -183,14 +210,25 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
         if (x_out_save.is_subset(x_res))
           continue;
         complementaryUnion(x_out_save, x_in, x_old0);
+        // std::cerr << std::hexfloat << x_in << " \n" << x_out_save << "\n";
+        // std::cerr << x_old0 << std::defaultfloat << "\n";
+        // std::cerr << l.size()  << " " << y.max_diam() << "\n#################\n";
         // if ((x_in & x_out_save).is_empty()){
         //   // std::cout << x_in << " " << x_out_save << "\n";
         //   x_res |= x_out_save;
         //   continue;
         // };
         IntervalVector y0(y);
-        // std::cerr << "##########################################################################\n";
-
+        if (( x_in | x_out_save ) != x_old0){
+          std::cerr << "##########################################################################\n";
+          std::cerr << std::hexfloat;
+          std::cerr << "x_in     " <<  x_in << "\n";
+          std::cerr << "x_out    " <<  x_out_save << "\n";
+          std::cerr << "x_old0 " <<  x_old0 << "\n";
+          std::cerr << std::defaultfloat;
+          std::cerr << "##########################################################################\n";
+          // assert( ( x_in | x_out_save ) == x_old0);
+        }
         fixpoint(x_in, x_out_save, y);
         IntervalVector x = x_in & x_out_save;
         if (x_out_save.is_empty()) continue;
@@ -199,7 +237,10 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
         // std::cerr << "x: " << x << " x_in: " << x_in << " x_out: " << x_out_save << "\n"
                   // << "x_res " << x_res  <<  " y: "  << y << "\n";
         if ( ! (( x_in | x_out_save ) == x_old0)){
-          std::cerr << x_in << " " << x_out_save << "  " << x_old0 << "\n";
+          std::cerr << x_in << " " << x_out_save << " \n" << x_old0 << "\n";
+          std::cerr << std::hexfloat << x_in << " \n" << x_out_save << "\n";
+          std::cerr << x_old0 << std::defaultfloat << "\n";
+          std::cerr << l.size() << "\n";
           assert( ( x_in | x_out_save ) == x_old0);
         }
         // std::cerr << x.is_empty() << " " << (x.max_diam()) << " " << prec << " " << y.is_empty() << " " << y.max_diam() << " " << x.max_diam() << " " << l.size()<< "\n";

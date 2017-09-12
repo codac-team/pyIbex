@@ -27,6 +27,7 @@ void export_Separators(py::module& m);
 PYBIND11_MODULE(pyibex, m)
 {
   // py::module m("pyibex", "python binding of ibex core fonctionnality");
+  m.doc() = "python binding of ibex core fonctionnality";
   export_Interval(m);
   export_IntervalVector(m);
   export_Function(m);

@@ -31,7 +31,7 @@ using ibex::Vector;
 
 
 
-void CreateWithList(IntervalMatrix &instance, int nb_rows, int nb_cols,  std::vector< Interval > & lst){
+IntervalMatrix* CreateWithList(int nb_rows, int nb_cols,  std::vector< Interval > & lst){
 
   size_t size = lst.size();
   if (size != nb_cols*nb_rows){
@@ -44,8 +44,9 @@ void CreateWithList(IntervalMatrix &instance, int nb_rows, int nb_cols,  std::ve
     tmp[index][1] = v.ub();
     index++;
   }
-  new(&instance) IntervalMatrix(nb_rows, nb_cols, tmp);
+  IntervalMatrix* instance = new IntervalMatrix(nb_rows, nb_cols, tmp);
   delete[] tmp;
+  return instance;
 }
 
 
@@ -81,7 +82,7 @@ void export_IntervalMatrix(py::module& m){
         .def(init<int,int>())
         .def(init<int,int,const Interval>())
         .def(init<const IntervalMatrix&>() )
-        .def("__init__", &CreateWithList)
+        .def(init(&CreateWithList))
         .def<IntervalVector&(IntervalMatrix&, int)> ("__getitem__", getitem, py::return_value_policy::reference_internal)
         .def<void(IntervalMatrix&, int, IntervalVector&)> ("__setitem__", setitem)
 

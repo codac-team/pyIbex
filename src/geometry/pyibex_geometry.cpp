@@ -19,6 +19,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+// #include <pybind11/stl_bind.h>
 using namespace pybind11::literals;
 namespace py = pybind11;
 
@@ -26,9 +27,10 @@ using ibex::Interval;
 using ibex::IntervalVector;
 // using namespace pyibex;
 
+// PYBIND11_MAKE_OPAQUE(std::vector< std::array<double, 2> >);
+// PYBIND11_MAKE_OPAQUE(std::map<std::string, double>);
 
-
-void SepPolygonFromList(pyibex::SepPolygon &instance,  std::vector< std::array<double, 2> >& lst){
+pyibex::SepPolygon* SepPolygonFromList(std::vector< std::array<double, 2> >& lst){
   // if (lst.size() != 2){
   //   throw std::invalid_argument("Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]");
   // }
@@ -45,9 +47,10 @@ void SepPolygonFromList(pyibex::SepPolygon &instance,  std::vector< std::array<d
       bx[i] = lst[ (i+1)%n ][0];
       by[i] = lst[ (i+1)%n ][1];
   }
-  new(&instance) pyibex::SepPolygon(ax, ay, bx, by);
+  return new pyibex::SepPolygon(ax, ay, bx, by);
 }
 
+// py::implicitly_convertible< int, float>();
 PYBIND11_MODULE(geometry, m)
 {
   // py::module m("geometry","Python binding of ibex-geometry functions");
@@ -105,8 +108,8 @@ PYBIND11_MODULE(geometry, m)
   //
   // // Export SepPolygon
   py::class_<pyibex::SepPolygon>(m, "SepPolygon", sep)
-    .def("__init__", &SepPolygonFromList)
-    .def(py::init<std::vector< std::vector< std::vector<double> > >& >())
+    .def(py::init(&SepPolygonFromList))
+    // .def(py::init<std::vector< std::vector< std::vector<double> > >& >())
     .def(py::init<std::vector<double>&, std::vector<double>&, std::vector<double>&, std::vector<double>&>())
     .def("separate", (void (ibex::Sep::*) (IntervalVector&, IntervalVector&)) &pyibex::SepPolygon::separate)
   ;
@@ -118,5 +121,4 @@ PYBIND11_MODULE(geometry, m)
   m.def("Cmod", &pyibex::Cmod);
   m.def("Cmod_bwd", &pyibex::Cmod_bwd);
   // return m.ptr();
-
 }

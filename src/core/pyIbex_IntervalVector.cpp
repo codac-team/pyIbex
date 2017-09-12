@@ -33,7 +33,7 @@ using ibex::Vector;
 
 
 
-void CreateWithList(IntervalVector &instance,  const std::vector< py::list >& lst){
+IntervalVector* CreateWithList(const std::vector< py::list >& lst){
   if (lst.size() < 1){
     throw std::invalid_argument("Size of the input list is 0");
   }
@@ -46,24 +46,26 @@ void CreateWithList(IntervalVector &instance,  const std::vector< py::list >& ls
     tmp[i][0] = lst[i][0].cast<double>();
     tmp[i][1] = lst[i][1].cast<double>();
   }
-  new(&instance) IntervalVector(lst.size(), tmp);
+  IntervalVector * instance = new IntervalVector(lst.size(), tmp);
   delete[] tmp;
+  return instance;
 }
 
-void CreateWithListOfInterval(IntervalVector &instance, const std::vector<Interval>& lst){
-  new(&instance) IntervalVector(lst.size());
+IntervalVector* CreateWithListOfInterval(const std::vector<Interval>& lst){
+  IntervalVector * instance = new IntervalVector(lst.size());
 
   for (size_t i = 0; i < lst.size(); i++){
-    instance[i] = lst[i];
+    (*instance)[i] = lst[i];
   }
+  return instance;
 }
 
 
-void CreateWithIntAndList(IntervalVector &instance, int ndim, std::vector<double>& v){
+IntervalVector* CreateWithIntAndList(int ndim, std::vector<double>& v){
   if (v.size() != 2){
     throw std::invalid_argument("syntax is IntervalVector(2, [1,2])");
   }
-  new(&instance) IntervalVector(ndim, Interval(v[0], v[1]));
+  return new IntervalVector(ndim, Interval(v[0], v[1]));
 }
 
 
@@ -143,10 +145,10 @@ void export_IntervalVector(py::module& m){
             .def(py::init<int,const Interval>(), "dim"_a, "itv"_a)
             .def(py::init<const IntervalVector&>(), "x"_a )
             .def(py::init<const Vector&>(), "x"_a)
-            .def("__init__", [](IntervalVector &instance, const Interval& a) { new(&instance) IntervalVector(1); instance[0] = a;}, "itv"_a)
-            .def("__init__", &CreateWithList, "list"_a)
-            .def("__init__", &CreateWithIntAndList, "dim"_a, "list"_a)
-            .def("__init__", &CreateWithListOfInterval, "list"_a)
+            .def(py::init([](const Interval& a) { IntervalVector *instance = new IntervalVector(1); (*instance)[0] = a; return instance;}), "itv"_a)
+            .def(py::init(&CreateWithList), "list"_a)
+            .def(py::init(&CreateWithIntAndList), "dim"_a, "list"_a)
+            .def(py::init(&CreateWithListOfInterval), "list"_a)
             // .def("__init__", &CreateWithTuple, "list"_a)
 
             // Bare bon interface

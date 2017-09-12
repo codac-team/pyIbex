@@ -110,7 +110,7 @@ void export_IntervalMatrix(py::module& m){
         .def( double() * self)
         .def( Interval() * self)
 
-
+        .def("shape", [] (IntervalMatrix& o) { return std::make_tuple(o.nb_rows(), o.nb_cols());} )
         .def("__repr__", &to_string)
         ;
 };

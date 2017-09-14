@@ -18,7 +18,7 @@ setup(
   url='https://github.com/benEnsta/pyIbex',
   description='PyIbex a python interface of ibexlib ',
   long_description='',
-  ext_modules=[Extension("pyibex.empty", sources=["empty.c"])],
+  # ext_modules=[Extension("pyibex.empty", sources=["empty.c"])],
   packages=['pyibex', 'pyibex.examples', 'pyibex.polar',
             'pyibex.thickset', 'pyibex.tube',
             'pyibex.geometry', 'pyibex.image', 'pyibex.tests'],

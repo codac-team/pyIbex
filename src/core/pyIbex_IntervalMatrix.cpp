@@ -28,9 +28,6 @@ using ibex::IntervalMatrix;
 using ibex::Vector;
 
 
-
-
-
 IntervalMatrix* CreateWithList(int nb_rows, int nb_cols,  std::vector< Interval > & lst){
 
   size_t size = lst.size();
@@ -74,8 +71,6 @@ std::string to_string(const IntervalMatrix& m){
   return ss.str();
 }
 
-// BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 1,2);
-
 void export_IntervalMatrix(py::module& m){
 
     class_<IntervalMatrix>(m, "IntervalMatrix")
@@ -83,8 +78,9 @@ void export_IntervalMatrix(py::module& m){
         .def(init<int,int,const Interval>())
         .def(init<const IntervalMatrix&>() )
         .def(init(&CreateWithList))
-        .def<IntervalVector&(IntervalMatrix&, int)> ("__getitem__", getitem, py::return_value_policy::reference_internal)
-        .def<void(IntervalMatrix&, int, IntervalVector&)> ("__setitem__", setitem)
+        .def("__getitem__", getitem, py::return_value_policy::reference_internal)
+        .def("__setitem__", setitem)
+
 
         .def("assign", &assignItv)
         .def( self == self )
@@ -103,13 +99,17 @@ void export_IntervalMatrix(py::module& m){
         // TODO .def( self -= other<Matrix>())
 
         .def( self *= self)
-        .def( self *= double())
-        .def( self *= Interval())
+        // .def( self *= double())
+        .def( "__mul__", [](IntervalMatrix& m, const IntervalVector& x) {return m*x;})
+
+        // .def( self *= Interval())
+        .def("__imult__", [](IntervalMatrix &o, const Interval& itv) { o *= itv;})
         // TODO .def( self * other<Matrix>())
         // TODO .def( other<Matrix>() * self)
         .def( "__mul__", [](IntervalMatrix& m, const IntervalVector& x) {return m*x;})
         .def( double() * self)
-        .def( Interval() * self)
+        // .def( Interval() * self)
+        .def( "__mul__", [](IntervalMatrix& m, const Interval& x) {return x*m;})
 
         .def("shape", [] (IntervalMatrix& o) { return std::make_tuple(o.nb_rows(), o.nb_cols());} )
         .def("__repr__", &to_string)

@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+2017-09-12 Benoit Desrochers <ben.ensta@gmail.com>
+  * PATCH v1.6.3b
+  * [add] Interval Matrix shape function (need to be converted in property)
+  * [update] fix pybind11 version to 2.2.1.
+
 2017-08-07 Benoit Desrochers <ben.ensta@gmail.com>
   * PATCH v1.6.3a
   * [update] use last pybind version

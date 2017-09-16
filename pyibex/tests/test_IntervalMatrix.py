@@ -34,6 +34,11 @@ class TestIntervalVector(unittest.TestCase):
 		self.assertEqual(a[0][2], Interval(3,4))
 		a[0][2] = Interval(0,0)
 		self.assertEqual(a[0][2], Interval(0,0))
+
+	def test_shape(self):
+		a = IntervalMatrix(3,3, Interval(3,4))
+		self.assertEqual(a.shape(), (3,3))
+
 		# print(a[1])
 		# print(a[1][1])
 		# a[0][2] = Interval(0,0)

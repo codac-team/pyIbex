@@ -64,8 +64,8 @@ bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVecto
 
     if (!((XinFull | XoutFull)  == cart_prod(x, y))){
       std::cerr << "##########################################################\n";
-      std::cerr << "XinFull " << XinFull << " XoutFull " << XoutFull << "\n";
-      std::cerr << "X0 " << cart_prod(x, y) << " Union "  << (XinFull | XoutFull)  << "\n";
+      std::cerr << "XinFull   " << XinFull << "\nXoutFull  " << XoutFull << "\n";
+      std::cerr << "X0        " << cart_prod(x, y) << "\nUnion     "  << (XinFull | XoutFull)  << "\n";
       std::cerr << "##########################################################\n";
 
       assert((XinFull | XoutFull)  == cart_prod(x, y));

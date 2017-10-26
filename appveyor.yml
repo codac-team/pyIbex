@@ -47,9 +47,8 @@ environment:
 
 install:
   - cmd: '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
-  - cinstall: python
-  - ps: (new-object net.webclient).DownloadFile('https://bootstrap.pypa.io/get-pip.py', 'C:/get-pip.py')
-  - "%PYTHON_DIR%/python.exe C:/get-pip.py"
+  - cmd: "%PYTHON_EXE% -m pip install --disable-pip-version-check --user --upgrade pip wheel"
+
   - ps: >-
 
       (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-v2.4.2/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
@@ -61,7 +60,8 @@ install:
       7z x -tzip -oC:"ibex-lib" "C:\projects\pyIbex\ibex-lib.zip"
 
       ls C:\projects\pyIbex\ibex-lib
-  - cmd: "%PYTHON_DIR%/python.exe -m pip install twine"
+
+  # - cmd: "%PYTHON_DIR%/python.exe -m pip install twine"
 
 artifacts:
   - path: '**\*.whl'
@@ -74,13 +74,12 @@ build_script:
   - git submodule update
   # - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
 
-  - cmake -G "%CMAKE_PLATFORM%" -DPYTHON_INCLUDE_DIR:PATH=%PYTHON_DIR%/include -DPYTHON_LIBRARY:FILEPATH=%PYTHON_DIR%/libs/python34.lib -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DIBEX_ROOT=C:\projects\pyIbex\ibex-lib\ibex-lib-"%IBEX_FILES%"
+  - cmake -G "%CMAKE_PLATFORM%"  -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_INCLUDE_DIR:PATH=%PYTHON_DIR%/include -DPYTHON_LIBRARY:FILEPATH=%PYTHON_DIR%/libs/python34.lib -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DIBEX_ROOT=C:\projects\pyIbex\ibex-lib\ibex-lib-"%IBEX_FILES%"
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
   - msbuild %MSBuildOptions% INSTALL.vcxproj
-  - ctest -C %Configuration%
+  - ctest -C %Configuration% -VV
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
-  # - msbuild %MSBuildOptions% src/install_python.vcxproj
 
 deploy:
   provider: FTP
@@ -91,18 +90,3 @@ deploy:
     secure: U58Tazcrcj6n+oP1CxfRCQ==
   folder: gittmp/win
   artifact: pip_wheel
-
-#
-#
-# deploy:
-#
-# - provider: GitHub
-#
-#   auth_token:
-#
-#     secure: wIeJZ9xcTslfsgvqCGez8oOC0YxhmM8LI0iJ7gBgsI7ykVeWWLEFfAQSIHgbac6k
-#
-#   artifact: pip_wheel
-#
-#   draft: true
-#   appveyor_repo_tag: true        # deploy on tag push only

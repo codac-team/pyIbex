@@ -7,9 +7,12 @@
 NAMESPACE_BEGIN(pybind11)
 NAMESPACE_BEGIN(detail)
 
+using ibex::Vector;
+using ibex::Array;
+
 template <> struct type_caster<ibex::Vector> {
 public:
-    PYBIND11_TYPE_CASTER(ibex::Vector, _("ibex::Vector"));
+    PYBIND11_TYPE_CASTER(ibex::Vector, _("Vector"));
 
     type_caster<ibex::Vector>() :  value(1) { }
     bool load(handle src_hdl, bool convert) {
@@ -61,7 +64,7 @@ template <typename Value> struct type_caster<ibex::Array<Value> > {
     // typedef ibex::Array<Value> type;
     typedef type_caster<Value> value_conv;
 public:
-    PYBIND11_TYPE_CASTER(ibex::Array<Value>, _("ibex::Array<Value>"));
+    PYBIND11_TYPE_CASTER(ibex::Array<Value>, _("Array<Value>"));
 
     // Vector_caster() :  value(0) { }
     bool load(handle src_hdl, bool convert) {

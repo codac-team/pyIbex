@@ -49,7 +49,7 @@ SepPaving::SepPaving(IntervalVector& p,Sep& sep,double eps, bool display):
 }
 
 
-SepPaving::SepPaving(const std::string& filename) : Sep(1), bisector(LargestFirst(0, 0.5)), root(IntervalVector(0)){
+SepPaving::SepPaving(const std::string& filename) : Sep(1), bisector(LargestFirst(0, 0.5)), root(IntervalVector(1)){
   std::ifstream myfile;
   myfile.open(filename, std::ios::binary | std::ios::in);
   root = std::move(*Node::load(myfile));

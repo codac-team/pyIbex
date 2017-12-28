@@ -7,7 +7,8 @@ set( SRCS
       pyibex_CtcTransform.cpp
       pyibex_QInterProjF.cpp
       pyibex_SepUnionBbox.cpp
-
+      pyibex_CtcHull.cpp
+      # vibes.cpp
 		)
 set( HEADERS
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepProj.h
@@ -17,6 +18,8 @@ set( HEADERS
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_SepTransform.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_CtcTransform.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_QInterProjF.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_CtcHull.h
+      # ${CMAKE_CURRENT_SOURCE_DIR}/vibes.h
 
 		)
 

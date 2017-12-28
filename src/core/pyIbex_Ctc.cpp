@@ -18,12 +18,14 @@ using namespace pybind11::literals;
 #include <ibex_CtcFwdBwd.h>
 #include <ibex_CtcUnion.h>
 #include <ibex_CtcCompo.h>
-
+#include <ibex_LargestFirst.h>
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
 #include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
+
+#include "pyibex_CtcHull.h"
 #include <pyibex_QInterProjF.h>
 #include "pyIbex_doc_Ctc.h"
 
@@ -134,9 +136,13 @@ void export_Ctc(py::module& m){
     .def("contract", &CtcQInter::contract, py::arg("box").noconvert())
     ;
 
-  // Export CtcQInterProjF
-  py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc, DOC_CTCQINTERPROJF_TYPE)
-    .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
-    .def("contract", &CtcQInterProjF::contract, py::arg("box").noconvert())
+  // Export CtcHull
+  py::class_<pyibex::CtcHull>(m, "CtcHull", ctc)
+    .def(py::init<ibex::Sep&, double, ibex::Bsc&>(),
+            py::keep_alive<1,2>(), py::keep_alive<1,4>(),
+            "sep"_a, "epsilon"_a, "bsc"_a = ibex::LargestFirst(1e-10)
+          )
+    .def("contract", &pyibex::CtcHull::contract, py::arg("box").noconvert())
     ;
+
 }

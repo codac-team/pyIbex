@@ -172,6 +172,8 @@ void export_Separators(py::module& m){
   py::class_<pyibex::SepCtcPairProj>(m, "SepCtcPairProj", sep, DOCS_SEP_SEPCTCPAIRPROJ)
     .def(py::init<ibex::Ctc&, ibex::Ctc&,const IntervalVector&, double>(), py::keep_alive<1,2>(), py::keep_alive<1,3>(),
           py::arg("ctc_in"), py::arg("ctc_out"), py::arg("y_init"), py::arg("prec"))
+    .def(py::init<ibex::SepCtcPair&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
+          py::arg("sep"), py::arg("y_init"), py::arg("prec") )
     .def(py::init<ibex::Sep&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
           py::arg("sep"), py::arg("y_init"), py::arg("prec") )
     .def("separate", &pyibex::SepCtcPairProj::separate)

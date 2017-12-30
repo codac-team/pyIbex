@@ -8,18 +8,20 @@
 //============================================================================
 
 
-#include "ibex_Interval.h"
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-// #include <pybind11/stl_bind.h>
 #include <pybind11/operators.h>
-#include "pyIbex_doc_Interval.h"
-#include <utility>
-
-#include <tuple>
+// #include <pybind11/stl_bind.h>
+// #include <utility>
+// #include <tuple>
 namespace py = pybind11;
 using py::self;
 using namespace pybind11::literals;
+
+#include <ibex_Interval.h>
+#include "pyIbex_doc_Interval.h"
+
 using namespace ibex;
 
 #include <sstream>
@@ -35,6 +37,13 @@ double getitem(Interval& X, int i){
 
 Interval my_copy(Interval& itv){
     return Interval(itv);
+}
+
+std::unique_ptr<Interval> buildFromList(std::vector<double>& lst){
+  if (lst.size() != 2){
+    throw std::invalid_argument("list size != 2 !");
+  }
+  return std::unique_ptr<Interval>(new Interval(lst[0], lst[1]));
 }
 
 void assignItv(Interval& self, const Interval& other){
@@ -61,21 +70,28 @@ py::tuple complementary_wrapper(const Interval&x){
 }
 
 
+
+// py::implicitly_convertible< std::array<double, 2>&, Interval>()
+// py::implicitly_convertible< std::array<int, 2>&, Interval>()
+// py::implicitly_convertible< std::pair<int, double>, Interval>()
+// py::implicitly_convertible< std::pair<double, int>, Interval>()
+
+
 void export_Interval(py::module& m){
     py::class_<Interval, std::unique_ptr<Interval> >(m, "Interval", DOCS_INTERVAL_TYPE)
 
     .def(py::init<>())
+    .def(py::init<Interval>(), "\tbuild a  copy of interval itv", "itv"_a.noconvert())
     .def(py::init<double, double>(), "\tbuild Interval [lb, ub]", "lb"_a, "ub"_a)
     .def(py::init<double>(), "\tbuild singleton [val,val]", "val"_a)
-    .def(py::init([](std::array<double, 2>& bounds) {return new Interval(bounds[0], bounds[1]);}))
-    .def(py::init([](std::array<int, 2>& bounds)    {return new Interval(bounds[0], bounds[1]);}))
-    .def(py::init([](std::pair<int, double> bounds) {return new Interval(bounds.first, bounds.second);}))
-    .def(py::init([](std::pair<double, int> bounds) {return new Interval(bounds.first, bounds.second);}))
+    // .def(py::init(&buildFromList))
+    // .def(py::init([](std::array<double, 2>& bounds) {return new Interval(bounds[0], bounds[1]);}))
+    // .def(py::init([](std::array<int, 2>& bounds)    {return new Interval(bounds[0], bounds[1]);}))
+    // .def(py::init([](std::pair<int, double>& bounds) {return new Interval(bounds.first, bounds.second);}))
+    // .def(py::init([](std::pair<double, int>& bounds) {return new Interval(bounds.first, bounds.second);}))
     // .def("__init__", [](Interval &instance,  std::pair<int, double>& bounds) { new(&instance) Interval(double(std::getw<0>(bounds)), std::get<1>(bounds[1]));})
     // .def("__init__", [](Interval &instance,  std::pair<int, double>& bounds) { new(&instance) Interval(double(bounds.first), bounds.second);})
 
-
-    .def(py::init<Interval>(), "\tbuild a  copy of interval itv", "itv"_a)
     .def("assign", &assignItv, "\tassign the value of itv to this", "itv"_a)
     .def( self == self )
     .def( self + self )
@@ -168,30 +184,30 @@ void export_Interval(py::module& m){
     ;
 
     // External functions
-    m.def( "sqr" , &ibex::sqr  );
-    m.def( "sqrt", &ibex::sqrt );
-    m.def( "root", &ibex::root );
-    m.def( "exp" , &ibex::exp  );
-    m.def( "log" , &ibex::log  );
-    m.def( "cos" , &ibex::cos  );
-    m.def( "sin" , &ibex::sin  );
-    m.def( "tan" , &ibex::tan  );
-    m.def( "acos", &ibex::acos );
-    m.def( "asin", &ibex::asin );
-    m.def( "atan",    &ibex::atan );
-    m.def( "atan2",   &ibex::atan2 );
-    m.def( "cosh",    &ibex::cosh );
-    m.def( "sinh",    &ibex::sinh );
-    m.def( "tanh",    &ibex::tanh );
-    m.def( "acosh",   &ibex::acosh );
-    m.def( "asinh",   &ibex::asinh );
-    m.def( "atanh",   &ibex::atanh );
-    m.def( "abs",    ( Interval (*) (const Interval&) ) &ibex::abs  );
-    m.def( "max",     &ibex::max  );
-    m.def( "min",     &ibex::min  );
-    m.def( "sign",    &ibex::sign );
-    m.def( "chi",     &ibex::chi  );
-    m.def( "integer", &ibex::integer  );
+    m.def( "sqr" ,    ( Interval (*) (const Interval&) ) &ibex::sqr  );
+    m.def( "sqrt",    ( Interval (*) (const Interval&) ) &ibex::sqrt );
+    m.def( "root",    ( Interval (*) (const Interval&, int) ) &ibex::root );
+    m.def( "exp" ,    ( Interval (*) (const Interval&) ) &ibex::exp  );
+    m.def( "log" ,    ( Interval (*) (const Interval&) ) &ibex::log  );
+    m.def( "cos" ,    ( Interval (*) (const Interval&) ) &ibex::cos  );
+    m.def( "sin" ,    ( Interval (*) (const Interval&) ) &ibex::sin  );
+    m.def( "tan" ,    ( Interval (*) (const Interval&) ) &ibex::tan  );
+    m.def( "acos",    ( Interval (*) (const Interval&) ) &ibex::acos );
+    m.def( "asin",    ( Interval (*) (const Interval&) ) &ibex::asin );
+    m.def( "atan",    ( Interval (*) (const Interval&) ) &ibex::atan );
+    m.def( "cosh",    ( Interval (*) (const Interval&) ) &ibex::cosh );
+    m.def( "sinh",    ( Interval (*) (const Interval&) ) &ibex::sinh );
+    m.def( "tanh",    ( Interval (*) (const Interval&) ) &ibex::tanh );
+    m.def( "acosh",   ( Interval (*) (const Interval&) ) &ibex::acosh );
+    m.def( "asinh",   ( Interval (*) (const Interval&) ) &ibex::asinh );
+    m.def( "atanh",   ( Interval (*) (const Interval&) ) &ibex::atanh );
+    m.def( "abs",     ( Interval (*) (const Interval&) ) &ibex::abs  );
+    m.def( "sign",    ( Interval (*) (const Interval&) ) &ibex::sign );
+    m.def( "integer", ( Interval (*) (const Interval&) ) &ibex::integer  );
+    m.def( "atan2",   ( Interval (*) (const Interval&, const Interval&) ) &ibex::atan2 );
+    m.def( "max",     ( Interval (*) (const Interval&, const Interval&) ) &ibex::max  );
+    m.def( "min",     ( Interval (*) (const Interval&, const Interval&) ) &ibex::min  );
+    m.def( "chi",     ( Interval (*) (const Interval&, const Interval&, const Interval&) ) &ibex::chi  );
 
     // Attention en python l'argument est passé en double par defaut et pas en int.
     // Bug possible dans pow_2
@@ -241,18 +257,8 @@ void export_Interval(py::module& m){
     m.def( "bwd_imod",    &ibex::bwd_imod );
     m.attr("oo") =  POS_INFINITY;
 
-    py::implicitly_convertible< std::array<double, 2>&, Interval>();
-    py::implicitly_convertible< std::array<int, 2>&, Interval>();
-    // py::implicitly_convertible< std::pair<int, double>, Interval>();
-    // py::implicitly_convertible< std::pair<double, int>, Interval>();
 
 
-    // py::implicitly_convertible< std::tuple<int, double>&, Interval>();
-
-
-
-
-
-
+    // py::implicitly_convertible< std::vector<double>, 2>&, Interval>();
 
 };

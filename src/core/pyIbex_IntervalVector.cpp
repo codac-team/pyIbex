@@ -134,11 +134,7 @@ IntervalVector max_intevalVector (const IntervalVector& a, const IntervalVector&
   return res;
 }
 
-// BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(bisect_overloads, bisect, 1,2);
-
 void export_IntervalVector(py::module& m){
-
-
 
     py::class_<IntervalVector >(m, "IntervalVector", DOCS_INTERVALVECTOR_TYPE)
             .def(py::init<int>(), "dim"_a)
@@ -180,27 +176,13 @@ void export_IntervalVector(py::module& m){
 
             .def( self *= double())
             .def( "__imul__", [](IntervalVector& a, const Interval& x){return a*=x;})
-            // .def( "__mul__", [](IntervalVector& a, const Interval& x){return x*a;})
-            // Move to Interval wrapper
-            // .def( "__rmul__", [](Interval& x, IntervalVector& a){return x*a;})
-            // .def( "__rmul__", [](IntervalVector& a, Interval& x ){return x*a;})
-            // .def(Interval() * self)
-
             .def( "__mul__", [](IntervalVector& a, const Vector& x){return a*x;})
             .def( "__rmul__", [](IntervalVector& a, const Vector& x){return x*a;})
             .def( "__rmul__", [](IntervalVector& a, const Interval& x){return x*a;})
 
-
-            // .def( self *= Interval())
-            // .def( self * Vector())
-
             .def( self &= self)
             .def( self |= self)
 
-
-
-
-            // .def (self + Vector())
             .def("__add__", [](IntervalVector& a, const Vector& x){return a+x;})
             .def("__iadd__", [](IntervalVector& a, const Vector& x){return a+x;})
             .def("__radd__", [](IntervalVector& a, const Vector& x){return a+x;})
@@ -208,36 +190,10 @@ void export_IntervalVector(py::module& m){
             .def("__sub__", [](IntervalVector& a, const Vector& x){return a-x;})
             .def("__isub__", [](IntervalVector& a, const Vector& x){return a-=x;})
             .def("__rsub__", [](IntervalVector& a, const Vector& x){return x-a;})
-
-            // .def ( Vector() + self )
-
-            // .def (self - Vector())
-            // .def ( Vector() - self )
-
-            // .def (self * Vector())
-            // .def ( Vector() * self )
             .def (double() * self)
-            // .def (constInterval&>() * Vector())
-            // .def (Interval() * self)
 
-
-
-
-            // .def( self - double())
-            // .def( double() - self)
-            // .def( self * other<double>())
-            // .def( other<double>() * self)
-            // .def( self / double())
-            // .def( double() / self)
-
-            // .def( -self )
-            // .def( self + double())
-
-            // .def(repr(self))
             .def("__repr__", &to_string)
             .def("copy", &my_copy)
-
-
             .def("size", &IntervalVector::size )
             .def_static( "empty", &IntervalVector::empty, DOCS_INTERVALVECTOR_EMPTY, py::arg("n") )
             .def( "set_empty", &IntervalVector::set_empty, DOCS_INTERVALVECTOR_SET_EMPTY)
@@ -307,5 +263,5 @@ void export_IntervalVector(py::module& m){
             m.def( "bwd_mul", (bool (*) (const Interval&, IntervalVector&, IntervalVector&)) &ibex::bwd_mul);
 
             m.def("max", ( IntervalVector(*) (const IntervalVector&, const IntervalVector&)) &max_intevalVector);
-            py::implicitly_convertible<Interval, IntervalVector>();
+
 };

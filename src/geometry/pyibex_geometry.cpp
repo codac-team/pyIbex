@@ -17,10 +17,10 @@
 #include "pyibex_SepPolygon.h"
 #include "pyibex_CtcSegment.h"
 #include "pyibex_SepDiskExists.h"
+#include "pyibex_doc_geometry.h"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-// #include <pybind11/stl_bind.h>
 using namespace pybind11::literals;
 namespace py = pybind11;
 
@@ -28,18 +28,7 @@ using ibex::Interval;
 using ibex::IntervalVector;
 // using namespace pyibex;
 
-// PYBIND11_MAKE_OPAQUE(std::vector< std::array<double, 2> >);
-// PYBIND11_MAKE_OPAQUE(std::map<std::string, double>);
-
 pyibex::SepPolygon* SepPolygonFromList(std::vector< std::array<double, 2> >& lst){
-  // if (lst.size() != 2){
-  //   throw std::invalid_argument("Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]");
-  // }
-  // if (lst.size() != 2){
-  //   throw std::invalid_argument("Invalide input argmment: expected [[ x1, x2, ..., xn], [ y1, y2, ..., yn]]");
-  // }
-  // std::vector<double> &lx = lst[0];
-  // std::vector<double> &ly = lst[1];
   int n = lst.size();
   std::vector<double> ax(n), ay(n),bx(n),by(n);
   for(size_t i = 0; i < n; i++){
@@ -51,26 +40,34 @@ pyibex::SepPolygon* SepPolygonFromList(std::vector< std::array<double, 2> >& lst
   return new pyibex::SepPolygon(ax, ay, bx, by);
 }
 
-// py::implicitly_convertible< int, float>();
+
 PYBIND11_MODULE(geometry, m)
 {
-  // py::module m("geometry","Python binding of ibex-geometry functions");
+  m.doc() = R"pbdoc(
+       pyIbex geometry module
+       -----------------------
+       .. currentmodule:: geometry
+       .. autosummary::
+          :toctree: _generate
+          CtcPolar
+          CtcPolarXY
+          SepPolarXY
+          CtcSegment
+          SepPolygon
+          SepDiskExists
+          Catan2
+          Cmod
+          Cmod_bwd
+
+   )pbdoc";
 
   py::object ctc = (py::object) py::module::import("pyibex").attr("Ctc");
   py::object sep = (py::object) py::module::import("pyibex").attr("Sep");
 
-  // Export CtcAngle
-  // py::class_<ibex::CtcAngle>(m, "CtcAngle", ctc)
-  //     .def(py::init<>())
-  //     .def("contract", ( void (ibex::CtcAngle::*) (IntervalVector&) ) &ibex::CtcAngle::contract)
-  //     .def("contract", ( void (ibex::CtcAngle::*) (Interval&, Interval&, Interval&)) &ibex::CtcAngle::contract)
-  // ;
-  //
-  // // Export CtcPolar
-  py::class_<pyibex::CtcPolar>(m, "CtcPolar", ctc)
+  py::class_<pyibex::CtcPolar>(m, "CtcPolar", ctc, DOC_CTCPOLAR_TYPE)
       .def(py::init<>())
-      .def("contract", ( void (pyibex::CtcPolar::*) (IntervalVector&) ) &pyibex::CtcPolar::contract)
-      .def("contract", ( void (pyibex::CtcPolar::*) (Interval&, Interval&, Interval&, Interval&) ) &pyibex::CtcPolar::contract)
+      .def("contract", ( void (pyibex::CtcPolar::*) (IntervalVector&) ) &pyibex::CtcPolar::contract, DOC_CTCPOLAR_CONTRACT1)
+      .def("contract", ( void (pyibex::CtcPolar::*) (Interval&, Interval&, Interval&, Interval&) ) &pyibex::CtcPolar::contract, DOC_CTCPOLAR_CONTRACT2)
       .def("RTfromXY", &pyibex::CtcPolar::RTfromXY)
   ;
   // Export CtcPolarXY
@@ -96,11 +93,6 @@ PYBIND11_MODULE(geometry, m)
       .def("separate", &pyibex::SepPolarXY::separate)
   ;
 
-  // py::class_<pyibex::SepPolarXYT>(m, "SepPolarXYT", sep)
-  //   .def(py::init<Interval, Interval , double , double >())
-  //   .def("separate", &pyibex::SepPolarXYT::separate)
-  // ;
-  //
   // // Export CtcSegment
   py::class_<pyibex::CtcSegment>(m, "CtcSegment", ctc)
       .def(py::init<double, double,double,double>())
@@ -109,7 +101,7 @@ PYBIND11_MODULE(geometry, m)
   //
   // // Export SepPolygon
   py::class_<pyibex::SepPolygon>(m, "SepPolygon", sep)
-    .def(py::init(&SepPolygonFromList))
+    .def(py::init(&SepPolygonFromList), "list"_a)
     // .def(py::init<std::vector< std::vector< std::vector<double> > >& >())
     .def(py::init<std::vector<double>&, std::vector<double>&, std::vector<double>&, std::vector<double>&>())
     .def("separate", (void (ibex::Sep::*) (IntervalVector&, IntervalVector&)) &pyibex::SepPolygon::separate)
@@ -120,9 +112,8 @@ PYBIND11_MODULE(geometry, m)
     .def(py::init<Interval, Interval, Interval >())
     .def("separate", &pyibex::SepDiskExists::separate)
   ;
-  //
-  //
-  // m.def("bwd_angle", &pyibex::bwd_angle);
+
+
   m.def("Catan2", &pyibex::Catan2);
   m.def("Cmod", &pyibex::Cmod);
   m.def("Cmod_bwd", &pyibex::Cmod_bwd);

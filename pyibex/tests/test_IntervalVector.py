@@ -423,6 +423,10 @@ class TestIntervalVector(unittest.TestCase):
         pyibex.bwd_mul(a,b,c)
         pyibex.bwd_mul(b,a,c)
 
+    def test_tolist(self):
+        a = IntervalVector([[1,2], [3, 4], [5, 6]])
+        L = a.tolist()
+        self.assertEqual(L, [1, 2, 3, 4, 5, 6])
 
 if __name__ == '__main__':
     unittest.main()

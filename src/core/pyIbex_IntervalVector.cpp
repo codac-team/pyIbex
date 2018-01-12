@@ -134,6 +134,15 @@ IntervalVector max_intevalVector (const IntervalVector& a, const IntervalVector&
   return res;
 }
 
+std::vector<double> tolist(const IntervalVector& obj){
+  std::vector<double> res(2*obj.size());
+  for (int i=0; i < obj.size(); i++){
+    res[2*i] = obj[i].lb();
+    res[2*i+1] = obj[i].ub();
+  }
+  return res;
+}
+
 void export_IntervalVector(py::module& m){
 
     py::class_<IntervalVector >(m, "IntervalVector", DOCS_INTERVALVECTOR_TYPE)
@@ -158,6 +167,7 @@ void export_IntervalVector(py::module& m){
             //  .def("__contains__", [](const IntervalVector &s, float v) { return s.contains(v); })
             //  .def("__reversed__", [](const IntervalVector &s) -> IntervalVector { return s.reversed(); })
 
+            .def("tolist", &tolist, DOCS_INTERVALVECTOR_TOLIST)
             .def("assign", &assignItv)
             .def( self == self )
             .def( self != self )

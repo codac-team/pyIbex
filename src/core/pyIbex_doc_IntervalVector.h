@@ -431,3 +431,11 @@ Return:
     list<IntervalVector> : two sub intervalvectors.
 
 )_docs";
+
+
+const char* DOCS_INTERVALVECTOR_TOLIST=
+R"_docs(Convert an IntervalVector  into a list
+
+Return:
+  list<double>: [x1_lb, x1_ub, x2_lb, x2_ub, ...., ]
+)_docs";

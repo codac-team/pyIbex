@@ -56,6 +56,7 @@ void export_Function(py::module& m){
     .def( "eval" , &Function::eval)
     .def( "eval_vector" , &Function::eval_vector)
     .def( "eval_matrix" , &Function::eval_matrix)
+    .def( "eval", [](Function& f, Interval& itv) { return f.eval_vector(IntervalVector(1, itv));})
 
     .def( "backward", ( bool(Function::*) (const Interval& , IntervalVector&) const) &Function::backward)
     .def( "backward", ( bool(Function::*) (const IntervalVector& , IntervalVector&) const) &Function::backward)

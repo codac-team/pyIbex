@@ -91,5 +91,10 @@ PYBIND11_MODULE(paving, m)
       .def("post_visit", &SepVisitor::post_visit)
       ;
 
+  class_<CtcPaving>(m, "CtcPaving", ctc)
+      .def(init<SepPaving&>())
+      .def("contract", &CtcPaving::contract)
+      ;
+
     // return m.ptr();
 }

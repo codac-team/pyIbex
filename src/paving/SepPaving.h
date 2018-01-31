@@ -17,6 +17,7 @@
 #include <ibex_IntervalVector.h>
 #include <ibex_LargestFirst.h>
 #include <ibex_Sep.h>
+#include <ibex_Ctc.h>
 
 
 
@@ -36,6 +37,7 @@ namespace pyibex {
 class SepPaving;
 
 using SepVisitor = PavingVisitor<SepPaving, IntervalVector>;
+
 class SepPaving : public Sep
 {
 using Node = PSetNode;
@@ -80,6 +82,7 @@ public:
 
 		IntervalVector getBoundingBox();
 
+		int dim();
 
     // std::pair<bool, std::vector<IntervalVector> > Intersect(const IntervalVector& Xm, const IntervalVector& Xp);
 
@@ -93,9 +96,24 @@ private:
 };
 
 
-//=========================================================================================
-//=========================  Inline implementation  =======================================
-//=========================================================================================
+
+class CtcPaving : public ibex::Ctc
+{
+public:
+	CtcPaving(SepPaving& paving): ibex::Ctc(paving.dim()), paving(paving) {}
+
+	virtual void contract(IntervalVector& X){
+		IntervalVector xin(X);
+		paving.separate(xin, X);
+	}
+
+	SepPaving& paving;
+
+};
+
+//==============================================================================
+//=========================  Inline implementation  ============================
+//==============================================================================
 
 inline bool SepPaving::is_empty(){
 		// this->Reunite();
@@ -107,6 +125,9 @@ inline IntervalVector SepPaving::getBoundingBox(){
 	return root.m_box_in | root.m_box_out;
 }
 
+inline int SepPaving::dim(){
+	getBoundingBox().size();
+}
 // inline ThickBoolean SepPaving::check_empty(){
 	// if ( is_empty() )
 	// 	return OUT;
@@ -123,6 +144,8 @@ inline IntervalVector SepPaving::getBoundingBox(){
   // }
 	// return UNK;
 // }
+
+
 
 } // end Namespace Ibex;
 //----------------------------------------------------------

@@ -247,6 +247,14 @@ void export_IntervalVector(py::module& m){
             .def( "volume",     &IntervalVector::volume, DOCS_INTERVALVECTOR_VOLUME )
             .def( "perimeter",  &IntervalVector::perimeter, DOCS_INTERVALVECTOR_PERIMETER )
             .def( "rel_distance",   &IntervalVector::rel_distance, DOCS_INTERVALVECTOR_REL_DISTANCE, "x"_a )
+            .def( "width", [](IntervalVector& o){
+                Vector diam = o.diam();
+                double width=0;
+                for(int i = 0; i < diam.size(); i++){
+                  width += std::pow(diam[i],2);
+                }
+                return std::sqrt(width);
+            })
 
             .def( "diff",   &diff_wrapper , DOCS_INTERVALVECTOR_DIFF, "y"_a, "compactness"_a=true)
             .def( "complementary",  &complementary_wrapper , DOCS_INTERVALVECTOR_COMPLEMENTARY)

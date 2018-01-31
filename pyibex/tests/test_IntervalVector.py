@@ -12,7 +12,7 @@
 import unittest
 import pyibex
 from pyibex import IntervalVector, Interval
-
+import math
 class TestIntervalVector(unittest.TestCase):
 
 
@@ -427,6 +427,11 @@ class TestIntervalVector(unittest.TestCase):
         a = IntervalVector([[1,2], [3, 4], [5, 6]])
         L = a.tolist()
         self.assertEqual(L, [1, 2, 3, 4, 5, 6])
+
+
+    def test_width(self):
+        a = IntervalVector([[1,2], [3, 4], [5, 8]])
+        self.assertEqual(a.width(), math.sqrt(11))
 
 if __name__ == '__main__':
     unittest.main()

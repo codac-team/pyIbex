@@ -23,17 +23,27 @@ using ibex::bwd_imod;
 namespace pyibex {
 
 
+// Implements interval modulo with double period:  x = y mod(p)
+inline bool bwd_imod2(Interval& x, Interval& y, const Interval& p) {
+  Interval z1 = (x - y)/p;
+  Interval z2 = integer(z1);
+  x &= y + z2*p;
+  y &= x - z2*p;
+  return true;
+}
+
+
 inline Interval Cmod(const Interval& x, const Interval& y){
   Interval xx(x);
   Interval yy(y);
-  bwd_imod(xx,yy,(2*Interval::PI).lb());
+  bwd_imod2(xx,yy,2*Interval::PI);
   return yy;
 }
 
 inline Interval Cmod_bwd(const Interval& x, const Interval& y){
   Interval xx(x);
   Interval yy(y);
-  bwd_imod(xx,yy,(2*Interval::PI).lb());
+  bwd_imod2(xx,yy,(2*Interval::PI));
   return xx;
 }
 

@@ -12,6 +12,7 @@ import pyibex
 from pyibex import *
 import sys
 import math
+import tempfile
 class TestContractors(unittest.TestCase):
     def test_Function(self):
         # generate memory leak !!!
@@ -19,7 +20,6 @@ class TestContractors(unittest.TestCase):
             f = Function("x", "y", "sqr(x) + sqr(y)")
         except RuntimeError as err:
             self.assertTrue(str(err) == "\n############# IBEX FUNCTION PARSER ###############\nSyntax error near \"sqr\" line 2: unknown symbol")
-
 
     def test_Function_vector(self):
         f = Function("x[2]", "y[3]", "(x[1]^2 - y[1]*y[0], y[0])")
@@ -30,6 +30,17 @@ class TestContractors(unittest.TestCase):
     #         f = Function("x[2]", "y[3]", "(( x[1]^2 - y[1]*y[0], y[0]);(x[0] + y[2], x[0]))")
     #     except:
     #         print("Unexpected error:", sys.exc_info()[0])
+
+    def test_Function_string(self):
+        fp = tempfile.NamedTemporaryFile(mode="w")
+        fp.write("""function f(x,y,z)
+                        return (x^2-y, y-2*z, z^3-sqrt(y-x));
+                end""")
+        fp.seek(0)
+        f = Function(fp.name)
+        self.assertEqual(str(f), "f:(x,y,z)->((x^2-y),(y-(2*z)),(z^3-sqrt((y-x))))")
+        fp.close()
+
 
     def test_CtcFwdBwd_default_arg(self):
         f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")

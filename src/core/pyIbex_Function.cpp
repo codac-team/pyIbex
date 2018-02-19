@@ -45,6 +45,7 @@ void export_Function(py::module& m){
 
   py::class_<Function>(m, "Function")
 
+    .def(py::init<cc_ptr>())
     .def(py::init<cc_ptr, cc_ptr>())
     .def(py::init<cc_ptr, cc_ptr, cc_ptr>())
     .def(py::init<cc_ptr, cc_ptr, cc_ptr, cc_ptr>())

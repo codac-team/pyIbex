@@ -59,7 +59,7 @@ With *pyibex* it can be created :
 
 ## Inclusion Functions
 
-Ibex-lib provides a very powerful framework to build *inclusion function*. See http://www.ibex-lib.org/doc/tutorial.html#functions
+Ibex-lib provides a framework to build *inclusion function*. See http://www.ibex-lib.org/doc/tutorial.html#functions
 
 With *pyibex*, functions are only defined with strings.  First arguments define variables
 while the last one represents the expression of the function.
@@ -75,7 +75,8 @@ can be defined with:
   # or with an array like syntax
   f2 = Function("x[2]", "x[0]*sin(x[0]+x[1])-2")
   # Evaluation with x=[1,3], y = [1,4]
-  f.eval(IntervalVector([[1,3], [1,4]]))
+  x = IntervalVector([[1,3], [1,4]])
+  f.eval(x)
 ```
 ### Vector valued functions
 

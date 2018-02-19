@@ -81,12 +81,12 @@ void SepPolarXY::separate(IntervalVector& x_in, IntervalVector& x_out){
 
     if (x_in.is_empty() && x_out.is_empty()){
         std::cerr << "Xin and Xout are both empty\n";
-        std::cerr << "config : \n" << std::hexfloat;
+        std::cerr << "config : \n"; // << std::hexfloat;
         std::cerr << "Rho = [" << rho.lb() << " , " << rho.ub() << "]\n";
         std::cerr << "Theta = [" << theta.lb() << " , " << theta.ub() << "]\n";
         std::cerr << "X[0] = [" << xinOld[0].lb() << " , " << xinOld[0].ub() << "]\n";
         std::cerr << "X[1] = [" << xinOld[1].lb() << " , " << xinOld[1].ub() << "]\n";
-        std::cerr << std::defaultfloat;
+        // std::cerr << std::defaultfloat;
         contractOut(xoutOld);
         contractIn(xinOld);
 //        assert(false);

@@ -12,12 +12,16 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/
 FILE(GENERATE OUTPUT "${PYTHON_PACKAGE_DIR}/pyibex/version.py" CONTENT "__version__=\"${PACKAGE_VERSION}\"")
 
 
+if(NOT WIN32)
+  set(FORCE_PYTHON_EXT "ext_modules=[Extension(\"pyibex.empty\", sources=[\"empty.c\"])],")
+  # trick to generate a correct wheel.
+  file(WRITE "${PYTHON_PACKAGE_DIR}/empty.c" "// empty source file")
+endif()
+
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in
   ${PYTHON_PACKAGE_DIR}/setup.py
 )
-
-
 
 set( pip_dir "${CMAKE_CURRENT_BINARY_DIR}/pip_package")
 include_directories(.)
@@ -32,8 +36,6 @@ add_subdirectory(paving)
 
 install( DIRECTORY "${PYTHON_PACKAGE_DIR}/pyibex" DESTINATION "${PYTHON_INSTDIR}")
 
-# trick to generate a correct wheel.
-file(WRITE "${PYTHON_PACKAGE_DIR}/empty.c" "// empty source file")
 
 add_custom_target(pip_package)
 add_custom_command(TARGET pip_package PRE_BUILD

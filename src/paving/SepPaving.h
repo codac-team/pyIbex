@@ -126,7 +126,7 @@ inline IntervalVector SepPaving::getBoundingBox(){
 }
 
 inline int SepPaving::dim(){
-	getBoundingBox().size();
+	return getBoundingBox().size();
 }
 // inline ThickBoolean SepPaving::check_empty(){
 	// if ( is_empty() )

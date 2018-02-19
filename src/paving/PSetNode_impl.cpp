@@ -103,17 +103,17 @@ PSetNode* PSetNode::right() const
 void PSetNode::removeNode(){
   bool bl = m_left->is_empty();
   bool br = m_right->is_empty();
-  if (bl and br){
+  if (bl && br){
     delete m_left; m_left=nullptr;
     delete m_right; m_right=nullptr;
-  } else if (!bl and br){
+  } else if (!bl && br){
     PSetNode* tmp = m_left;
     delete m_right;
     m_right = tmp->m_right;
     m_left = tmp->m_left;
     tmp->m_left = nullptr; tmp->m_right = nullptr;
     delete tmp;
-  } else if (bl and !br){
+  } else if (bl && !br){
     PSetNode* tmp = m_right;
     delete m_left;
     m_left=m_right->m_left;
@@ -329,11 +329,14 @@ PSetNode* PSetNode::load(std::ifstream& infile)
   bool has_children;
 
   infile.read((char*)(&size), sizeof(size));
-  double bounds_in[size][2], bounds_out[size][2];
+  auto bounds_in = new double[size][2];
+  auto bounds_out = new double[size][2];
   infile.read((char*)(&bounds_out), 2*size*sizeof(double));
   infile.read((char*)(&bounds_in), 2*size*sizeof(double));
   infile.read((char*)(&has_children), sizeof(has_children));
   PSetNode* node = new PSetNode(IntervalVector(size, bounds_in), IntervalVector(size, bounds_out) );
+  delete[] bounds_in;
+  delete[] bounds_out;
   if (has_children) {
     node->m_left = PSetNode::load(infile);
     node->m_right = PSetNode::load(infile);

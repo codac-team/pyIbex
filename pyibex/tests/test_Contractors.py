@@ -32,14 +32,14 @@ class TestContractors(unittest.TestCase):
     #         print("Unexpected error:", sys.exc_info()[0])
 
     def test_Function_string(self):
-        fp = tempfile.NamedTemporaryFile(mode="w")
+        fp = tempfile.NamedTemporaryFile(mode="w", delete=False)
         fp.write("""function f(x,y,z)
                         return (x^2-y, y-2*z, z^3-sqrt(y-x));
                 end""")
-        fp.seek(0)
-        f = Function(fp.name)
-        self.assertEqual(str(f), "f:(x,y,z)->((x^2-y),(y-(2*z)),(z^3-sqrt((y-x))))")
+        filename = fp.name
         fp.close()
+        f = Function(filename)
+        self.assertEqual(str(f), "f:(x,y,z)->((x^2-y),(y-(2*z)),(z^3-sqrt((y-x))))")
 
 
     def test_CtcFwdBwd_default_arg(self):

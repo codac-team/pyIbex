@@ -148,7 +148,7 @@ void SepPaving::separate(IntervalVector& xin, IntervalVector& xout){
         if (!Xleft.is_empty() && !Xleft.is_subset(xborder)){
           L.push_back(n->left());
         }
-        if ( !Xright.is_empty() and !Xright.is_subset(xborder)){
+        if ( !Xright.is_empty() && !Xright.is_subset(xborder)){
           L.push_back(n->right());
         }
       }
@@ -244,7 +244,7 @@ void SepPaving::Sivia_ops(Sep &sep, double eps, bool intersection){
 
         L.push_back(n->left());
         L.push_back(n->right());
-      } else if (X.is_empty() or X.max_diam() < eps) {
+      } else if (X.is_empty() || X.max_diam() < eps) {
         n->clear();
       }
   }

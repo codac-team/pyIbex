@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12)
 
 project(pyIbex)
-set(PACKAGE_VERSION "1.6.4b2")
+set(PACKAGE_VERSION "1.6.4b1")
 
 # build type
 IF(NOT CMAKE_BUILD_TYPE)
@@ -23,7 +23,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
 
 if(NOT WIN32)
   # SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"  )
+	ADD_DEFINITIONS(-std=c++11)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"   )
 	set(IbexLib_USE_STATIC 1)
 	#SET(CMAKE_EXE_LINKER_FLAGS "-static")
 endif()

@@ -39,7 +39,7 @@ using namespace pybind11::literals;
 using namespace pyibex;
 
 
-using SepVisitor = PavingVisitor<SepPaving, IntervalVector>;
+// using SepVisitor = PavingVisitor<SepPaving, IntervalVector>;
 class pySepVisitor : public SepVisitor {
 public:
   /* Inherit the constructors */

@@ -18,12 +18,14 @@ using namespace pybind11::literals;
 #include <ibex_CtcFwdBwd.h>
 #include <ibex_CtcUnion.h>
 #include <ibex_CtcCompo.h>
-
+#include <ibex_LargestFirst.h>
 #include <ibex_CtcNotIn.h>
 #include <ibex_Function.h>
 #include <ibex_CtcInverse.h>
 #include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
+
+#include "pyibex_CtcHull.h"
 #include <pyibex_QInterProjF.h>
 #include "pyIbex_doc_Ctc.h"
 
@@ -44,7 +46,6 @@ using ibex::IntervalVector;
 using ibex::Function;
 using ibex::Array;
 using ibex::Interval;
-
 using pyibex::CtcQInterProjF;
 
 
@@ -100,6 +101,17 @@ void export_Ctc(py::module& m){
     .def("contract", &CtcCompo::contract)
     ;
 
+  // Export CtcQInterProjF
+  py::class_<CtcQInter>(m, "CtcQInter", ctc, DOC_CTCQINTER_TYPE)
+    .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>(), "list"_a, "q"_a)
+    .def("contract", &CtcQInter::contract)
+    ;
+
+  py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc, DOC_CTCQINTERPROJF_TYPE)
+    .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>(), "list"_a, "q"_a)
+    .def("contract", &CtcQInterProjF::contract)
+    ;
+
   // Export CtcFwdBwd
   py::class_<CtcFwdBwd>(m, "CtcFwdBwd", ctc, DOC_CTCFWDBWD_TYPE)
     .def(py::init<Function&, CmpOp>(), py::keep_alive<1,2>(), "f"_a, "op"_a=ibex::EQ)
@@ -111,7 +123,7 @@ void export_Ctc(py::module& m){
   // Export CtcInverse
   py::class_<CtcInverse>(m, "CtcInverse", ctc, DOC_CTCINVERSE_TYPE)
     .def(py::init<Ctc&, Function&>(),py::keep_alive<1,2>(), py::keep_alive<1,3>(), "ctc"_a, "f"_a)
-    .def("contract", &CtcInverse::contract, py::arg("box").noconvert())
+    .def("contract", &CtcInverse::contract)
     ;
 
   // Export CtcNotIn
@@ -121,22 +133,19 @@ void export_Ctc(py::module& m){
     .def("contract", &CtcNotIn::contract)
     ;
 
-  // Export CtcNotIn
+  // Export CtcFixPoint
   py::class_<CtcFixPoint>(m, "CtcFixPoint", ctc, DOC_CTCFIXPOINT_TYPE)
     .def(py::init<Ctc&, double>(), py::keep_alive<1,2>(), "ctc"_a, "ratio"_a=1e-3)
     .def("contract", &CtcFixPoint::contract)
     ;
 
-
-  // Export CtcQInterProjF
-  py::class_<CtcQInter>(m, "CtcQInter", ctc, DOC_CTCQINTER_TYPE)
-    .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
-    .def("contract", &CtcQInter::contract, py::arg("box").noconvert())
+  // Export CtcHull
+  py::class_<pyibex::CtcHull>(m, "CtcHull", ctc, DOC_CTCHULL_TYPE)
+    .def(py::init<ibex::Sep&, double, ibex::Bsc&>(),
+            py::keep_alive<1,2>(), py::keep_alive<1,4>(),
+            "sep"_a, "epsilon"_a, "bsc"_a = ibex::LargestFirst(1e-10)
+          )
+    .def("contract", &pyibex::CtcHull::contract, py::arg("box").noconvert())
     ;
 
-  // Export CtcQInterProjF
-  py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc, DOC_CTCQINTERPROJF_TYPE)
-    .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>())
-    .def("contract", &CtcQInterProjF::contract, py::arg("box").noconvert())
-    ;
 }

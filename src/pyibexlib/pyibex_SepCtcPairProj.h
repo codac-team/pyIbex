@@ -17,6 +17,7 @@
 #include <ibex_SepFwdBwd.h>
 #include <ibex_CtcForAll.h>
 #include <ibex_CtcExist.h>
+#include <ibex_SepFwdBwd.h>
 
 
 using ibex::Ctc;
@@ -25,6 +26,8 @@ using ibex::IntervalVector;
 using ibex::CtcExist;
 using ibex::CtcForAll;
 using ibex::Bitset;
+using ibex::SepCtcPair;
+using ibex::SepFwdBwd;
 
 namespace pyibex {
 
@@ -48,16 +51,20 @@ class SepCtcPairProj : public Sep {
 
 public:
     SepCtcPairProj(Ctc& ctc_in, Ctc& ctc_out, const IntervalVector& y_init, double prec);
+    SepCtcPairProj(SepCtcPair &sep, const IntervalVector& y_init, double prec);
     SepCtcPairProj(Sep &sep, const IntervalVector& y_init, double prec);
+
     ~SepCtcPairProj();
 
     void separate(IntervalVector &x_in, IntervalVector &x_out);
 
 protected:
-    Ctc *ctcIn, *ctcOut;
-    CtcExist *ctcExist;
-    CtcForAll *ctcForAll;
-
+    Ctc& ctcIn;
+    Ctc& ctcOut;
+    // CtcExist *ctcExist;
+    // CtcForAll *ctcForAll;
+    // bool delete_ctc;
+    IntervalVector y_init;
     Bitset<unsigned int, float> vars;
 
 };

@@ -26,6 +26,7 @@ add_subdirectory(pyibexlib)
 add_subdirectory(core)
 add_subdirectory(geometry)
 add_subdirectory(image)
+add_subdirectory(paving)
 
 
 

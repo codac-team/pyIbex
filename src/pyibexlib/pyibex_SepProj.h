@@ -120,6 +120,10 @@ typedef struct ImpactStatus_{
     void reconstrut_v2(IntervalVector &x_in, IntervalVector& x_out, IntervalVector& x_old){
         // std::cerr << x_in << " " << x_out << " " << x_old << "\n";
         // std::cerr << impact_cout << " " << impact_cin << "\n";
+        if (x_out.is_empty() && impact_cout && impact_cin){
+          x_in  = x_old;
+          return;
+        }
         if (!x_in.is_empty() && !x_out.is_empty()){
             if (impact_cin == true){
                 if (impact_cout == false){

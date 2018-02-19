@@ -77,7 +77,7 @@ protected:
  */
 class CtcPolarXY : public Ctc {
 public:
-  CtcPolarXY(const Interval &rho, const Interval& th): Ctc(2), rho(rho), theta(theta){}
+  CtcPolarXY(const Interval &rho, const Interval& theta): Ctc(2), rho(rho), theta(theta){}
 
   /**
    * @brief Contract the box

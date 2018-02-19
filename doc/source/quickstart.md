@@ -1,12 +1,18 @@
 # Get Started
 
-First install pyibex with conda:
+First install pyibex with pip:
 
 ```
-conda install -c benensta pyibex
+$ python -m pip install pyibex
+```
+Don't forget to upgrade your pip installation in order to be able to download wheel files.
+```bash
+$ python -m pip install --upgrade pip
 ```
 See [Installation section](installation.html) for more details:
 
+
+# Basics
 
 **PyIbex** functionalities and objects are under the *pyibex* namespace.
 
@@ -14,14 +20,10 @@ See [Installation section](installation.html) for more details:
     from pyibex import Interval
 ```
 
-
-# Basic Types
-
 ## Intervals
 
 The type Interval represents a closed set of `$\mathbb{R}$`. The set of all Intervals
-are denoted `$\mathbb{IR}$`
-
+is denoted `$\mathbb{IR}$`
 
 ```python
 
@@ -29,10 +31,11 @@ are denoted `$\mathbb{IR}$`
     from pyibex import Interval
 
     # Create new Intervals
-    a = Interval.EMPTY_SET # create an empty interval
-    a = Interval.ALL_REALS # create [-oo, oo]
-    a = Interval()         # create [-oo, oo]
-    a  = Interval(-2, 3)   # create [-2, 3]
+    a = Interval.EMPTY_SET # an empty interval
+    a = Interval.ALL_REALS # interval [-oo, oo]
+    a = Interval(-oo, oo)  # interval [-oo, oo]
+    a = Interval()         # interval [-oo, oo]
+    a  = Interval(-2, 3)   # interval [-2, 3]
 ```
 
 ## IntervalVector (box)
@@ -56,7 +59,7 @@ With *pyibex* it can be created :
 
 ## Inclusion Functions
 
-Ibex-lib provides a very powerful framework to build *inclusion function*. See http://www.ibex-lib.org/doc/tutorial.html#functions
+Ibex-lib provides a framework to build *inclusion function*. See http://www.ibex-lib.org/doc/tutorial.html#functions
 
 With *pyibex*, functions are only defined with strings.  First arguments define variables
 while the last one represents the expression of the function.
@@ -72,8 +75,10 @@ can be defined with:
   # or with an array like syntax
   f2 = Function("x[2]", "x[0]*sin(x[0]+x[1])-2")
   # Evaluation with x=[1,3], y = [1,4]
-  f.eval(IntervalVector([[1,3], [1,4]]))
+  x = IntervalVector([[1,3], [1,4]])
+  f.eval(x)
 ```
+### Vector valued functions
 
 Vector valued function can be written by using parenthesis syntax "( ..., ..., ...)".
 For instance :
@@ -89,7 +94,9 @@ is defined in python by:
   f = Function("x","y","z", "( x^2-y, y-2*z, z^3-sqrt(y-x))")
 
 ```
-Using the **minibex** syntxe (see http://www.ibex-lib.org/doc/tutorial.html#using-the-minibex-syntax)
+### Using the minibex syntax.
+
+Using the **minibex** syntax (see http://www.ibex-lib.org/doc/tutorial.html#using-the-minibex-syntax)
 function can be defined from a text file.
 
 for instance:
@@ -107,8 +114,59 @@ for instance:
 
 
 ## Contractors
+A *Contractor* `$\mathcal{C}$` is an operator `$\mathbb{IR}^{n}\mapsto\mathbb{IR}^{n}$` such that
+```math
+\begin{equation}
+  \begin{array}{lll}
+    \mathcal{C}([\mathbf{x}])\subset[\mathbf{x}] &  & \text{(contractance)}\\
+    {}[\mathbf{x}]\subset\left[\mathbf{y}\right]\text{ }\Rightarrow\text{}\mathcal{C}([\mathbf{x}])\subset\mathcal{C}([\mathbf{y}]). &  & \text{(monotonicity)}
+\end{array}
+\end{equation}
+```
 
+A set `$\mathbb{X}$` is *consistent* with the contractor `$\mathcal{C}$` (we
+will write `$\mathbb{X}\sim\mathcal{C}$`) if for all `$\left[\mathbf{x}\right]$`, we
+have:
+```math
+\begin{equation}
+\mathcal{C}([\mathbf{x}])\cap\mathbb{X}=[\mathbf{x}]\cap\mathbb{X}.
+\end{equation}
+```
 
+In pyibex a contractor is called using the *contract* method, appled on a box or directly by calling the *__call__*
+method.
+
+### Forward / Backward Contractor
+
+Given a function `$\mathbf{f}$` and a box `$[\mathbf{y}]$`,
+the *CtcFwdBwd* object can be used to build a fwd/bwd contractor associated to
+the set `$\mathbb{X} = \left\{ \mathbf{x} \mid \mathbf{f}(\mathbf{x}) \in [\mathbf{y}] \right\}$`:
+For instance:
+```python
+    # Define a Function from an equation
+    f = Function("x_1", "x_2", "x_1^2 + x_2^2 - 3")
+
+    # FwdBwd Contractor f(x) > 0
+    ctc = CtcFwdBwd(f, [0, oo])
+
+    # Define an initial box X0 = [-5, 5]x[-5, 5]
+    X0 = IntervalVector(2, [-5, 5])
+
+```
+
+### Operation on
+
+```python
+    # CtcIn/CtcOut contractors :math:`$f \in [-2.5, 3.5]$`
+    ctcIn = CtcIn(f, Interval(3).inflate(0.5))
+    ctcOut = CtcNotIn(f, Interval(3).inflate(0.5))
+
+    # Operations on Contractors
+    # composition of two contractor
+    ctc = ctcIn & ctcOut
+    # union of a python list of contractors
+    ctc1 = CtcUnion([ctcIn, ctcOut, ctc1])
+```
 ```python
 
     # Define a Function from an equation

@@ -38,6 +38,7 @@ using namespace pybind11::literals;
 #include "pyibex_SepFixPoint.h"
 #include "pyibex_SepProj.h"
 #include "pyibex_SepCtcPairProj.h"
+#include "pyibex_SepUnionBbox.h"
 
 
 #include "pyIbex_doc_Separators.h"
@@ -54,6 +55,8 @@ using pyibex::SepFixPoint;
 using pyibex::SepProj;
 using pyibex::SepCtcPairProj;
 using pyibex::SepQInterProjF;
+using pyibex::SepUnionBbox;
+
 
 
 
@@ -81,7 +84,6 @@ SepUnion* __or(Sep& s1, Sep& s2) { return (new SepUnion(s1, s2)); }
 SepInter* __and(Sep& s1, Sep& s2){ return (new SepInter(s1, s2)); }
 SepNot* __not(Sep& s1){ return (new SepNot(s1)); }
 
-
 void export_Separators(py::module& m){
 
   // typedef void (Sep::*separate) (IntervalVector&, IntervalVector&);
@@ -103,6 +105,11 @@ void export_Separators(py::module& m){
     .def("separate", &SepUnion::separate)
   ;
 
+  class_<SepUnionBbox>(m, "SepUnionBbox", sep)
+    .def(init<Array<Sep>, std::vector<IntervalVector> & >(), keep_alive<1,2>(), py::arg("list"), py::arg("bbox"))
+    .def("separate", &SepUnionBbox::separate)
+  ;
+
   class_<SepInter>(m, "SepInter", sep, DOCS_SEP_SEPINTER)
     .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
     .def("separate", &SepInter::separate)
@@ -120,7 +127,11 @@ void export_Separators(py::module& m){
   class_<SepFwdBwd>(m, "SepFwdBwd", sepCtcPair, DOCS_SEP_SEPFWDBWD)
     .def(init< Function&, CmpOp >(), keep_alive<1,2>(), py::arg("f"), py::arg("op"))
     .def(init<Function&, Interval& >(), keep_alive<1,2>(), py::arg("f"), py::arg("itv_y"))
-    .def(init<Function&, IntervalVector& >(), keep_alive<1,2>(), py::arg("f"), py::arg("box_y"))
+    .def(init<Function&, IntervalVector& >(), keep_alive<1,2>(), py::arg("f"), py::arg("itv_y"))
+    .def(init([](ibex::Function& f,const std::array<double, 2>& itv){
+        return std::unique_ptr<SepFwdBwd> ( new SepFwdBwd(f, Interval(itv[0], itv[1])));
+    }), keep_alive<1,2>(), py::arg("f"), py::arg("itv_y") )
+
     .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepFwdBwd::separate)
     // .def("ctc_in", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_in;}, py::return_value_policy::reference)
     // .def("ctc_out", [](const SepFwdBwd* o) -> const Ctc& {return o->ctc_out;}, py::return_value_policy::reference)
@@ -157,6 +168,17 @@ void export_Separators(py::module& m){
           py::arg("sep"), py::arg("y_init"), py::arg("prec")=1e-3 )
     .def(py::init<ibex::Sep&,const Interval&, double>(), py::keep_alive<1,2>(),
           py::arg("sep"), py::arg("y_init"), py::arg("prec")=1e-3 )
+    .def(py::init(
+        [](ibex::Sep& S,const std::array<double, 2>& itv, double eps){
+          return std::unique_ptr<pyibex::SepProj> (
+            new pyibex::SepProj(S, Interval(itv[0], itv[1]), eps)
+          );
+        }),
+        py::keep_alive<1,2>(),
+        py::arg("sep"),
+        py::arg("y_init"),
+        py::arg("prec")=1e-3 )
+
     .def("separate", &pyibex::SepProj::separate)
   ;
 
@@ -164,6 +186,8 @@ void export_Separators(py::module& m){
   py::class_<pyibex::SepCtcPairProj>(m, "SepCtcPairProj", sep, DOCS_SEP_SEPCTCPAIRPROJ)
     .def(py::init<ibex::Ctc&, ibex::Ctc&,const IntervalVector&, double>(), py::keep_alive<1,2>(), py::keep_alive<1,3>(),
           py::arg("ctc_in"), py::arg("ctc_out"), py::arg("y_init"), py::arg("prec"))
+    .def(py::init<ibex::SepCtcPair&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
+          py::arg("sep"), py::arg("y_init"), py::arg("prec") )
     .def(py::init<ibex::Sep&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
           py::arg("sep"), py::arg("y_init"), py::arg("prec") )
     .def("separate", &pyibex::SepCtcPairProj::separate)
@@ -180,5 +204,7 @@ void export_Separators(py::module& m){
     .def(py::init<ibex::Sep&, double >(), py::keep_alive<1,2>(), "sep"_a, "ratio"_a=0.01)
     .def("separate", &pyibex::SepFixPoint::separate)
   ;
+
+  // py::implicitly_convertible< std::array<double, 2>&, Interval>();
 
 }

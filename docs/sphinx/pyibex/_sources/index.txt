@@ -13,15 +13,15 @@ PyIbex is a python module providing an easy-to-use interface of `Ibex-lib`_
 with high level functionalities such as Interval Arithmetics, Contractors programming
 and Sets manipulation.
 
-The core part of algorithm is generally written in C++ and binded with python using `pybind11`_
+Core part of algorithm is generally written in C++ and bind with python using `pybind11`_
 
 .. _`Ibex-lib`: http://www.ibex-lib.org
 .. _`pybind11`: https://github.com/wjakob/pybind11
 
-Modules descriptions
+Modules description
 --------------------
 
-*PyIbex* is composed on several sub-modules:
+*PyIbex* is composed on severals sub-modules:
 
 - `core <api.html>`_ ( mainly direct binding of Ibex-lib)
 - `geometry <https://github.com/benensta/ibex-geometry/>`_
@@ -38,8 +38,8 @@ Contents:
    :maxdepth: 2
 
    quickstart
-   api
    installation
+   api
 
 
 Indices and tables

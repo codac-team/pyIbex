@@ -24,12 +24,7 @@ It contains core functionalities of ibex and additional modules:
 See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyibex/) for more informations.
 
 
-# Install with a precompiled version
-
-## With Conda
-```bash
->>> conda install -c benensta pyibex
-```
+# Install with a precompiled version using pip
 
 ## With pip
 ```python

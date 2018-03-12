@@ -133,3 +133,7 @@ SepQInter
   :members:
   :show-inheritance:
   :no-undoc-members:
+
+Geometry
+--------
+.. automodule:: pyibex.geometry

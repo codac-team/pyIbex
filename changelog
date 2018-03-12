@@ -5,18 +5,13 @@ Changelog
 All notable changes to this project will be documented in this file.
 
 
-TODO: ipdate SepQInterProjF Doc
-TODO: Change python to python3
-TODO: change example CmpOp.LEQ
-
-
-
-
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 2018-03-12 Benoit Desrochers <ben.ensta@gmail.com>
-
+  * [install] add vibes requirment in setup.py (for iamooc)
+  * [doc] fix indentation error in Interval
+  
 2018-02-25 Benoit Desrochers <ben.ensta@gmail.com>
   * [update] pybind11 version > 2.2.1 (#b48d4a)
   * [update] doc

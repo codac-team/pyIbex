@@ -27,6 +27,7 @@ setup(
   },
   test_suite='pyibex.tests',
   license="LGPLv3+",
+  install_requires=['vibes'],
   classifiers=[
       "Development Status :: 3 - Alpha",
       "Topic :: Scientific/Engineering :: Mathematics",

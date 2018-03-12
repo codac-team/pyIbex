@@ -304,6 +304,16 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+def no_pyibex_signature(app, what, name, obj, options, signature, return_annotation):
+    print(signature)
+    if signature is not None:
+        signature = signature.replace("pyibex.pyibex", "pyibex")
+        print(signature)
+    if return_annotation is not None:
+        return_annotation = return_annotation.replace("pyibex.pyibex", "pyibex")
+    return (signature, return_annotation)
+
 def setup(app):
     app.add_config_value('recommonmark_config', {
             'enable_eval_rst': True,
@@ -311,5 +321,9 @@ def setup(app):
             'enable_inline_math': True
             }, True)
     app.add_transform(AutoStructify)
+    app.connect(
+        'autodoc-process-signature',
+        no_pyibex_signature,
+    )
 
 autodoc_member_order='groupwise'

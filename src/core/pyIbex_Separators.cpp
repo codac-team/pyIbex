@@ -149,7 +149,7 @@ void export_Separators(py::module& m){
     .def_property("q", py::cpp_function(&SepQInter::get_q), py::cpp_function(&SepQInter::set_q))
   ;
 
-  class_<SepQInterProjF>(m, "SepQInterProjF", sep, DOCS_SEP_SEPQINTER)
+  class_<SepQInterProjF>(m, "SepQInterProjF", sep, DOCS_SEP_SEPQINTERPROJF)
     .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
     .def("separate", &SepQInterProjF::separate)
     .def_property("q", py::cpp_function(&SepQInterProjF::get_q), py::cpp_function(&SepQInterProjF::set_q))

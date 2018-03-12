@@ -62,53 +62,61 @@ Example:
 
 )_docs";
 
-const char* DOCS_SEP_SEPARATE=
-R"_docs(Separate a box in two sub-boxes.
+const char* DOCS_SEP_SEPARATE=R"_docs(
+Separate a box in two sub-boxes.
+
 Args:
     x_in  (IntervalVector): As input: the initial box. As output: result of the first ("inner") contraction
     x_out (IntervalVector): As input: the initial box. As output: the result of the second ("outer") contraction
+
 Note:
     Precondition: x_in and x_out must be the same boxes.
 
 )_docs";
 
-const char* DOCS_SEP_NBVAR=
-R"_docs(The number of variables this separator works with.
+const char* DOCS_SEP_NBVAR=R"_docs(
+The number of variables this separator works with.
 )_docs";
 
 
-const char* DOCS_SEP_OR=
-R"_docs(Union a two separators
+const char* DOCS_SEP_OR=R"_docs(
+Union a two separators
+
 Example:
     >>> sep = sep1 | sep2
 )_docs";
 
-const char* DOCS_SEP_AND=
-R"_docs(Intersection of two separators
+const char* DOCS_SEP_AND=R"_docs(
+Intersection of two separators
+
 Example:
     >>> sep = sep1 & sep2
 )_docs";
 
-const char* DOCS_SEP_INVERSE=
-R"_docs(Inverse of a separator (operator not)
+const char* DOCS_SEP_INVERSE=R"_docs(
+Inverse of a separator (operator not)
+
 Example:
     >>> sep = ~sep1
 )_docs";
 
-const char* DOCS_SEP_SEPUNION=
-R"_docs(Union of separators
+const char* DOCS_SEP_SEPUNION=R"_docs(
+Union of separators
+
 Args:
-    list<Sep> list of separators
+    list<Sep>: list of separators
 )_docs";
 
-const char* DOCS_SEP_SEPINTER=
-R"_docs(Intersection of separators
+const char* DOCS_SEP_SEPINTER=R"_docs(
+Intersection of separators
+
 Args:
-    list<Sep> list of separators
+    list<Sep>: list of separators
 )_docs";
 
-const char* DOCS_SEP_SEPCTCPAIR=
-R"_docs(Build a separator with a pair of complementary contractors
+const char* DOCS_SEP_SEPCTCPAIR=R"_docs(
+  Build a separator with a pair of complementary contractors
+
 Args:
     ctc_in (Ctc): inner contractor
     ctc_out (Ctc): outer contractor
@@ -120,13 +128,13 @@ Example:
     >>> sep = SepCtcPair(ctc_in, ctc_out)
 )_docs";
 
-const char* DOCS_SEP_SEPFWDBWD=
-R"_docs(This separator applies inner and outer forward-backward
+const char* DOCS_SEP_SEPFWDBWD=R"_docs(
+This separator applies inner and outer forward-backward
 contractors to separate a box w.r.t. a constraint
 :math:`f(x) in [y]`.
 
 Args:
-    f (Function) : Function used for the Forward-backward
+    f (Function): Function used for the Forward-backward
     op (CmpOp): comparaison operator
     itv_y (Interval): for constraint f(x) in itv_y
     box_y (IntervalVector): for constraint f(x) in box_y
@@ -145,17 +153,38 @@ See Also:
 )_docs";
 
 const char* DOCS_SEP_SEPQINTER=
-R"_docs(Exact relaxed intersection of a list of separators
+R"_docs(
+Exact relaxed intersection of a list of separators
+
+The complexity of this algorithm is exponential wrt the dimension of the
+input box.
+
 Args:
     list (list<Ctc>) : list of separators
     q (int) : The number of separators which have to intersect the result
+
+)_docs";
+
+const char* DOCS_SEP_SEPQINTERPROJF=
+R"_docs(
+Approximation of the relaxed intersection.
+
+Compute the approximation of the relaxed intersection of a list of separators
+using a projection algorithm.
+
+Args:
+    list (list<Ctc>) : list of separators
+    q (int) : The number of separators which have to intersect the result
+
 )_docs";
 
 const char* DOCS_SEP_SEPINVERSE=
 R"_docs(Image of a separator by a function in a forward-backward manner
+
 Args:
     sep (Sep) : Separator to use
     f (Function): Function to use
+
 See Also
     pyibex.CtcInverse
 
@@ -166,10 +195,12 @@ const char* DOCS_SEP_SEPTRANSFORM=
 R"_docs(Image of a separator by a function in a forward-backward manner with
   the analytical expression of f and f^{-1}
   It will return f(S) = { f o S_in o f^{-1}, f o S_out o f^{-1}}
+
 Args:
     sep (Sep) : Separator to use
     ffwd (Function): forward expression of f
     fbwd (Function): reverse expression of f
+
 See Also
     pyibex.CtcInverse, pyibex.SepInverse
 )_docs";

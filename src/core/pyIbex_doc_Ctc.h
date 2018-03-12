@@ -85,6 +85,7 @@ Return:
 
 const char* DOC_CTCFWDBWD_TYPE=
 R"_doc(Forward-backward contractor (HC4Revise).
+
 Can be initialized with:
     + a function ( constraint f(x) cmp 0) default cmp = EQ
     + a function and a interval/box  f(x) in itv

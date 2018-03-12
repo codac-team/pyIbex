@@ -67,54 +67,65 @@ R"doc_itv(Returns the midpoint of self.
     * [a, b]     -> midP ~ a + .5*(b-a)
 )doc_itv";
 
-const char* DOCS_INTERVAL_RAD =
-R"doc_itv(Return the diameter of self.
+const char* DOCS_INTERVAL_RAD =R"doc_itv(
+Return the diameter of self.
 By convention, 0 if self is empty.
+
 )doc_itv";
 
-const char* DOCS_INTERVAL_DIAM =
-R"doc_itv(Return the diameter of self.
-By convention, 0 if self is empty.)doc_itv";
+const char* DOCS_INTERVAL_DIAM =R"doc_itv(
+Return the diameter of self.
+By convention, 0 if self is empty.
 
-const char* DOCS_INTERVAL_MIG =
-R"doc_itv(Returns the mignitude of self:
+)doc_itv";
+
+const char* DOCS_INTERVAL_MIG =R"doc_itv(
+Returns the mignitude of self:
 
   * +(lower bound)  if self > 0
   * -(upper bound) if self < 0
   * 0 otherwise
+
 )doc_itv";
 
 
 const char* DOCS_INTERVAL_MAG =
-R"mydelimiter(Returns the magnitude of self:
-mag(self)=max(|lower bound|, |upper bound|).
-)mydelimiter";
+R"doc_itv(Returns the magnitude of self
+
+  mag(self)=max(``|lower bound|``, ``|upper bound|``).
+
+)doc_itv";
 
 const char* DOCS_INTERVAL_IS_SUBSET =
 R"doc_itv(True iff this interval is a subset of \a x.
+
 Note:
     Always return true if self is empty.
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_IS_STRICT_SUBSET =
-R"doc_itv(True iff this interval is a subset of \a x and not \a x itself.
+R"doc_itv(True iff this interval is a subset of x and not x itself.
 
 Note:
     In particular, (-oo,oo) is not a strict subset of (-oo,oo)
     and the empty set is not a strict subset of the empty set although
     in both cases, the first is inside the interior of the second.
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_IS_INTERIOR_SUBSET=
 R"doc_itv(Returns:
-  bool: True iff this interval is in the interior of \a x.
+bool: True iff this interval is in the interior of `x`.
 
 Note:
     In particular, (-oo,oo) is in the interior of (-oo,oo)
     and the empty set is in the interior of the empty set.
+
 Note:
     Always return true if self is empty.
-  )doc_itv";
+
+)doc_itv";
 
 const char* DOCS_INTERVAL_IS_STRICT_INTERIOR_SUBSET =
 R"doc_itv(Returns:
@@ -170,9 +181,12 @@ R"doc_itv(True iff self is empty.
 
 const char* DOCS_INTERVAL_IS_DEGENERATED =
 R"doc_itv(True iff self is degenerated.
+
 An interval is degenerated if it is of the form [a, a]
+
 Note:
     An empty interval is considered here as degenerated.
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_IS_UNBOUNDED =
@@ -184,14 +198,19 @@ Note:
 
 const char* DOCS_INTERVAL_IS_BISECTABLE =
 R"doc_itv(True iff self can be bisected into two non-degenerated intervals.
+
 Examples of non bisectable intervals are [0,next_float(0)] or [DBL_MAX,+oo).
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_REL_DISTANCE =
 R"doc_itv(Relative Hausdorff distance between self and x.
+
 The relative distance is basically distance(x)/diam(self).
+
 See:
   #ibex::distance (const ibex::Interval &x1, const ibex::Interval &x2).
+
 )doc_itv";
 
 const char* DOCS_INTERVAL_COMPLEMENTARY =
@@ -204,11 +223,12 @@ R"doc_itv(Returns:
    x\y
 )doc_itv";
 
-const char* DOCS_INTERVAL_BISECT =
-R"doc_itv(Bisect self into two subintervals.
-  The Interval musts be bisectable (  is_bisectable() must be true.)
+const char* DOCS_INTERVAL_BISECT =R"doc_itv(Bisect self into two subintervals.
+
+The Interval musts be bisectable i.e. is_bisectable() must be true.
+
 Args:
     ratio (float): says where to split (in [0, 1] , 0.5=middle)
 Returns:
-    list: two sub intervals
+    list (itv1, itv2): two sub intervals
 )doc_itv";

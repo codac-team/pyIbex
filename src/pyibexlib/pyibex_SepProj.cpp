@@ -111,12 +111,22 @@ bool SepProj::process(IntervalVector& x_in, IntervalVector& x_out, IntervalVecto
 
 void complementaryUnion(IntervalVector& x, const IntervalVector& y, const IntervalVector& x0){
   IntervalVector *res;
-  if ((x == y) || (x == x0)) return;
+  if (x == x0) return;
   int n = x0.diff(y, res);
   for(int i = 0; i < n; i++){
     x |= res[i];
   }
   delete[] res;
+  if (( x | y ) != x0){
+    std::cerr << "##########################################################################\n";
+    std::cerr << std::hexfloat;
+    std::cerr << "x_in     " <<  x << "\n";
+    std::cerr << "x_out    " <<  y << "\n";
+    std::cerr << "x_old0 " <<  x0 << "\n";
+    std::cerr << std::defaultfloat;
+    std::cerr << "##########################################################################\n";
+    assert( ( x | y ) == x0);
+  }
 }
 
 bool SepProj::fixpoint(IntervalVector& x_in, IntervalVector& x_out, IntervalVector& y){
@@ -204,11 +214,11 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
     while(!l.empty()){
         IntervalVector x_out_save(l.front().first);
         IntervalVector y = l.front().second;
-        IntervalVector x_out0(x_out);
 
         l.pop();
         if (x_out_save.is_subset(x_res))
           continue;
+
         complementaryUnion(x_out_save, x_in, x_old0);
         // std::cerr << std::hexfloat << x_in << " \n" << x_out_save << "\n";
         // std::cerr << x_old0 << std::defaultfloat << "\n";
@@ -221,15 +231,16 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
         IntervalVector y0(y);
         if (( x_in | x_out_save ) != x_old0){
           std::cerr << "##########################################################################\n";
-          //std::cerr << std::hexfloat;
+          std::cerr << std::hexfloat;
           std::cerr << "x_in     " <<  x_in << "\n";
           std::cerr << "x_out    " <<  x_out_save << "\n";
           std::cerr << "x_old0 " <<  x_old0 << "\n";
-          //std::cerr << std::defaultfloat;
+          std::cerr << std::defaultfloat;
           std::cerr << "##########################################################################\n";
-          // assert( ( x_in | x_out_save ) == x_old0);
+          assert( ( x_in | x_out_save ) == x_old0);
         }
         fixpoint(x_in, x_out_save, y);
+
         IntervalVector x = x_in & x_out_save;
         if (x_out_save.is_empty()) continue;
         // std::cerr << x_in << " " << x_out_save << "\n";
@@ -237,52 +248,33 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
         // std::cerr << "x: " << x << " x_in: " << x_in << " x_out: " << x_out_save << "\n"
                   // << "x_res " << x_res  <<  " y: "  << y << "\n";
         if ( ! (( x_in | x_out_save ) == x_old0)){
-          // std::cerr << x_in << " " << x_out_save << " \n" << x_old0 << "\n";
-          // std::cerr << std::hexfloat << x_in << " \n" << x_out_save << "\n";
-          // std::cerr << x_old0 << std::defaultfloat << "\n";
-          // std::cerr << l.size() << "\n";
+          std::cerr << x_in << " " << x_out_save << " \n" << x_old0 << "\n";
+          std::cerr << std::hexfloat << x_in << " \n" << x_out_save << "\n";
+          std::cerr << x_old0 << std::defaultfloat << "\n";
+          std::cerr << l.size() << "\n";
           assert( ( x_in | x_out_save ) == x_old0);
         }
         // std::cerr << x.is_empty() << " " << (x.max_diam()) << " " << prec << " " << y.is_empty() << " " << y.max_diam() << " " << x.max_diam() << " " << l.size()<< "\n";
         if (x.is_empty() || x.is_flat() || x.max_diam() < prec || y0.is_empty() || y.max_diam() < 0.1*x.max_diam()){
             x_res |= x_out_save;
-            // std::cerr << "------> end y besection\n";
+            // std::cerr << "------> end y bisection\n";
         } else {
           if (!y.is_empty() && !x_out_save.is_subset(x_res) ){
             try{
               TwoItv cut = bsc->bisect(y);
               l.push(TwoItv(x_out_save, cut.first));
               l.push(TwoItv(x_out_save, cut.second));
-              // std::cout << "la \n";
+              // std::cerr << "la \n";
             } catch (ibex::NoBisectableVariableException& e){
-                std::cout << "Error while trying to bisect y\n";
+                // std::cerr << "Error while trying to bisect y\n";
                 assert(false);
 
             }
           }
       }
     }
-    //
-    //     if ( !proceed4(x_in, x_save, x_res, cut.second, l))
-    //
-    //     try{
-    //
-    //         IntervalVector x_save(l.front().first);
-    //         TwoItv cut = bsc->bisect(l.front().second);
-    //
-    //         l.pop();
-    //         proceed4(x_in, x_save, x_res, cut.second, l);
-    //
-    //         if(x_in.is_empty() ) break;
-    //         proceed4(x_in, x_save, x_res, cut.first, l);
-    //
-    //         k++;
-    //     } catch (ibex::NoBisectableVariableException& e){
-    //         l.pop();
-    //     }
-    // std::cerr << "###########################################################\n";
-    x_out = x_res;
 
+    x_out = x_res;
     x_in = x_in;
 
 }

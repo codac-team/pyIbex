@@ -43,14 +43,14 @@ public:
       box            /* Argument(s) */
     );
   }
-  virtual ItvPair bisect(Cell& cell){
-    PYBIND11_OVERLOAD(
-      ItvPair,       /* return type */
-      Bsc,           /* Parent class */
-      bisect,        /* Name of function */
-      cell           /* Argument(s) */
-    );
-  }
+  // virtual ItvPair bisect(Cell& cell){
+  //   PYBIND11_OVERLOAD(
+  //     ItvPair,       /* return type */
+  //     Bsc,           /* Parent class */
+  //     bisect,        /* Name of function */
+  //     cell           /* Argument(s) */
+  //   );
+  // }
 
   virtual void add_backtrackable(Cell& root){
     PYBIND11_OVERLOAD(
@@ -83,6 +83,6 @@ void export_Bsc(py::module& m){
     class_<LargestFirst>(m, "LargestFirst", bsc, DOCS_LARGEST_FIRST)
       .def(init<double, double>(), py::arg("prec")=0, py::arg("ratio")=Bsc::default_ratio())
       .def(init<Vector&, double>(), py::arg("prec"), py::arg("ratio")=Bsc::default_ratio())
-    	.def("bisect", &LargestFirst::bisect)
+    	.def("bisect", (ItvPair (LargestFirst::*) (const IntervalVector& box) ) &LargestFirst::bisect)
     	;
 }

@@ -119,11 +119,11 @@ void complementaryUnion(IntervalVector& x, const IntervalVector& y, const Interv
   delete[] res;
   if (( x | y ) != x0){
     std::cerr << "##########################################################################\n";
-    std::cerr << std::hexfloat;
+    // std::cerr << std::hexfloat;
     std::cerr << "x_in     " <<  x << "\n";
     std::cerr << "x_out    " <<  y << "\n";
     std::cerr << "x_old0 " <<  x0 << "\n";
-    std::cerr << std::defaultfloat;
+    // std::cerr << std::defaultfloat;
     std::cerr << "##########################################################################\n";
     assert( ( x | y ) == x0);
   }
@@ -231,11 +231,11 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
         IntervalVector y0(y);
         if (( x_in | x_out_save ) != x_old0){
           std::cerr << "##########################################################################\n";
-          std::cerr << std::hexfloat;
+          // std::cerr << std::hexfloat;
           std::cerr << "x_in     " <<  x_in << "\n";
           std::cerr << "x_out    " <<  x_out_save << "\n";
           std::cerr << "x_old0 " <<  x_old0 << "\n";
-          std::cerr << std::defaultfloat;
+          // std::cerr << std::defaultfloat;
           std::cerr << "##########################################################################\n";
           assert( ( x_in | x_out_save ) == x_old0);
         }
@@ -249,8 +249,10 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
                   // << "x_res " << x_res  <<  " y: "  << y << "\n";
         if ( ! (( x_in | x_out_save ) == x_old0)){
           std::cerr << x_in << " " << x_out_save << " \n" << x_old0 << "\n";
-          std::cerr << std::hexfloat << x_in << " \n" << x_out_save << "\n";
-          std::cerr << x_old0 << std::defaultfloat << "\n";
+          // std::cerr << std::hexfloat;
+          std::cerr << x_in << " \n" << x_out_save << "\n";
+          std::cerr << x_old0 << "\n";
+          // std::cerr << std::defaultfloat;
           std::cerr << l.size() << "\n";
           assert( ( x_in | x_out_save ) == x_old0);
         }

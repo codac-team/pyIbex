@@ -15,13 +15,13 @@ namespace pyibex {
 
 SepCtcPairProj::SepCtcPairProj(Ctc& ctc_in, Ctc& ctc_out, const IntervalVector& y_init, double prec) :
     Sep(ctc_in.nb_var), ctcIn(ctc_in), ctcOut(ctc_out),
-    vars(ibex::BitSet::empty(ctc_in.nb_var)), y_init(y_init)
+    vars(ibex::BitSet(ctc_in.nb_var)), y_init(y_init)
 {
     for(int i = 0; i < ctc_in.nb_var-y_init.size(); i++){
-        vars.add(true);
+        vars.add(i);
     }
     for(int i = 0; i < y_init.size(); i++){
-        vars.add(false);
+        vars.remove(ctc_in.nb_var+i);
     }
     // this->ctc_in = &ctc_in;
     // this->ctc_out = &ctc_in;
@@ -32,13 +32,13 @@ SepCtcPairProj::SepCtcPairProj(Ctc& ctc_in, Ctc& ctc_out, const IntervalVector& 
 
 SepCtcPairProj::SepCtcPairProj(SepCtcPair& sep, const IntervalVector& y_init, double prec) :
     Sep(sep.nb_var), ctcIn(sep.ctc_in), ctcOut(sep.ctc_out),
-    vars(ibex::BitSet::empty(sep.nb_var)), y_init(y_init)
+    vars(ibex::BitSet(sep.nb_var)), y_init(y_init)
 {
     for(int i = 0; i < sep.nb_var-y_init.size(); i++){
-        vars.add(true);
+        vars.add(i);
     }
     for(int i = 0; i < y_init.size(); i++){
-        vars.add(false);
+        vars.remove(sep.nb_var+i);
     }
 
     // ctc_in = &sep.ctc_in;
@@ -50,13 +50,13 @@ SepCtcPairProj::SepCtcPairProj(SepCtcPair& sep, const IntervalVector& y_init, do
 
 SepCtcPairProj::SepCtcPairProj(Sep& sep, const IntervalVector& y_init, double prec) :
     Sep(sep.nb_var), ctcIn(*new CtcFromSep(sep, true)), ctcOut(*new CtcFromSep(sep, false)),
-    vars(ibex::BitSet::empty(sep.nb_var)), y_init(y_init)
+    vars(ibex::BitSet(sep.nb_var)), y_init(y_init)
 {
     for(int i = 0; i < sep.nb_var-y_init.size(); i++){
-        vars.add(true);
+        vars.add(i);
     }
     for(int i = 0; i < y_init.size(); i++){
-        vars.add(false);
+        vars.remove(sep.nb_var+i);
     }
 
     // ctc_in = &sep.ctc_in;

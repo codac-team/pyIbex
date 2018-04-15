@@ -19,13 +19,14 @@
 #include <ibex_CtcExist.h>
 #include <ibex_SepFwdBwd.h>
 
+#include <ibex_BitSet.h>
 
 using ibex::Ctc;
 using ibex::Sep;
 using ibex::IntervalVector;
 using ibex::CtcExist;
 using ibex::CtcForAll;
-using ibex::Bitset;
+using ibex::BitSet;
 using ibex::SepCtcPair;
 using ibex::SepFwdBwd;
 
@@ -65,7 +66,7 @@ protected:
     // CtcForAll *ctcForAll;
     // bool delete_ctc;
     IntervalVector y_init;
-    Bitset<unsigned int, float> vars;
+    BitSet vars;
 
 };
 

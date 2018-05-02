@@ -24,7 +24,7 @@ using namespace pybind11::literals;
 #include <ibex_CtcInverse.h>
 #include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
-
+#include <ibex_CtcPropag.h>
 #include "pyibex_CtcHull.h"
 #include <pyibex_QInterProjF.h>
 #include "pyIbex_doc_Ctc.h"
@@ -36,6 +36,7 @@ using ibex::CtcUnion;
 using ibex::CmpOp;
 using ibex::CtcUnion;
 using ibex::CtcCompo;
+using ibex::CtcPropag;
 using ibex::CtcFwdBwd;
 using ibex::CtcInverse;
 using ibex::CtcNotIn;
@@ -101,6 +102,12 @@ void export_Ctc(py::module& m){
     .def("contract", &CtcCompo::contract)
     ;
 
+
+  // Export CtcCompo
+  py::class_<CtcPropag>(m, "CtcPropag", ctc, DOC_CTCCOMPO_TYPE)
+    .def(py::init<ibex::Array<Ctc>, double, bool >(), py::keep_alive<1,2>(), "list"_a, "ratio"_a=0.1, "incr"_a=false)
+    .def("contract", &CtcPropag::contract)
+    ;
   // Export CtcQInterProjF
   py::class_<CtcQInter>(m, "CtcQInter", ctc, DOC_CTCQINTER_TYPE)
     .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>(), "list"_a, "q"_a)

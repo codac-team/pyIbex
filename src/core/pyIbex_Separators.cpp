@@ -57,13 +57,6 @@ using pyibex::SepCtcPairProj;
 using pyibex::SepQInterProjF;
 using pyibex::SepUnionBbox;
 
-
-
-
-
-
-
-
 class pySep : public Sep {
 public:
   /* Inherit the constructors */
@@ -92,11 +85,11 @@ void export_Separators(py::module& m){
   py::class_<Sep, std::unique_ptr<Sep>, pySep> sep(m, "Sep", DOCS_SEP_TYPE);
   sep.def(init<int>())
     .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &Sep::separate, DOCS_SEP_SEPARATE,
-                      py::arg("x_in"), py::arg("x_out"))
+                      py::arg("x_in"), py::arg("x_out"), py::call_guard<py::gil_scoped_release>())
     .def_readonly("nb_var", &Sep::nb_var, DOCS_SEP_NBVAR)
-    .def("__or__", &__or, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>(), DOCS_SEP_OR)
-    .def("__and__", &__and, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>(), DOCS_SEP_AND)
-    .def("__invert__", &__not, py::return_value_policy::take_ownership, keep_alive<0,1>(), DOCS_SEP_INVERSE)
+    .def("__or__", &__or, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>(), DOCS_SEP_OR, py::call_guard<py::gil_scoped_release>())
+    .def("__and__", &__and, py::return_value_policy::take_ownership, keep_alive<0,1>(),keep_alive<0,2>(), DOCS_SEP_AND, py::call_guard<py::gil_scoped_release>())
+    .def("__invert__", &__not, py::return_value_policy::take_ownership, keep_alive<0,1>(), DOCS_SEP_INVERSE, py::call_guard<py::gil_scoped_release>())
   ;
 
 
@@ -107,18 +100,18 @@ void export_Separators(py::module& m){
 
   class_<SepUnionBbox>(m, "SepUnionBbox", sep)
     .def(init<Array<Sep>, std::vector<IntervalVector> & >(), keep_alive<1,2>(), py::arg("list"), py::arg("bbox"))
-    .def("separate", &SepUnionBbox::separate)
+    .def("separate", &SepUnionBbox::separate, py::call_guard<py::gil_scoped_release>())
   ;
 
   class_<SepInter>(m, "SepInter", sep, DOCS_SEP_SEPINTER)
     .def(init<Array<Sep> >(), keep_alive<1,2>(), py::arg("list"))
-    .def("separate", &SepInter::separate)
+    .def("separate", &SepInter::separate, py::call_guard<py::gil_scoped_release>())
   ;
 
 
   class_<SepCtcPair> sepCtcPair(m, "SepCtcPair", sep, DOCS_SEP_SEPCTCPAIR);
     sepCtcPair.def(init<Ctc&, Ctc&>(), keep_alive<1,2>(), keep_alive<1,3>(), py::arg("ctc_in"), py::arg("ctc_out"))
-    .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepCtcPair::separate)
+    .def("separate", (void (Sep::*) (IntervalVector&, IntervalVector&)) &SepCtcPair::separate, py::call_guard<py::gil_scoped_release>())
     .def("ctc_in", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_in;}, py::return_value_policy::reference_internal)
     .def("ctc_out", [](const SepCtcPair* o) -> const Ctc& {return o->ctc_out;}, py::return_value_policy::reference_internal)
   ;
@@ -159,7 +152,7 @@ void export_Separators(py::module& m){
 
   class_<SepInverse>(m, "SepInverse", sep, DOCS_SEP_SEPINVERSE)
     .def(init<Sep&, Function& >(), keep_alive<1,2>(), keep_alive<1,3>(), py::arg("sep"), py::arg("f"))
-    .def("separate", &SepInverse::separate)
+    .def("separate", &SepInverse::separate, py::call_guard<py::gil_scoped_release>())
   ;
 
   // Export SepProj
@@ -179,7 +172,7 @@ void export_Separators(py::module& m){
         py::arg("y_init"),
         py::arg("prec")=1e-3 )
 
-    .def("separate", &pyibex::SepProj::separate)
+    .def("separate", &pyibex::SepProj::separate, py::call_guard<py::gil_scoped_release>())
   ;
 
   // Export SepCtcPairProj
@@ -190,19 +183,19 @@ void export_Separators(py::module& m){
           py::arg("sep"), py::arg("y_init"), py::arg("prec") )
     .def(py::init<ibex::Sep&,const IntervalVector&, double>(), py::keep_alive<1,2>(),
           py::arg("sep"), py::arg("y_init"), py::arg("prec") )
-    .def("separate", &pyibex::SepCtcPairProj::separate)
+    .def("separate", &pyibex::SepCtcPairProj::separate, py::call_guard<py::gil_scoped_release>())
   ;
 
   // Export SepTransform
   py::class_<pyibex::SepTransform>(m, "SepTransform", sep)
     .def(py::init<ibex::Sep&, ibex::Function&, ibex::Function& >(), py::keep_alive<1,2>(), py::keep_alive<1,3>(), py::keep_alive<1,4>())
-    .def("separate", &pyibex::SepTransform::separate)
+    .def("separate", &pyibex::SepTransform::separate, py::call_guard<py::gil_scoped_release>())
   ;
 
   // Export SepFixPoint
   py::class_<pyibex::SepFixPoint>(m, "SepFixPoint", sep)
     .def(py::init<ibex::Sep&, double >(), py::keep_alive<1,2>(), "sep"_a, "ratio"_a=0.01)
-    .def("separate", &pyibex::SepFixPoint::separate)
+    .def("separate", &pyibex::SepFixPoint::separate, py::call_guard<py::gil_scoped_release>())
   ;
 
   // py::implicitly_convertible< std::array<double, 2>&, Interval>();

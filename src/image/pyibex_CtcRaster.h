@@ -78,7 +78,6 @@ inline bool CtcRaster::contractDim(PixelCoords& coords, int nPix){
 
 inline void CtcRaster::contract(IntervalVector& box){
     assert(box.size() == this->nb_var);
-
     if(box.is_empty()) return;
     if (inner == true && !box.is_subset(boundingBox) ) return;
     box &= boundingBox;
@@ -90,15 +89,18 @@ inline void CtcRaster::contract(IntervalVector& box){
     // std::cerr << pixel_coords[0] << " " << pixel_coords[1] << " "<< pixel_coords[2] << " "<< pixel_coords[3] << "\n";
     // IntervalVector res2 = grid_to_world(pixel_coords);
     // std::cerr << "RES2 " << res2 << std::endl;
-
+    // std::cerr << box << "\n";
     size_t box_pixel_size = (pixel_coords[1]+1 - pixel_coords[0]) * (pixel_coords[3]+1 - pixel_coords[2]);
+    // std::cerr << pixel_coords[0] << " " << pixel_coords[1] << " "<< pixel_coords[2] << " "<< pixel_coords[3] << " "<< "\n";
     unsigned int nPix = enclosed_pixels(pixel_coords);//[0],pixel_coords[1],pixel_coords[2],pixel_coords[3]);
     // std::cerr << nPix << "\n";
     if ( nPix == 0 ) {// && checkBorder(pixel_coords, coordMapper.limit, false ) == true){
       box.set_empty();
     } else {
-      contractDim(pixel_coords, nPix);
+
       // std::cerr << pixel_coords[0] << " " << pixel_coords[1] << " "<< pixel_coords[2] << " "<< pixel_coords[3] << " "<< " " << nPix <<  " " << enclosed_pixels(pixel_coords) << "\n";
+      contractDim(pixel_coords, nPix);
+      // std::cerr << "done\n";
 
 
       IntervalVector res = grid_to_world(pixel_coords);

@@ -68,7 +68,10 @@ inline PixelCoords GeoMapper::world_to_grid(const IntervalVector& box) {
 
         itv &= Interval(0,shape_[i]-1);
         // std::cout.precision(10);
-
+        if (itv.is_empty()){
+          std::cerr << box[i] << "\n";
+          assert(itv.is_empty() == false);
+        }
         // if (itv.is_empty())
 
         // std::cout << "[" << i << "] " << itv.lb() << " " << itv.ub() << "\n";

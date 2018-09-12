@@ -83,6 +83,7 @@ inline DATA_TYPE GeoImage::pixelAt( int x, int y){
 }
 //
 inline DATA_TYPE GeoImage::enclosed_pixels( int xmin,int xmax,int ymin,int ymax) {
+    // std::cerr << "enclosed_pixels" << ymin << " " << ymin -1 << "\n";
     DATA_TYPE b1 = pixelAt(xmax,ymax);
     DATA_TYPE b2 = pixelAt(xmax,ymin-1);
     DATA_TYPE b3 = pixelAt(xmin-1,ymax);

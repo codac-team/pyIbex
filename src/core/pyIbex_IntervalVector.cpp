@@ -168,6 +168,24 @@ void export_IntervalVector(py::module& m){
             //  .def("__contains__", [](const IntervalVector &s, float v) { return s.contains(v); })
             //  .def("__reversed__", [](const IntervalVector &s) -> IntervalVector { return s.reversed(); })
 
+            .def(py::pickle(
+                [](const IntervalVector &p) {
+                    py::list l;
+                    for(int i = 0; i < p.size(); i++){
+                      l.append(p[i]);
+                    }
+                    return l;
+                },
+                [](py::list t) {
+                    if (t.size() == 0){
+                      std::cerr << t.size();
+                      throw std::runtime_error("Invalid state!");
+                    }
+                    auto p = CreateWithListOfInterval(t.cast<std::vector<Interval> >());
+                    return p;
+                }
+            ))
+
             .def("tolist", &tolist, DOCS_INTERVALVECTOR_TOLIST)
             .def("assign", &assignItv)
             .def( self == self )

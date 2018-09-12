@@ -10,6 +10,13 @@
 import unittest
 import pyibex
 from pyibex import Interval, oo
+
+try:
+    import cPickle as pickle  # Use cPickle on Python 2.7
+except ImportError:
+    import pickle
+
+
 class TestInterval(unittest.TestCase):
 
     def setUp(self):
@@ -51,6 +58,14 @@ class TestInterval(unittest.TestCase):
 
     # def test_constructor_with_list(self):
     #     self.assertEqual( Interval([1,2]), Interval(1,2))
+
+    def test_pickling(self):
+        Lp = [Interval(0, 5), Interval(0, oo), Interval.EMPTY_SET]
+        for p in Lp:
+            data = pickle.dumps(p, 3)  # Must use pickle protocol >= 2
+            p2 = pickle.loads(data)
+            self.assertEqual(p, p2)
+
 
     def test_inflate(self):
         c1 = Interval(0).inflate(1)

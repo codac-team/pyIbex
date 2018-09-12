@@ -11,8 +11,14 @@
 
 import unittest
 import pyibex
-from pyibex import IntervalVector, Interval
+from pyibex import IntervalVector, Interval, oo
 import math
+
+try:
+    import cPickle as pickle  # Use cPickle on Python 2.7
+except ImportError:
+    import pickle
+
 class TestIntervalVector(unittest.TestCase):
 
 
@@ -45,6 +51,13 @@ class TestIntervalVector(unittest.TestCase):
         self.assertEqual(c[0], Interval(1, 3))
         self.assertEqual(c[1], Interval(float('-inf'), 4))
 
+
+    def test_pickling(self):
+        p = IntervalVector([Interval(0, 5), Interval(0, oo), Interval.EMPTY_SET])
+
+        data = pickle.dumps(p, 2)  # Must use pickle protocol >= 2
+        p2 = pickle.loads(data)
+        self.assertEqual(p, p2)
 
 
     def test_constructor4(self):

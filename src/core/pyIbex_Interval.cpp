@@ -166,6 +166,18 @@ void export_Interval(py::module& m){
     .def( "complementary",  &complementary_wrapper, DOCS_INTERVAL_COMPLEMENTARY )
     .def( "diff",   &diff_wrapper, DOCS_INTERVAL_DIFF, "y"_a)
 
+    .def(py::pickle(
+        [](const Interval &p) {
+            return py::make_tuple(p.lb(), p.ub());
+        },
+        [](py::tuple t) {
+            if (t.size() != 2)
+                throw std::runtime_error("Invalid state!");
+            auto p = Interval(t[0].cast<double>(), t[1].cast<double>());
+            return p;
+        }
+    ))
+
     .def( "bisect", &Interval::bisect, DOCS_INTERVAL_BISECT, py::arg("ratio")=0.5)
     .def("__getitem__", getitem, "self[0] returns the lb and self[1] return ub")
     .def( "copy", &my_copy, "return a new objec which is the copy of self")

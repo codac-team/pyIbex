@@ -268,8 +268,8 @@ void SepProj::separate(IntervalVector &x_in, IntervalVector &x_out){
               l.push(TwoItv(x_out_save, cut.second));
               // std::cerr << "la \n";
             } catch (ibex::NoBisectableVariableException& e){
-                // std::cerr << "Error while trying to bisect y\n";
-                assert(false);
+                std::cerr << "Error while trying to bisect y" << y <<"\n";
+                // assert(falsse);
 
             }
           }

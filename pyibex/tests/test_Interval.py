@@ -62,7 +62,7 @@ class TestInterval(unittest.TestCase):
     def test_pickling(self):
         Lp = [Interval(0, 5), Interval(0, oo), Interval.EMPTY_SET]
         for p in Lp:
-            data = pickle.dumps(p, 3)  # Must use pickle protocol >= 2
+            data = pickle.dumps(p, 2)  # Must use pickle protocol >= 2
             p2 = pickle.loads(data)
             self.assertEqual(p, p2)
 

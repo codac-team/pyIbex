@@ -27,7 +27,7 @@ setup(
           'pyibex${PYTHON_MODULE_EXTENSION}',
           'geometry/geometry${PYTHON_MODULE_EXTENSION}',
           'image/image${PYTHON_MODULE_EXTENSION}',
-          'paving/paving${PYTHON_MODULE_EXTENSION}'
+          'paving${PYTHON_MODULE_EXTENSION}'
       ],
   },
   test_suite='pyibex.tests',

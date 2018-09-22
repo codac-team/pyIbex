@@ -35,16 +35,24 @@ matrix:
       apt:
         sources: [ubuntu-toolchain-r-test, kubuntu-backports, deadsnakes, george-edison55-precise-backports]
         packages: [g++-4.8, cmake, cmake-data, pkg-config]
+  - os: linux
+    language: python
+    env: PYTHON=3.7 CPP=11 GCC=4.8
+    python: "3.7"
+    addons:
+      apt:
+        sources: [ubuntu-toolchain-r-test, kubuntu-backports, deadsnakes, george-edison55-precise-backports]
+        packages: [g++-4.8, cmake, cmake-data, pkg-config]
 
   - os: osx
     osx_image: xcode7.3
     env: PYTHON=2.7 CPP=14 CLANG
   - os: osx
     osx_image: xcode7.3
-    env: PYTHON=3.6 CPP=14 CLANG
+    env: PYTHON=3.7 CPP=14 CLANG
   - os: osx
     osx_image: xcode7.3
-    env: PYTHON=3.5 CPP=14 CLANG
+    env: PYTHON=3.6.5 CPP=14 CLANG
 env:
   global:
   - secure: QMtC7zYxU4pPwZrQ4OX2bjgPoei+2PYZPxuTOGewgI11HlbM7xFbryhloHeIeoeKXjKgUhCSY32lUiAP4NlT1ZkQVVr30m7FF+6hZkw6/bFvernOdr9kAd99Hg3uiunHCKoce7tTkIpo/eLTGAmr1Vbcc0FTZNagAWZmNClGOIw=
@@ -93,12 +101,13 @@ before_install:
         fi
     elif [ "$TRAVIS_OS_NAME" = "osx" ]; then
       if [ "$PY" = "3" ]; then
-        brew update; brew install python$PY;
+        brew update; brew update python;
+        brew switch python$PYTHON
       else
         curl -fsSL -O https://bootstrap.pypa.io/get-pip.py;
         sudo -H python get-pip.py;
       fi
-      pip$PY install --user --upgrade pip virtualenv;
+      python$PY -m pip install --user --upgrade pip virtualenv;
       python$PY -m virtualenv venv;
       source venv/bin/activate;
     fi
@@ -127,7 +136,7 @@ script:
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
 after_failure: cat tests/test_cmake_build/*.log
 after_success:
-  - curl --ftp-create-dirs --ftp-ssl -p -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
+  - curl --ftp-create-dirs --ftp-ssl -P 21 -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
 # deploy:
 #   skip_cleanup: true
 #   provider: releases

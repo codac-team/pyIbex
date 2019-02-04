@@ -63,6 +63,7 @@ public:
   using Sep::Sep;
   /* Trampoline (need one for each virtual function) */
   virtual void separate(IntervalVector& xin, IntervalVector& xout){
+    py::gil_scoped_acquire acquire;
     PYBIND11_OVERLOAD_PURE(
       void,       /* return type */
       Sep,        /* Parent class */

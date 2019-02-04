@@ -51,25 +51,29 @@ using pyibex::CtcQInterProjF;
 
 
 class pyCtc : public Ctc {
+  // protected:
 public:
+  pyCtc(int v): Ctc(v){}
   /* Inherit the constructors */
-  using Ctc::Ctc;
+  // using Ctc::Ctc;
 
   /* Trampoline (need one for each virtual function) */
   void contract(IntervalVector& box) override {
+    // py::gil_scoped_acquire acquire;
     PYBIND11_OVERLOAD_PURE(
       void,       /* return type */
       Ctc,        /* Parent class */
       contract,   /* Name of function */
       box         /* Argument(s) */
     );
+    // py::gil_scoped_release release;
   }
 };
 
 
 CtcUnion* __or(Ctc& c1, Ctc& c2){ return (new CtcUnion(c1, c2)); }
 CtcCompo* __and(Ctc& c1, Ctc& c2){ return (new CtcCompo(c1, c2)); }
-
+typedef void (*ctc_method)(IntervalVector& );
 void export_Ctc(py::module& m){
 
   py::class_<Ctc, std::unique_ptr<Ctc>, pyCtc > ctc(m, "Ctc", DOCS_CTC_TYPE);
@@ -93,30 +97,30 @@ void export_Ctc(py::module& m){
   // Export CtcUnion
   py::class_<CtcUnion>(m, "CtcUnion", ctc, DOC_CTCUNION_TYPE)
     .def(py::init<ibex::Array<Ctc> >(), py::keep_alive<1,2>(), "list"_a)
-    .def("contract", &CtcUnion::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcUnion::contract)
     ;
 
   // Export CtcCompo
   py::class_<CtcCompo>(m, "CtcCompo", ctc, DOC_CTCCOMPO_TYPE)
     .def(py::init<ibex::Array<Ctc> >(), py::keep_alive<1,2>(), "list"_a)
-    .def("contract", &CtcCompo::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcCompo::contract)
     ;
 
 
   // Export CtcCompo
   py::class_<CtcPropag>(m, "CtcPropag", ctc, DOC_CTCCOMPO_TYPE)
     .def(py::init<ibex::Array<Ctc>, double, bool >(), py::keep_alive<1,2>(), "list"_a, "ratio"_a=0.1, "incr"_a=false)
-    .def("contract", &CtcPropag::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcPropag::contract)
     ;
   // Export CtcQInterProjF
   py::class_<CtcQInter>(m, "CtcQInter", ctc, DOC_CTCQINTER_TYPE)
     .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>(), "list"_a, "q"_a)
-    .def("contract", &CtcQInter::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcQInter::contract)
     ;
 
   py::class_<CtcQInterProjF>(m, "CtcQInterProjF", ctc, DOC_CTCQINTERPROJF_TYPE)
     .def(py::init<Array<Ctc>, int>(), py::keep_alive<1,2>(), "list"_a, "q"_a)
-    .def("contract", &CtcQInterProjF::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcQInterProjF::contract)
     ;
 
   // Export CtcFwdBwd
@@ -124,26 +128,26 @@ void export_Ctc(py::module& m){
     .def(py::init<Function&, CmpOp>(), py::keep_alive<1,2>(), "f"_a, "op"_a=ibex::EQ)
     .def(py::init<Function&,Interval&>(), py::keep_alive<1,2>(), "f"_a, "itv_y"_a)
     .def(py::init<Function&,IntervalVector&>(), py::keep_alive<1,2>(), "f"_a, "box_y"_a)
-    .def("contract", &CtcFwdBwd::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcFwdBwd::contract)
     ;
 
   // Export CtcInverse
   py::class_<CtcInverse>(m, "CtcInverse", ctc, DOC_CTCINVERSE_TYPE)
     .def(py::init<Ctc&, Function&>(),py::keep_alive<1,2>(), py::keep_alive<1,3>(), "ctc"_a, "f"_a)
-    .def("contract", &CtcInverse::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcInverse::contract)
     ;
 
   // Export CtcNotIn
   py::class_<CtcNotIn>(m, "CtcNotIn", ctc, DOC_CTCNOTIN_TYPE)
     .def(py::init<Function&, Interval&>(), py::keep_alive<1,2>())
     .def(py::init<Function&, IntervalVector&>(), py::keep_alive<1,2>())
-    .def("contract", &CtcNotIn::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcNotIn::contract)
     ;
 
   // Export CtcFixPoint
   py::class_<CtcFixPoint>(m, "CtcFixPoint", ctc, DOC_CTCFIXPOINT_TYPE)
     .def(py::init<Ctc&, double>(), py::keep_alive<1,2>(), "ctc"_a, "ratio"_a=1e-3)
-    .def("contract", &CtcFixPoint::contract)
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcFixPoint::contract)
     ;
 
   // Export CtcHull

@@ -52,14 +52,14 @@ public:
   //   );
   // }
 
-  virtual void add_backtrackable(Cell& root){
-    PYBIND11_OVERLOAD(
-      void,               /* return type */
-      Bsc,                /* Parent class */
-      add_backtrackable,  /* Name of function */
-      root                /* Argument(s) */
-    );
-  }
+  // virtual void add_backtrackable(Cell& root){
+  //   PYBIND11_OVERLOAD(
+  //     void,               /* return type */
+  //     Bsc,                /* Parent class */
+  //     add_backtrackable,  /* Name of function */
+  //     root                /* Argument(s) */
+  //   );
+  // }
 };
 
 

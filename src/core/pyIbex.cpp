@@ -13,6 +13,7 @@ namespace py = pybind11;
 
 #include <string>
 #include <sstream>
+#include <ibex_Setting.h>
 
 
 void export_Interval(py::module&m);
@@ -35,6 +36,7 @@ PYBIND11_MODULE(pyibex, m)
   export_Bsc(m);
   export_Ctc(m);
   export_Separators(m);
+  m.attr("ibex_version") = _IBEX_VERSION_;
   // return m.ptr();
 
 }

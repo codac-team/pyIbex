@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12)
 
 project(pyIbex)
-set(PACKAGE_VERSION "1.6.4")
+set(PACKAGE_VERSION "1.7.0")
 
 # build type
 IF(NOT CMAKE_BUILD_TYPE)

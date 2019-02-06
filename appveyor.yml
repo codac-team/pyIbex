@@ -38,6 +38,10 @@ environment:
       PYTHON_DIR: "C:\\Python36-x64"
       PYTHON_EXE: "C:\\Python36-x64/python.exe"
       IBEX_FILES: "2.6.5-win64"
+    - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
+      PYTHON_DIR: "C:\\Python37-x64"
+      PYTHON_EXE: "C:\\Python37-x64/python.exe"
+      IBEX_FILES: "2.6.5-win64"
 
   USERNAME:
     secure: x/KrtKQDdjxKhvPlvfdiMQ==

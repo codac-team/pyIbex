@@ -7,11 +7,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+2019-02-06 Benoit Desrochers <ben.ensta@gmail.com>
+  * [update] pybind11 2.2.4
+  * [update] ibex-lib 2.7.4 (with breaking api changes)
+  * [add] ibex version info pyibex.ibex_version
+  * [add] pickling support for Interval, IntervalVector
+  * [CI] update travis / appveyor script
+  * [release] v1.8.0
 
 2018-03-12 Benoit Desrochers <ben.ensta@gmail.com>
   * [install] add vibes requirment in setup.py (for iamooc)
   * [doc] fix indentation error in Interval
-  
+
 2018-02-25 Benoit Desrochers <ben.ensta@gmail.com>
   * [update] pybind11 version > 2.2.1 (#b48d4a)
   * [update] doc

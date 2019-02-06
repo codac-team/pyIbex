@@ -13,35 +13,36 @@ environment:
   global:
     DISTUTILS_USE_SDK: 1
     MSSdk: 1
+    IBEX_VERSION: 2.7.4
   matrix:
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python34"
       PYTHON_EXE: "C:\\Python34/python.exe"
-      IBEX_FILES: "2.6.5-win32"
+      IBEX_FILES: "IBEX_VERSION-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python35"
       PYTHON_EXE: "C:\\Python35/python.exe"
-      IBEX_FILES: "2.6.5-win32"
+      IBEX_FILES: "IBEX_VERSION-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python36"
       PYTHON_EXE: "C:\\Python36/python.exe"
-      IBEX_FILES: "2.6.5-win32"
+      IBEX_FILES: "IBEX_VERSION-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python34-x64"
       PYTHON_EXE: "C:\\Python34-x64/python.exe"
-      IBEX_FILES: "2.6.5-win64"
+      IBEX_FILES: "IBEX_VERSION-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python35-x64"
       PYTHON_EXE: "C:\\Python35-x64/python.exe"
-      IBEX_FILES: "2.6.5-win64"
+      IBEX_FILES: "IBEX_VERSION-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python36-x64"
       PYTHON_EXE: "C:\\Python36-x64/python.exe"
-      IBEX_FILES: "2.6.5-win64"
+      IBEX_FILES: "IBEX_VERSION-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python37-x64"
       PYTHON_EXE: "C:\\Python37-x64/python.exe"
-      IBEX_FILES: "2.6.5-win64"
+      IBEX_FILES: "IBEX_VERSION-win64"
 
   USERNAME:
     secure: x/KrtKQDdjxKhvPlvfdiMQ==
@@ -56,7 +57,7 @@ install:
 
   - ps: >-
 
-      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.5/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
+      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-$env:IBEX_VERSION/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
 
       ls C:\projects\pyIbex
 

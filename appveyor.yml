@@ -89,7 +89,7 @@ build_script:
 
 deploy:
   provider: FTP
-  protocol: ftps
+  protocol: ftp
   host: bdesroch.privatedns.org
   username: git
   password:

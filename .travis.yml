@@ -136,7 +136,7 @@ script:
   - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
 after_failure: cat tests/test_cmake_build/*.log
 after_success:
-  - curl --ftp-create-dirs --ftp-ssl -P 21 -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
+  - curl --ftp-create-dirs --ftp-ssl --insecure -v -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
 # deploy:
 #   skip_cleanup: true
 #   provider: releases

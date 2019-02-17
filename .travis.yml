@@ -60,7 +60,7 @@ matrix:
     osx_image: xcode7.3
     env: PYTHON=2.7 CPP=14 CLANG
     install:
-      - brew update && brew install pyenv
+      # - brew update && brew install pyenv
       - bash ./travis_script/build_Ibex4pyIbex.sh 1> /dev/null
     script:
       - chmod a+x ./travis_script/build_osx.sh
@@ -154,7 +154,7 @@ cache:
   # - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
 after_failure: cat tests/test_cmake_build/*.log
 after_success:
-  - curl --ftp-create-dirs --ftp-ssl --insecure -v -k  -T $TRAVIS_BUILD_DIR/$wheel_file --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
+  - curl --ftp-create-dirs --ftp-ssl --insecure -v -k  -T $(ls wheelhouse/*.whl) --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
 # deploy:
 #   skip_cleanup: true
 #   provider: releases

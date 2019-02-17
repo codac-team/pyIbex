@@ -6,6 +6,11 @@ matrix:
     services:
       - docker
     env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+    cache:
+      directories:
+        - $HOME/ibex
+        - $HOME/Downloads
+        - $HOME/cache
     install:
       - docker pull $DOCKER_IMAGE
     script:
@@ -57,11 +62,11 @@ matrix:
   #       packages: [g++-4.8, cmake, cmake-data, pkg-config]
 
   - os: osx
-    osx_image: xcode8
+    # osx_image: xcode8.3
     env: PYTHON=2.7 CPP=14 CLANG
     install:
-      - brew update && brew install pyenv
-      - bash ./travis_script/build_Ibex4pyIbex.sh 1> /dev/null
+      - brew upgrade pyenv
+      - bash ./travis_script/build_Ibex4pyIbex.sh 2>&1 1> ibex-build.log
     script:
       - chmod a+x ./travis_script/build_osx.sh
       - ./travis_script/build_osx.sh
@@ -154,7 +159,13 @@ cache:
   # - mv $wheel_file $TRAVIS_BUILD_DIR/$wheel_file
 after_failure: cat tests/test_cmake_build/*.log
 after_success:
-  - curl --ftp-create-dirs --ftp-ssl --insecure -v -k  -T $(ls wheelhouse/*.whl) --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/
+  - cd wheelhouse
+  - whl=$(ls *.whl)
+  - echo $whl
+  - for w in $whl; do
+      curl --ftp-create-dirs --ftp-ssl --insecure -v -k  -T $w --user $FTP_USER:$FTP_PASSWD  ftp://bdesroch.privatedns.org/gittmp/$(date +"%Y%m%d")/;
+    done;
+    
 # deploy:
 #   skip_cleanup: true
 #   provider: releases

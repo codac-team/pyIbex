@@ -158,3 +158,21 @@ Args:
     sep (Sep) : the separator to use
     eps (double) : accuracy of the approximation used by the paver
 )_doc";
+
+const char* DOC_CTCEXISTS_TYPE=
+R"_doc(Projection of a contractor C assosiated with a constraint  such as:
+  +  C_{exists}(x) <=> \exists y in [y_init] , C(x, y)
+Args:
+    C (Ctc) : the contractor to use
+    eps (double) : accuracy of the approximation used by the paver
+)_doc";
+
+
+const char* DOC_CTCFORALL_TYPE=
+R"_doc(Projection of a contractor C assosiated with a constraint  such as:
+  +  C_{forall} <=> \forall y in [y_init] , C(x, y)
+Args:
+    C (Ctc) : the contractor to use
+    eps (double) : accuracy of the approximation used by the paver
+)_doc";
+

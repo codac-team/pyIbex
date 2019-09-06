@@ -119,7 +119,26 @@ class TestContractors(unittest.TestCase):
         self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
 
 
+    def test_CtcExist(self):
+        f = Function("x", "y", "sqrt(x^2+y^2)-1")
+        ctc = CtcFwdBwd(f, CmpOp.EQ)
+        y = IntervalVector(1, [-0.5, -0.4])
+        ctc_exist = CtcExist(ctc, y)
+        X = IntervalVector(1, [0, 3])
+        ctc_exist.contract(X)
+        xres = sin(acos(Interval(-0.5, -0.4))) 
+        self.assertTrue( X.is_subset(IntervalVector([xres])))
 
+
+    def test_CtcForAll(self):
+        f = Function("x", "y", "sqrt(x^2+y^2)-1")
+        ctc = CtcFwdBwd(f, CmpOp.EQ)
+        y = IntervalVector(1, [-0.5, -0.4])
+        ctc_forall = CtcForAll(ctc, y)
+        X = IntervalVector(1, [0, 3])
+        ctc_forall.contract(X)
+        xres = sin(acos(Interval(-0.5, -0.4))) 
+        self.assertTrue( X.is_subset(IntervalVector([xres])))
 
 if __name__ == '__main__':
 

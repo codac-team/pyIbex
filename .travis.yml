@@ -20,9 +20,13 @@ matrix:
   - os: osx
     env: PYTHON=2.7 CPP=14 CLANG
     install:
-    - brew upgrade pyenv
+    # - brew upgrade pyenv
+    - git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    - export PYENV_ROOT="$HOME/.pyenv"
+    - export PATH="$PYENV_ROOT/bin:$PATH"
     - bash ./travis_script/build_Ibex4pyIbex.sh 2>&1 1> ibex-build.log
     script:
+
     - chmod a+x ./travis_script/build_osx.sh
     - "./travis_script/build_osx.sh"
 env:

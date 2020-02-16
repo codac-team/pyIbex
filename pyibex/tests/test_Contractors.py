@@ -47,6 +47,11 @@ class TestContractors(unittest.TestCase):
         ctc1 = CtcFwdBwd(f)
         ctc1 = CtcFwdBwd(f, CmpOp.LEQ)
 
+    def test_CtcFwdBwd_default_arg_with_list(self):
+        f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
+        ctc1 = CtcFwdBwd(f)
+        ctc1 = CtcFwdBwd(f, [-oo,0])
+
 
     def test_CtcUnion_2_arguments(self):
         f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")

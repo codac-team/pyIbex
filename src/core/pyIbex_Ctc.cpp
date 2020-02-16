@@ -10,6 +10,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/functional.h>
+#include <pybind11/stl.h>
 #include <pyIbex_type_caster.h>
 namespace py = pybind11;
 using py::self;
@@ -148,6 +149,9 @@ void export_Ctc(py::module& m){
     .def(py::init<Function&, CmpOp>(), py::keep_alive<1,2>(), "f"_a, "op"_a=ibex::EQ)
     .def(py::init<Function&,Interval&>(), py::keep_alive<1,2>(), "f"_a, "itv_y"_a)
     .def(py::init<Function&,IntervalVector&>(), py::keep_alive<1,2>(), "f"_a, "box_y"_a)
+    .def(py::init([](ibex::Function& f,const std::array<double, 2>& itv){
+        return std::unique_ptr<CtcFwdBwd> ( new CtcFwdBwd(f, Interval(itv[0], itv[1])));
+    }), py::keep_alive<1,2>(), py::arg("f"), py::arg("itv_y") )
     .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcFwdBwd::contract)
     ;
 

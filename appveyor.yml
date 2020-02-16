@@ -87,12 +87,26 @@ build_script:
   - ctest -C %Configuration% -VV
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
 
+# deploy:
+#   provider: FTP
+#   protocol: ftps
+#   host: bdesroch.privatedns.org
+#   username: git
+#   password:
+#     secure: U58Tazcrcj6n+oP1CxfRCQ==
+#   folder: gittmp/win
+#   artifact: pip_wheel
+
 deploy:
-  provider: FTP
-  protocol: ftps
-  host: bdesroch.privatedns.org
-  username: git
-  password:
-    secure: U58Tazcrcj6n+oP1CxfRCQ==
+  release: pyibex-v$(appveyor_build_version)
+  description: 'pyIbex windows build'
+  provider: GitHub
+  auth_token:
+    secure: Bu9kqyFD6errPkHu23iueJXI5x7JZ/8ZHVwoYNB1ZijEQ7KOySfC/sJ0fKBDgFOA
   folder: gittmp/win
   artifact: pip_wheel
+  draft: true
+  prerelease: false
+  # on:
+  #   branch: with_cmake      # release from master branch only
+  #   appveyor_repo_tag: false        # deploy on tag push only

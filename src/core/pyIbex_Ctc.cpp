@@ -10,6 +10,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
 #include <pybind11/functional.h>
+#include <pybind11/stl.h>
 #include <pyIbex_type_caster.h>
 namespace py = pybind11;
 using py::self;
@@ -25,6 +26,9 @@ using namespace pybind11::literals;
 #include <ibex_CtcFixPoint.h>
 #include <ibex_CtcQInter.h>
 #include <ibex_CtcPropag.h>
+#include <ibex_CtcExist.h>
+#include <ibex_CtcForAll.h>
+
 #include "pyibex_CtcHull.h"
 #include <pyibex_QInterProjF.h>
 #include "pyIbex_doc_Ctc.h"
@@ -47,7 +51,24 @@ using ibex::IntervalVector;
 using ibex::Function;
 using ibex::Array;
 using ibex::Interval;
+using ibex::CtcExist;
+using ibex::CtcForAll;
 using pyibex::CtcQInterProjF;
+
+
+CtcExist* create_CtcExist(Ctc& c, const IntervalVector& y, double prec){
+  ibex::BitSet vars = ibex::BitSet::empty(c.nb_var);
+  vars.fill(0, c.nb_var-y.size()-1);
+  CtcExist * instance = new CtcExist(c, vars, y, prec);
+  return instance;
+}
+
+CtcForAll* create_CtcForAll(Ctc& c, const IntervalVector& y, double prec){
+  ibex::BitSet vars = ibex::BitSet::empty(c.nb_var);
+  vars.fill(0, c.nb_var-y.size()-1);
+  CtcForAll * instance = new CtcForAll(c, vars, y, prec);
+  return instance;
+}
 
 
 class pyCtc : public Ctc {
@@ -128,6 +149,9 @@ void export_Ctc(py::module& m){
     .def(py::init<Function&, CmpOp>(), py::keep_alive<1,2>(), "f"_a, "op"_a=ibex::EQ)
     .def(py::init<Function&,Interval&>(), py::keep_alive<1,2>(), "f"_a, "itv_y"_a)
     .def(py::init<Function&,IntervalVector&>(), py::keep_alive<1,2>(), "f"_a, "box_y"_a)
+    .def(py::init([](ibex::Function& f,const std::array<double, 2>& itv){
+        return std::unique_ptr<CtcFwdBwd> ( new CtcFwdBwd(f, Interval(itv[0], itv[1])));
+    }), py::keep_alive<1,2>(), py::arg("f"), py::arg("itv_y") )
     .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcFwdBwd::contract)
     ;
 
@@ -159,4 +183,19 @@ void export_Ctc(py::module& m){
     .def("contract", &pyibex::CtcHull::contract, py::arg("box").noconvert())
     ;
 
+  py::class_<CtcExist>(m, "CtcExist", ctc, DOC_CTCEXISTS_TYPE)
+    .def(py::init(&create_CtcExist),
+          py::keep_alive<1,2>(),
+          "ctc"_a, "y"_a, "prec"_a = 1e-3
+        )  
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcExist::contract, py::arg("box").noconvert())
+    ;
+
+  py::class_<CtcForAll>(m, "CtcForAll", ctc, DOC_CTCEXISTS_TYPE)
+    .def(py::init(&create_CtcForAll),
+          py::keep_alive<1,2>(),
+          "ctc"_a, "y"_a, "prec"_a = 1e-3
+        )  
+    .def("contract", (void (Ctc::*) (IntervalVector&)) &CtcForAll::contract, py::arg("box").noconvert())
+    ;
 }

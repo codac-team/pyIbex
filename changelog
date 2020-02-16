@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+2020-02-16 Benoit Desrochers <ben.ensta@gmail.com>
+  * PATCH v1.7.1
+  * [pybind11] use v2.4.3 (15 Oct 2019)
+  * [add] add pickling support on Interval
+  * [add] paving library
+  * [add] add CtcPropag
+  * [add] add CtcExist and CtcForAll interface
+  * [fix] update breaking api with ibex-lib v2.6.5
+  * [fix] CtcFwdBwd constuctor with list
+
 2019-02-06 Benoit Desrochers <ben.ensta@gmail.com>
   * [update] pybind11 2.2.4
   * [update] ibex-lib 2.7.4 (with breaking api changes)

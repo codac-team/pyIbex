@@ -37,6 +37,7 @@ from recommonmark.transform import AutoStructify
 
 mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 extensions = [
+    'recommonmark',
     # 'sphinx.ext.imgmath',
     'sphinx.ext.autodoc',
     # 'sphinx.ext.jsmath',
@@ -54,11 +55,11 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 source_suffix = ['.rst', '.md']
 # source_suffix = '.rst'
-from recommonmark.parser import CommonMarkParser
+# from recommonmark.parser import CommonMarkParser
 
-source_parsers = {
-'.md': CommonMarkParser,
-}
+# source_parsers = {
+# '.md': CommonMarkParser,
+# }
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'

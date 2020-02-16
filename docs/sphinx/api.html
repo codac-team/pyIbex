@@ -17,42 +17,46 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'1.6.4',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pyibex 1.6.4 documentation" href="index.html"/>
-        <link rel="next" title="Installation" href="installation.html"/>
-        <link rel="prev" title="Get Started" href="quickstart.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Get Started" href="quickstart.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -61,7 +65,7 @@
 
           
             
-            <img src="_static/pyibex_logo.png" class="logo" />
+            <img src="_static/pyibex_logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -135,7 +139,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pyibex</a>
@@ -143,9 +147,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -243,7 +248,7 @@ the upper / lower bounds of the Interval object</p>
 
 <dl class="method">
 <dt id="pyibex.Interval.bisect">
-<code class="descname">bisect</code><span class="sig-paren">(</span><em>self: pyibex.Interval</em>, <em>ratio: float=0.5</em><span class="sig-paren">)</span> &#x2192; Tuple[pyibex.Interval, pyibex.Interval]<a class="headerlink" href="#pyibex.Interval.bisect" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bisect</code><span class="sig-paren">(</span><em>self: pyibex.Interval</em>, <em>ratio: float = 0.5</em><span class="sig-paren">)</span> &#x2192; Tuple[pyibex.Interval, pyibex.Interval]<a class="headerlink" href="#pyibex.Interval.bisect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bisect self into two subintervals.</p>
 <p>The Interval musts be bisectable i.e. is_bisectable() must be true.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -420,9 +425,7 @@ in both cases, the first is inside the interior of the second.</p>
 <dt id="pyibex.Interval.is_strict_superset">
 <code class="descname">is_strict_superset</code><span class="sig-paren">(</span><em>self: pyibex.Interval</em>, <em>x: pyibex.Interval</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#pyibex.Interval.is_strict_superset" title="Permalink to this definition">¶</a></dt>
 <dd><p>True iff this interval is a superset of a x different from x.
-see:</p>
-<blockquote>
-<div>#is_strict_subset(const Interval&amp;) const.</div></blockquote>
+See is_strict_subset(const Interval&amp;) const.</p>
 </dd></dl>
 
 <dl class="method">
@@ -635,7 +638,7 @@ For more information read doc from <a class="reference external" href="http://ww
 
 <dl class="method">
 <dt id="pyibex.IntervalVector.bisect">
-<code class="descname">bisect</code><span class="sig-paren">(</span><em>self: pyibex.IntervalVector</em>, <em>i: int</em>, <em>ratio: float=0.5</em><span class="sig-paren">)</span> &#x2192; Tuple[pyibex.IntervalVector, pyibex.IntervalVector]<a class="headerlink" href="#pyibex.IntervalVector.bisect" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bisect</code><span class="sig-paren">(</span><em>self: pyibex.IntervalVector</em>, <em>i: int</em>, <em>ratio: float = 0.5</em><span class="sig-paren">)</span> &#x2192; Tuple[pyibex.IntervalVector, pyibex.IntervalVector]<a class="headerlink" href="#pyibex.IntervalVector.bisect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bisect the box
 The box is bisected along the dimension a i
 and with a ratio a ratio. If (self)[i] is the interval [a,a+d]:</p>
@@ -730,7 +733,7 @@ Dimension of a x must be equal to the dimension of (self).
 
 <dl class="method">
 <dt id="pyibex.IntervalVector.diff">
-<code class="descname">diff</code><span class="sig-paren">(</span><em>self: pyibex.IntervalVector</em>, <em>y: pyibex.IntervalVector</em>, <em>compactness: bool=True</em><span class="sig-paren">)</span> &#x2192; List[pyibex.IntervalVector]<a class="headerlink" href="#pyibex.IntervalVector.diff" title="Permalink to this definition">¶</a></dt>
+<code class="descname">diff</code><span class="sig-paren">(</span><em>self: pyibex.IntervalVector</em>, <em>y: pyibex.IntervalVector</em>, <em>compactness: bool = True</em><span class="sig-paren">)</span> &#x2192; List[pyibex.IntervalVector]<a class="headerlink" href="#pyibex.IntervalVector.diff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return self \ y (set difference).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -758,9 +761,9 @@ to the empty box. It is &lt;b&gt;not&lt;/b&gt; a zero-sized array containing no 
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="pyibex.IntervalVector.empty">
-<code class="descname">empty</code><span class="sig-paren">(</span><em>n: int</em><span class="sig-paren">)</span> &#x2192; pyibex.IntervalVector<a class="headerlink" href="#pyibex.IntervalVector.empty" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">empty</code><span class="sig-paren">(</span><em>n: int</em><span class="sig-paren">)</span> &#x2192; pyibex.IntervalVector<a class="headerlink" href="#pyibex.IntervalVector.empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create [empty; …; empty]</p>
 <blockquote>
 <div><p>Create an empty IntervalVector of dimension a n
@@ -1860,9 +1863,7 @@ input box.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1871,7 +1872,7 @@ input box.</p>
         <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="quickstart.html" class="btn btn-neutral" title="Get Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Get Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -1880,11 +1881,11 @@ input box.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016, Benoit Desrochers.
+        &copy; Copyright 2016, Benoit Desrochers
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1897,37 +1898,15 @@ input box.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.6.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

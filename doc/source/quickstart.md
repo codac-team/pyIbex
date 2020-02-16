@@ -39,7 +39,7 @@ is denoted `$\mathbb{IR}$`
     a = Interval.ALL_REALS # interval [-oo, oo]
     a = Interval(-oo, oo)  # interval [-oo, oo]
     a = Interval()         # interval [-oo, oo]
-    a  = Interval(-2, 3)   # interval [-2, 3]
+    a = Interval(-2, 3)    # interval [-2, 3]
 ```
 
 ## IntervalVector (box)
@@ -54,10 +54,10 @@ With *pyibex* it can be created :
 
 ```python
     # Create IntervalVector
-    IntervalVector( 2, [1,3]) # ==> box [1, 3]x[1,3]
-    IntervalVector( 2, Interval(1,3)) # ==> box [1, 3]x[1,3]
+    IntervalVector( 2, [1,3]) # ==> box [1,3]x[1,3]
+    IntervalVector( 2, Interval(1,3)) # ==> box [1,3]x[1,3]
     IntervalVector([1,2,3]) # ==> box [1,1]x[2,2]x[3,3]
-    IntervalVector([[-1,3], [3,10], [-3, -1]]) # ==> box  [-1,3]x[
+    IntervalVector([[-1,3], [3,10], [-3, -1]]) # ==> box [-1,3]x[3,10]x[-3,-1]
     IntervalVector( [a, Interval(-1,0), Interval(0) ] )
 ```
 
@@ -158,7 +158,7 @@ For instance:
 
 ```
 
-### Operation on
+### Operations on Contractors
 
 ```python
     # CtcIn/CtcOut contractors :math:`$f \in [-2.5, 3.5]$`
@@ -188,4 +188,29 @@ For instance:
     ctc = ctcIn & ctcOut
     # union of a python list of contractors
     ctc1 = CtcUnion([ctcIn, ctcOut, ctc1])
+```
+
+## Separators
+### Defintion
+
+A separator `$\mathcal{S}$` is an operator that performs two complementary contractions. Associated with a set `$\mathbb{S}$` and given a box `$[\mathbf{x}]$`, the separator produces two sub-boxes `$[\mathbf{x}_ {in}]$` and `$[\mathbf{x}_{out}]$` that verify:
+```math
+        ([\mathbf{x}] \cap [\mathbf{x}_{in}]) \subset \mathbb{S} \\
+        ([\mathbf{x}] \cap [\mathbf{x}_{out}]) \cap \mathbb{S} = \emptyset
+```
+A separator can also be viewed a as pair of contractors. For efficiency reasons, the separate(…) function takes only two input-output arguments, `$\mathbf{x}_{in}$` and `$\mathbf{x}_{out}$`, each containing initially a copy of the box `$[\mathbf{x}]$`
+### Example
+```python
+    from pyibex import *
+    from vibes import *
+
+    f = Function('x', 'y', 'x*cos(x-y)+y')
+    # build the separator associated to the constraint f(x,y) < 0
+    sep = SepFwdBwd(f, CmpOp.LEQ)
+    # setup the initialbox [-10,10]x[-10,10]
+    box = IntervalVector(2, [-10, 10])
+    vibes.beginDrawing()
+    pySIVIA(box, sep, 0.3)
+    vibes.endDrawing()
+
 ```

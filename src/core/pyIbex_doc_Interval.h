@@ -144,7 +144,8 @@ Note:
 
 const char* DOCS_INTERVAL_IS_STRICT_SUPERSET =
 R"doc_itv(True iff this interval is a superset of \a x different from x.
-see:
+
+See:
     #is_strict_subset(const Interval&) const.
   )doc_itv";
 

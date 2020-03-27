@@ -48,9 +48,14 @@ Example:
     >>>     def __init__(self):
     >>>         Sep.__init__(self, 2) # init Sep abstract class
     >>>     def separate(self, box_in, box_out):
+    >>>         return box_in, box_out
     >>>         pass
 
 You can also make the intersection / union / restriction of separators using &, | and ~
+
+Nota: 
+  Since version 1.8.0 of pyibex, custom separator must return the 
+  contracted boxes at the end.  
 
 Example:
     >>> sep1 = SepXXX

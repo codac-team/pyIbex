@@ -57,19 +57,38 @@ using pyibex::SepCtcPairProj;
 using pyibex::SepQInterProjF;
 using pyibex::SepUnionBbox;
 
+
 class pySep : public Sep {
 public:
   /* Inherit the constructors */
   using Sep::Sep;
-  /* Trampoline (need one for each virtual function) */
-  virtual void separate(IntervalVector& xin, IntervalVector& xout){
-    py::gil_scoped_acquire acquire;
-    PYBIND11_OVERLOAD_PURE(
-      void,       /* return type */
-      Sep,        /* Parent class */
-      separate,   /* Name of function */
-      xin, xout          /* Argument(s) */
-    );
+
+  virtual void separate(IntervalVector& xin, IntervalVector& xout) override {
+
+    pybind11::gil_scoped_acquire gil;  // Acquire the GIL while in this scope.
+    // Try to look up the overloaded method on the Python side.
+    pybind11::function overload = pybind11::get_overload(this, "separate");
+    if (overload) {  // method is found
+        auto obj = overload(xin, xout);  // Call the Python function.
+        if (py::isinstance<py::tuple>(obj)) {  // check if it returned a Python integer type
+            auto tup = obj.cast<py::tuple>();
+            if (tup.size() != 2){
+              std::cout << "Return type error: expects two returns IntervalVector but get " << tup.size() << ".\n";
+              std::cout << "The separate function must return x_in and x_out\n";
+              return;
+            }
+            xin &= tup[0].cast<IntervalVector>();
+            xout &= tup[1].cast<IntervalVector>();
+            return; 
+        } else {
+            std::cout << "WARNING: Deprecated Python Seprator.\n";
+            std::cout << "The function separate must return two IntervalVector to avoid unpredictable results\n";
+            std::cout << "Following ibex-lib convension, it is assumed than x_in, x_out have been contracted \n";
+            std::cout << "inside the function\n";
+            return ;  // Python returned none, return false.
+        }
+    }
+    return;  
   }
 };
 

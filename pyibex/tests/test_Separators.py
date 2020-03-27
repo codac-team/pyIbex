@@ -203,6 +203,7 @@ class TestSeparator(unittest.TestCase):
         x_in &= (IntervalVector(1, Interval.NEG_REALS) | IntervalVector(xpos.mid()) ) #| IntervalVector([0]).inflate(1e-10)
         x_out &= (IntervalVector(1, Interval.POS_REALS) | IntervalVector(xneg.mid()) ) #| IntervalVector([0]).inflate(1e-10)
         # print(x_in, x_out)
+        return x_in, x_out
 
 
     sep = SepFixPoint(FakeSep())
@@ -226,6 +227,18 @@ class TestSeparator(unittest.TestCase):
     sep = SepProj(sepfb, [1, 2])
 
 
+  def test_SepFixPoint(self):
+    class WrongSep(Sep):
+      def __init__(self):
+        Sep.__init__(self, 1)
+
+      def separate(self, x_in, x_out):
+        return tuple(x_in)
+        
+    sep = SepFixPoint(WrongSep())
+    x_in, x_out = IntervalVector(1, [-10, 10]), IntervalVector(1, [-10, 10])
+    sep.separate(x_in, x_out)
+    
 
 
 

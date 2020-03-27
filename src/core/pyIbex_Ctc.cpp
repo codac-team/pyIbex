@@ -80,14 +80,25 @@ public:
 
   /* Trampoline (need one for each virtual function) */
   void contract(IntervalVector& box) override {
-    // py::gil_scoped_acquire acquire;
-    PYBIND11_OVERLOAD_PURE(
-      void,       /* return type */
-      Ctc,        /* Parent class */
-      contract,   /* Name of function */
-      box         /* Argument(s) */
-    );
-    // py::gil_scoped_release release;
+
+    pybind11::gil_scoped_acquire gil;  // Acquire the GIL while in this scope.
+    // Try to look up the overloaded method on the Python side.
+    pybind11::function overload = pybind11::get_overload(this, "contract");
+    if (overload) {  // method is found
+        auto box_copy = IntervalVector(box);
+        auto obj = overload(box_copy);  // Call the Python function.
+        if (py::isinstance<IntervalVector>(obj)) {  // check if it returned a Python integer type
+            box &= obj.cast<IntervalVector>();  // Cast it and assign it to the value.
+            return;  // Return true; value should be used.
+    
+        } else {
+            box &= box_copy;
+            // std::cout << "Return autre chose " << (py::isinstance<py::none>(obj) == false) << "\n";
+            std::cout << "WARNING: Deprecated Python Contractor.\n The function contract must return an IntervalVector to avoid unpredictable results\n";
+            return ;  // Python returned none, return false.
+        }
+    }
+    return; 
   }
 };
 

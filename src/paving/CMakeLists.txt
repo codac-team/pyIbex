@@ -26,7 +26,7 @@ include_directories(.)
 
 
 PYBIND11_ADD_MODULE(paving SHARED  ${SRCS} )
-target_link_libraries(paving PRIVATE ${LIBS})
+target_link_libraries(paving PRIVATE Ibex::ibex)
 
 add_custom_command(TARGET paving POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:paving>" "${PYTHON_PACKAGE_DIR}/pyibex"

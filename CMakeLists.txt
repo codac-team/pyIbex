@@ -1,66 +1,57 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0.2)
 
-project(pyIbex)
-set(PACKAGE_VERSION "1.7.1")
+project (PYIBEX VERSION 1.8.0 LANGUAGES CXX)
+set (PYIBEX_DESCRIPTION "A set of python modules for solving nonlinear problems using Interval Arithmetic tools." )
+set (PYIBEX_URL "http://benensta.github.io/pyIbex/")
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
+
+################################################################################
+# Read Pproject version from git tag
+################################################################################
+include(version_from_git)
+version_from_git()
+
+################################################################################
 # build type
+################################################################################
 IF(NOT CMAKE_BUILD_TYPE)
-	#SET(CMAKE_BUILD_TYPE "Release")
-	SET(CMAKE_BUILD_TYPE "DEBUG")
+	SET(CMAKE_BUILD_TYPE "Release")
+	#SET(CMAKE_BUILD_TYPE "DEBUG")
 	#SET(CMAKE_BUILD_TYPE "RELWITHDEBINFO")
 	#SET(CMAKE_BUILD_TYPE "MINSIZEREL")
 ENDIF()
 
+
+################################################################################
 # option declaration
+################################################################################
 option(BUILD_TESTS "Build tests" ON)
-set(PYBIND11_PYTHON_VERSION "" CACHE STRING "Python version to use for compiling modules")
-if (DEFINED PYTHON_VERSION)
-	set(PYBIND11_PYTHON_VERSION ${PYTHON_VERSION})
-endif()
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/)
+################################################################################
+# Find IbexLib using cmake
+################################################################################
+find_package (IBEX REQUIRED)
+message (STATUS "Found Ibex version ${IBEX_VERSION}")
+message(STATUS ${IBEX_INCLUDES})
+ibex_init_common() # Ibex should have installed this function
+set(LIBS Ibex::ibex)
 
 
-if(NOT WIN32)
-  # SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-	ADD_DEFINITIONS(-std=c++11)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC"   )
-	set(IbexLib_USE_STATIC 1)
-	#SET(CMAKE_EXE_LINKER_FLAGS "-static")
-endif()
-
-# set ( PYBIND11_PYTHON_VERSION "3.5")
+################################################################################
+# Add pybind11 
+################################################################################
 add_subdirectory(pybind11)
 
-FIND_PACKAGE(IbexLib REQUIRED)
-if(IBEX_FOUND)
-  INCLUDE_DIRECTORIES(${IBEX_INCLUDE_DIRS})
-  SET(LIBS ${LIBS} ${IBEX_LIBRARIES} )
-else()
-  MESSAGE(WARNING "Unable to find IbexLib. Maybe you need to set IBEX_ROOT ${IBEX_ROOT}")
-  MESSAGE(WARNING "If ibex is not installer run : \n\t sh travis_script/install_ibexlib.sh /path/to/your/install/dir")
-  #MESSAGE(FATAL_ERROR "where ")
-endif()
+################################################################################
+# Add pybind11 to link static lib into .so
+################################################################################
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
-# include(${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/check_dependancies.cmake)
-# Find python install path (from morse install script)
 
-EXECUTE_PROCESS(COMMAND
-					${PYTHON_EXECUTABLE} -c "import distutils.sysconfig, sys; sys.stdout.write(distutils.sysconfig.get_python_lib(1,0,\"\"))"
-					OUTPUT_VARIABLE PYTHON_INSTALL
-					ERROR_VARIABLE PYTHON_STDERR
-					RESULT_VARIABLE PYTHON_ERR
-				)
-
-if(NOT PYTHON_INSTDIR)
-	SET(PYTHON_INSTDIR ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL})
-endif(NOT PYTHON_INSTDIR)
-
-if(WIN32)
-    STRING(REGEX REPLACE "\\\\" "/" PYTHON_INSTDIR ${PYTHON_INSTDIR})
-endif(WIN32)
-MESSAGE(STATUS "will install python files in ${PYTHON_INSTDIR}")
-
+################################################################################
+# Set win32 flags to generate and use static lib
+################################################################################
 if(WIN32)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 	set(CompilerFlags
@@ -76,17 +67,17 @@ if(WIN32)
   endforeach()
 endif()
 
+
 add_subdirectory(src)
 
+#########################################################################
+### Enable Tests 
+#########################################################################
 if (BUILD_TESTS)
 	ENABLE_TESTING()
 	include( CTest )
 	add_subdirectory(pyibex/tests)
 endif(BUILD_TESTS)
-
-
-
-
 
 #########################################################################
 ### Uninstall ###
@@ -94,18 +85,15 @@ endif(BUILD_TESTS)
 configure_file("${CMAKE_HOME_DIRECTORY}/CMakeModules/cmake_uninstall.cmake.in" "cmake_uninstall.cmake" IMMEDIATE @ONLY)
 add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake_uninstall.cmake")
 
-
 #########################################################################
-### Package configuration ###
+### Package configuration (Not working yet) ###
 #########################################################################
-
-
 set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 set(CPACK_PACKAGE_VENDOR "B. Desrochers")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Python wrapper for Ibex Library")
-set(CPACK_PACKAGE_VERSION_MAJOR "1")
-set(CPACK_PACKAGE_VERSION_MINOR "6")
-set(CPACK_PACKAGE_VERSION_PATCH "3")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
 set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 #set(CPACK_PACKAGE_INSTALL_DIRECTORY "pyIbex")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Benoit Desrochers <ben.ensta@gmail.com>")

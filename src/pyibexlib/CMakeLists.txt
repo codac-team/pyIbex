@@ -20,7 +20,6 @@ set( HEADERS
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_QInterProjF.h
       ${CMAKE_CURRENT_SOURCE_DIR}/pyibex_CtcHull.h
       # ${CMAKE_CURRENT_SOURCE_DIR}/vibes.h
-
 		)
 
 # add_subdirectory(polar)
@@ -28,10 +27,11 @@ set( HEADERS
 
 add_library(pyibexlib ${SRCS} ${HEADERS})
 target_link_libraries(pyibexlib ${LIBS})
-if(NOT MSVC)
+
+# if(NOT MSVC)
   # Make sure C++11/14 are enabled
-  target_compile_options(pyibexlib PUBLIC ${PYBIND11_CPP_STANDARD})
-endif()
+  # target_compile_options(pyibexlib PUBLIC ${PYBIND11_CPP_STANDARD})
+# endif()
 
 # INSTALL( TARGETS pyibexlib DESTINATION lib)
 # install(FILES ${HEADERS} DESTINATION "include/ibex-geometry")

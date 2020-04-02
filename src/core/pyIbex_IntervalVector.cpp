@@ -75,14 +75,14 @@ IntervalVector* CreateWithIntAndList(int ndim, std::vector<double>& v){
 // }
 
 Interval& getitem(IntervalVector& X, size_t i){
-  if (i >= X.size())
+  if (i >= static_cast<size_t>(X.size()))
       throw py::index_error();
   return X[i];
 
 }
 
 void setitem(IntervalVector& X, size_t i, Interval& itv){
-  if (i >= X.size())
+  if (i >= static_cast<size_t>(X.size()))
       throw py::index_error();
   X[i] = itv;
 }

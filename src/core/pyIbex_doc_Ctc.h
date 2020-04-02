@@ -17,14 +17,20 @@ i.e. the dimension of the box passed to contract function.
 
 In python you can define yout own contractor
 Example:
-   >>> #  contractor on a 2 dimensionnal boxes
+   >>> #  contractor on a 2 dimensionnal box
    >>> class myCtc(Ctc):
    >>> def __init__(self):
    >>>     Ctc.__init__(self, 2) # init Ctc abstract class
    >>>
    >>> def contract(self, box):
+   >>>     return box
    >>>     pass
+
 You can also make the intersection / union of contractors using & and |
+
+Nota: 
+  Since version 1.8.0 of pyibex, custom contractor must return the 
+  contracted box at the end.  
 
 Example:
   >>> ctc1 = CtcXXX

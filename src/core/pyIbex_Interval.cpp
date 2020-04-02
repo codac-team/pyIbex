@@ -32,7 +32,7 @@ double getitem(Interval& X, int i){
     else if (i == 1)
         return X.ub();
     else
-        return IBEX_NAN;
+        throw py::index_error();
 }
 
 Interval my_copy(Interval& itv){
@@ -141,7 +141,7 @@ void export_Interval(py::module& m){
     .def( "inflate",( Interval& (Interval::*) (double, double) ) &Interval::inflate, DOCS_INTERVAL_INFLATE)
     // .def( "inflate",&Interval::inflate, DOCS_INTERVAL_INFLATE, py::return_value_policy::copy )
     .def( "set_empty", &Interval::set_empty, "set self to empty set" )
-    .def( "mid",    &Interval::mid, DOCS_INTERVAL_MID)
+    .def( "mid",    &Interval::mid, DOCS_INTERVAL_MID )
     .def( "rad",    &Interval::rad, DOCS_INTERVAL_RAD )
     .def( "diam",   &Interval::diam, DOCS_INTERVAL_DIAM )
     .def( "mig",    &Interval::mig, DOCS_INTERVAL_MIG )
@@ -220,6 +220,8 @@ void export_Interval(py::module& m){
     m.def( "max",     ( Interval (*) (const Interval&, const Interval&) ) &ibex::max  );
     m.def( "min",     ( Interval (*) (const Interval&, const Interval&) ) &ibex::min  );
     m.def( "chi",     ( Interval (*) (const Interval&, const Interval&, const Interval&) ) &ibex::chi  );
+    m.def( "ceil" , ( Interval (*) (const Interval&) ) &ibex::ceil  );
+    m.def( "floor", ( Interval (*) (const Interval&) ) &ibex::floor );
 
     // Attention en python l'argument est passé en double par defaut et pas en int.
     // Bug possible dans pow_2
@@ -265,7 +267,8 @@ void export_Interval(py::module& m){
     m.def( "bwd_min",     &ibex::bwd_min );
     m.def( "bwd_sign",    &ibex::bwd_sign );
     m.def( "bwd_chi",     &ibex::bwd_chi );
-    m.def( "bwd_integer", &ibex::bwd_integer );
+    m.def( "bwd_floor",   &ibex::bwd_floor);
+    m.def( "bwd_ceil",   &ibex::bwd_ceil);
     m.def( "bwd_imod",    &ibex::bwd_imod );
     m.attr("oo") =  POS_INFINITY;
 

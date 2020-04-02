@@ -36,7 +36,7 @@ PYBIND11_MODULE(pyibex, m)
   export_Bsc(m);
   export_Ctc(m);
   export_Separators(m);
-  m.attr("ibex_version") = _IBEX_VERSION_;
+  m.attr("ibex_version") = _IBEX_RELEASE_;
   // return m.ptr();
 
 }

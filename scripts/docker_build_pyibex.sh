@@ -1,26 +1,29 @@
 #!/bin/bash
 set -e -x
+
+yum install -y cppunit-devel cmake3 flex bison
+alias cmake=cmake3
 mkdir -p /io/cache
 cd /io/cache
-if [ ! -d "/io/cache/cmake-3.13.4" ]; then
-  curl -L https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz --output cmake-3.13.4.tar.gz
-  ls .
-  tar -zxf cmake-3.13.4.tar.gz
-  ls .
-  pwd
-  cd cmake-3.13.4
-  ./bootstrap && make && make install
-else
-  cd /io/cache/cmake-3.13.4
-  make install
-fi
+# if [ ! -d "/io/cache/cmake-3.13.4" ]; then
+#   curl -L https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4.tar.gz --output cmake-3.13.4.tar.gz
+#   ls .
+#   tar -zxf cmake-3.13.4.tar.gz
+#   ls .
+#   pwd
+#   cd cmake-3.13.4
+#   ./bootstrap && make && make install
+# else
+#   cd /io/cache/cmake-3.13.4
+#   make install
+# fi
 
 if [ ! -d "/io/cache/ibex-lib" ]; then
   cd /io/cache
-  git clone -b with_cmake https://github.com/benEnsta/ibex-lib.git
+  git clone -b develop https://github.com/ibex-lib/ibex-lib.git
   cd ibex-lib
   mkdir build && cd build
-  cmake -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${HOME}/ibex ../
+  cmake -DCMAKE_INSTALL_PREFIX=${HOME}/ibex -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_C_FLAGS="-fPIC" ..
   make -j2
   make install
 else

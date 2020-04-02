@@ -233,7 +233,7 @@ class TestInterval(unittest.TestCase):
         res = c / 2
         self.assertEqual(res, Interval(1, 1.5)    )
         res = 2.0 / c
-        self.assertEqual(res, Interval(2/3.0, 1)    )
+        self.assertEqual(res, Interval(2)/3.0 | Interval(1)    )
         res = c / 2.0
         self.assertEqual(res, Interval(1, 1.5)    )
 
@@ -456,15 +456,15 @@ class TestInterval(unittest.TestCase):
         d = Interval(-2,1)
         pyibex.bwd_chi(c,self.a,b,d)
 
-    def test_bwd_integer(self):
-        c = Interval(-2,4)
-        pyibex.bwd_integer(c)
+    def test_bwd_floor(self):
+        x = Interval(0.01,2.99)
+        pyibex.bwd_floor(Interval(1,2), x)
+        self.assertEqual(x,  Interval(1,2.99))
 
-
-
-
-
-
+    def test_bwd_ceil(self):
+        x = Interval(0.01,2.99)
+        pyibex.bwd_ceil(Interval(1,2), x)
+        self.assertEqual(x, Interval(0.01,2))
 
 
 

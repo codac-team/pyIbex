@@ -56,7 +56,7 @@ void export_Function(py::module& m){
     .def("__repr__", &to_string)
     .def( "eval" , ( Interval(Function::*) (const IntervalVector& box) const) &Function::eval)
     .def( "eval_vector" , ( IntervalVector(Function::*) (const IntervalVector& box) const) &Function::eval_vector)
-    .def( "eval_matrix" , &Function::eval_matrix)
+    // .def( "eval_matrix" , &Function::eval_matrix)
     .def( "eval", [](Function& f, Interval& itv) { return f.eval_vector(IntervalVector(1, itv));})
 
     .def( "backward", ( bool(Function::*) (const Interval& , IntervalVector&) const) &Function::backward)

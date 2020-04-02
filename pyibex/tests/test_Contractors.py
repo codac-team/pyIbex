@@ -14,6 +14,13 @@ import sys
 import math
 import tempfile
 class TestContractors(unittest.TestCase):
+
+    def assertApproxItvVec(self, first, second):
+        for i in range(len(first)):
+            self.assertAlmostEqual(first[i][0], second[i][0])
+            self.assertAlmostEqual(first[i][1], second[i][1])
+
+
     def test_Function(self):
         # generate memory leak !!!
         try:
@@ -62,7 +69,7 @@ class TestContractors(unittest.TestCase):
         del f, ctc1, f2, ctc2 # delete tmp object
         a = IntervalVector(2)
         ctc.contract(a)
-        self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
+        self.assertApproxItvVec(a, IntervalVector(2, Interval(-2.1, 3.1)))
 
     def test_CtcUnion_Array(self):
         f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
@@ -73,7 +80,7 @@ class TestContractors(unittest.TestCase):
         del ctc2, ctc1 , f, f2 # Test if references are kept by python
         a = IntervalVector(2)
         ctc.contract(a)
-        self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
+        self.assertApproxItvVec(a, IntervalVector(2, Interval(-2.1, 3.1)))
 
     def test_CtcCompo(self):
         f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
@@ -86,7 +93,7 @@ class TestContractors(unittest.TestCase):
         del ctc1, ctc2, ctc3 # optionnal test if references are kept by python
         a = IntervalVector(2)
         ctc.contract(a)
-        self.assertEqual(a, IntervalVector(2, Interval(-1.1000000000000005, 2.1000000000000005)))
+        self.assertApproxItvVec(a, IntervalVector(2, Interval(-1.1, 2.1)))
 
     def test_CtcArray(self):
         f = Function("x", "y", "(x)^2 + (y)^2 - [3.61, 4.41]")
@@ -99,7 +106,7 @@ class TestContractors(unittest.TestCase):
         del lst, ctc1, ctc2
         a = IntervalVector(2)
         ctc.contract(a)
-        self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
+        self.assertApproxItvVec(a, IntervalVector(2, Interval(-2.1, 3.1)))
 
     # def test_CtcPolar(self):
     #     ctc = CtcPolar()
@@ -121,7 +128,7 @@ class TestContractors(unittest.TestCase):
         ctcs = None
         a = IntervalVector(2, Interval(-20, 20))
         ctc.contract(a)
-        self.assertEqual(a, IntervalVector(2, Interval(-2.1000000000000005, 3.1000000000000005)))
+        self.assertApproxItvVec(a, IntervalVector(2, Interval(-2.1, 3.1)))
 
 
     def test_CtcExist(self):

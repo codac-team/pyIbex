@@ -13,21 +13,26 @@ import pyibex
 from pyibex import *
 
 class TestBsc(unittest.TestCase):
-    def test_LargestFirst(self):
 
+    def assertApproxItvVec(self, first, second):
+        for i in range(len(first)):
+            self.assertAlmostEqual(first[i][0], second[i][0])
+            self.assertAlmostEqual(first[i][1], second[i][1])
+
+    def test_LargestFirst(self):
         bsc = LargestFirst(0.1)
         a = IntervalVector([[1,2], [2,6]])
         (c,b) = bsc.bisect(a)
-        self.assertEqual(c, IntervalVector([[1,2],[2,3.8]]))
-        self.assertEqual(b, IntervalVector([[1,2],[3.8,6]]))
+        self.assertApproxItvVec(c, IntervalVector([[1,2],[2,3.8]]))
+        self.assertApproxItvVec(b, IntervalVector([[1,2],[3.8,6]]))
         self.assertTrue(True)
 
     def test_LargestFirst2(self):
         bsc = LargestFirst([0.1, 1])
         a = IntervalVector([[1,2], [2,6]])
         (c,b) = bsc.bisect(a)
-        self.assertEqual(c, IntervalVector([[1,1.45],[2,6]]))
-        self.assertEqual(b, IntervalVector([[1.45,2],[2,6]]))
+        self.assertApproxItvVec(c, IntervalVector([[1,1.45],[2,6]]))
+        self.assertApproxItvVec(b, IntervalVector([[1.45,2],[2,6]]))
         self.assertTrue(True)
 
 

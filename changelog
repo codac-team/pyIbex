@@ -8,8 +8,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+2020-04-02 Benoit Desrochers <ben.ensta@gmail.com>
+ * [release] 1.8.0dev1
+ * [BREAKING] change Ctc python API. Ctc can return a IntervalVector
+ * [update] ibex-lib 2.8.6 with cmake
+ * [change] remove bwd_integer; add bwd_ceil and bwd_flootr
+ * [change] add 
+
 2020-02-16 Benoit Desrochers <ben.ensta@gmail.com>
-  * PATCH v1.7.1
+  * [release] v1.7.1
   * [pybind11] use v2.4.3 (15 Oct 2019)
   * [add] add pickling support on Interval
   * [add] paving library

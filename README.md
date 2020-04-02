@@ -47,7 +47,7 @@ A set of example can be found in the pyibex/example directory. to run them enter
 + [CMake](http://www.cmake.org "CMake project page") (>= 2.8.12)
 + [Python](http://www.python.org "Python home page") (tested with 3.4, 3.5, 3.6, but should work with >= 2.7)
 + [pybind11](https://github.com/wjakob/pybind11) required C++11 support
-+ [ibex-lib](http://www.ibex-lib.org/) custom version from [github](https://github.com/benEnsta/ibex-lib/tree/with_cmake)
++ [ibex-lib](http://www.ibex-lib.org/) custom version from [github](https://github.com/ibex-team/ibex-lib/tree/with_cmake)
 + a C++ compiler for your platform , e.g. [GCC](http://gcc.gnu.org "GCC home") (>= 4.8), [MSVS 13](https://www.visualstudio.com "Visual Studio 2014"), [llvm](http://llvm.org "llvm")
 
 
@@ -65,12 +65,23 @@ Sometime, you will have to manually specify python executable, include and libs 
 
   -using -DPYTHON_EXECUTABLE to specify python executable path.
 
-Alternatively, run the provided `install.sh` script.
+Alternatively, run the provided `script/install.sh` script.
 remark : If Ibex isn't installed on the current machine, it will be downloaded, build and installed.
+
+remark : Ibex must be compuled with the -fPIC option
 
 
 ### Linux/Mac OS X
 --------------------------------------
+
+If ibex-lib is not installed
+```bash
+git clone -b develop https://github.com/ibex-team/ibex-lib.git
+cd ibex-lib
+mkdir build && cd build
+cmake -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_C_FLAGS="-fPIC" ..
+make && make check && make install
+```
 
 To install pyIbex run the following commands:
 ```bash
@@ -78,14 +89,13 @@ git clone https://github.com/benEnsta/pyIbex.git
 cd pyIbex
 git submodule init
 mkdir -p build && cd build
-make
-# if pip is installed run
-make install_python
-# otherwise
-make install
+make && make test
+# generate the python package
+make pip_package
+# or go to the package directory and install in dev mode
+cd ./src/python_package
+python ./setup.py develop
 ```
-If you used a non stantdart install preifx (-DCMAKE_INSTALL_PREFIX),
-add `${PREFIX}/lib/python3/dist-packages` to your PYTHONPATH
 
 ###For Windows Users (Win64 version) (Not ready Yet)
 --------------------------------------

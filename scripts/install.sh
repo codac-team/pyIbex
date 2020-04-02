@@ -34,22 +34,14 @@ echo "    - python version = ${py_version}"
 
 # save current path
 curr_path=$(pwd)
-# echo " pybind11 installation"
-# git clone https://github.com/wjakob/pybind11.git pybind11
-# cd pybind11
-# mkdir -p build && cd build
-# cmake ${prefix} -DPYBIND11_PYTHON_VERSION=${py_version} ../
-# make install
 
 cd $curr_path
 echo " ibex_lib installation"
-git clone https://github.com/benEnsta/ibex-lib.git
+git clone -b develop https://github.com/ibex-lib/ibex-lib.git
 cd ibex-lib
-git checkout with_cmake
-mkdir -p build
-cd build
-cmake ${prefix} -DBUILD_TESTS=OFF  ../
-make -j2
+mkdir -p build && cd build
+cmake -DCMAKE_INSTALL_PREFIX=${prefix##*=} -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_C_FLAGS="-fPIC" ../
+make -j2 && make check
 make install
 
 cd $curr_path

@@ -14,8 +14,8 @@ matrix:
     install:
     - docker pull $DOCKER_IMAGE
     script:
-    - chmod a+x travis_script/docker_build_pyibex.sh
-    - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/travis_script/docker_build_pyibex.sh
+    - chmod a+x script/docker_build_pyibex.sh
+    - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/script/docker_build_pyibex.sh
     - ls wheelhouse
   - os: osx
     env: PYTHON=2.7 CPP=14 CLANG
@@ -24,11 +24,11 @@ matrix:
     - git clone https://github.com/pyenv/pyenv.git ~/.pyenv
     - export PYENV_ROOT="$HOME/.pyenv"
     - export PATH="$PYENV_ROOT/bin:$PATH"
-    - bash ./travis_script/build_Ibex4pyIbex.sh 2>&1 1> ibex-build.log
+    - bash ./script/build_Ibex4pyIbex.sh 2>&1 1> ibex-build.log
     script:
 
-    - chmod a+x ./travis_script/build_osx.sh
-    - "./travis_script/build_osx.sh"
+    - chmod a+x ./script/build_osx.sh
+    - "./script/build_osx.sh"
 env:
   global:
   - secure: QMtC7zYxU4pPwZrQ4OX2bjgPoei+2PYZPxuTOGewgI11HlbM7xFbryhloHeIeoeKXjKgUhCSY32lUiAP4NlT1ZkQVVr30m7FF+6hZkw6/bFvernOdr9kAd99Hg3uiunHCKoce7tTkIpo/eLTGAmr1Vbcc0FTZNagAWZmNClGOIw=

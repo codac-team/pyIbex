@@ -3,14 +3,11 @@
 set -x
 # check to see if protobuf folder is empty
 if [ ! -e "$HOME/ibex/lib/libibex.a" ]; then
-	git clone https://github.com/benEnsta/ibex-lib.git
+	git clone -b develop https://github.com/ibex-lib/ibex-lib.git
 	cd ibex-lib
-	git checkout with_cmake
-	mkdir build
-	cd build
-	cmake -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=${HOME}/ibex ../
-	make -j2
-	make install
+	mkdir build && cd build
+	cmake -DCMAKE_INSTALL_PREFIX=${HOME}/ibex cmake -DCMAKE_CXX_FLAGS="-fPIC" -DCMAKE_C_FLAGS="-fPIC" ..
+	make -j2 && make install
 else
   echo 'Using cached directory.';
 fi

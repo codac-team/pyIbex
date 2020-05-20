@@ -82,8 +82,8 @@ endif(BUILD_TESTS)
 #########################################################################
 ### Uninstall ###
 #########################################################################
-configure_file("${CMAKE_HOME_DIRECTORY}/CMakeModules/cmake_uninstall.cmake.in" "cmake_uninstall.cmake" IMMEDIATE @ONLY)
-add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake_uninstall.cmake")
+# configure_file("${CMAKE_HOME_DIRECTORY}/CMakeModules/cmake_uninstall.cmake.in" "cmake_uninstall.cmake" IMMEDIATE @ONLY)
+# add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake_uninstall.cmake")
 
 #########################################################################
 ### Package configuration (Not working yet) ###

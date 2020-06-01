@@ -13,7 +13,7 @@ environment:
   global:
     DISTUTILS_USE_SDK: 1
     MSSdk: 1
-    IBEX_VERSION: 2.7.4
+    IBEX_VERSION: 2.6.8dev1
   matrix:
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python34"
@@ -58,7 +58,7 @@ install:
   - ps: >-
 
       (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-$env:IBEX_VERSION/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
-
+      
       ls C:\projects\pyIbex
 
       cd C:\projects\pyIbex
@@ -80,7 +80,7 @@ build_script:
   - git submodule update
   # - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
   - mkdir build && cd build
-  - cmake -G "%CMAKE_PLATFORM%"  -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DIBEX_ROOT=C:\projects\pyIbex\ibex-lib\ibex-lib-"%IBEX_FILES%" ..
+  - cmake -G "%CMAKE_PLATFORM%"  -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DCMAKE_PREFIX_PATH=C:\projects\pyIbex\ibex-lib\ibex-lib-"%IBEX_FILES%\share\ibex\cmake" ..
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
   - msbuild %MSBuildOptions% INSTALL.vcxproj

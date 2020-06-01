@@ -33,7 +33,7 @@ add_subdirectory(image)
 add_subdirectory(paving)
 
 
-install( DIRECTORY "${PYTHON_PACKAGE_DIR}/pyibex" DESTINATION "${PYTHON_INSTDIR}")
+# install( DIRECTORY "${PYTHON_PACKAGE_DIR}/pyibex" DESTINATION "${PYTHON_INSTDIR}")
 
 
 add_custom_target(pip_package)

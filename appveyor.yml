@@ -18,31 +18,38 @@ environment:
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python34"
       PYTHON_EXE: "C:\\Python34/python.exe"
-      IBEX_FILES: "%IBEX_VERSION%-win32"
+      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win32.zip"
+      IBEX_FILES: "ibex-2.8.6-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python35"
       PYTHON_EXE: "C:\\Python35/python.exe"
-      IBEX_FILES: "%IBEX_VERSION%-win32"
+      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win32.zip"
+      IBEX_FILES: "ibex-2.8.6-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python36"
       PYTHON_EXE: "C:\\Python36/python.exe"
-      IBEX_FILES: "%IBEX_VERSION%-win32"
+      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win32.zip"
+      IBEX_FILES: "ibex-2.8.6-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python34-x64"
       PYTHON_EXE: "C:\\Python34-x64/python.exe"
-      IBEX_FILES: "%IBEX_VERSION%-win64"
+      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
+      IBEX_FILES: "ibex-2.8.6-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python35-x64"
       PYTHON_EXE: "C:\\Python35-x64/python.exe"
-      IBEX_FILES: "%IBEX_VERSION%-win64"
+      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
+      IBEX_FILES: "ibex-2.8.6-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python36-x64"
       PYTHON_EXE: "C:\\Python36-x64/python.exe"
-      IBEX_FILES: "%IBEX_VERSION%-win64"
+      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
+      IBEX_FILES: "ibex-2.8.6-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python37-x64"
       PYTHON_EXE: "C:\\Python37-x64/python.exe"
-      IBEX_FILES: "%IBEX_VERSION%-win64"
+      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
+      IBEX_FILES: "ibex-2.8.6-win64"
 
   USERNAME:
     secure: x/KrtKQDdjxKhvPlvfdiMQ==
@@ -54,10 +61,10 @@ environment:
 install:
   - cmd: '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
   - cmd: "%PYTHON_EXE% -m pip install --disable-pip-version-check --user --upgrade pip wheel"
-  - cmd: echo "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-%IBEX_VERSION%/ibex-lib-$env:IBEX_FILES.zip"
+  - cmd: echo "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-%IBEX_VERSION%/ibex-lib-$env:DL_IBEX_FILES.zip"
   - ps: >-
 
-      (new-object net.webclient).DownloadFile("https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-$env:IBEX_VERSION/ibex-lib-$env:IBEX_FILES.zip", 'C:\projects\pyIbex\ibex-lib.zip')
+      (new-object net.webclient).DownloadFile($env:DL_IBEX_FILES, 'C:\projects\pyIbex\ibex-lib.zip')
       
       ls C:\projects\pyIbex
 
@@ -80,12 +87,13 @@ build_script:
   - git submodule update
   # - git clone -b build_process https://github.com/benEnsta/ibex-robotics.git ibex-robotics
   - mkdir build && cd build
-  - cmake -G "%CMAKE_PLATFORM%"  -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DCMAKE_PREFIX_PATH=C:\projects\pyIbex\ibex-lib\ibex-lib-"%IBEX_FILES%\share\ibex\cmake" ..
+  - cmake -G "%CMAKE_PLATFORM%"  -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DCMAKE_PREFIX_PATH=C:\projects\pyIbex\ibex-lib\%IBEX_FILES%\share\ibex\cmake ..
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
-  - msbuild %MSBuildOptions% INSTALL.vcxproj
+  # - msbuild %MSBuildOptions% INSTALL.vcxproj
   - ctest -C %Configuration% -VV
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
+
 
 # deploy:
 #   provider: FTP

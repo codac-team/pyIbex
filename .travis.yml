@@ -9,7 +9,7 @@ matrix:
     install:
     - docker pull $DOCKER_IMAGE
     script:
-    - chmod a+x script/docker_build_pyibex.sh
+    - chmod a+x scripts/docker_build.sh
     - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/scripts/docker_build.sh
     - ls wheelhouse
   - name: "Python 3.7.4 on macOS"
@@ -60,6 +60,7 @@ before_install:
 - ssh-add /tmp/deploy_rsa
 after_failure: cat tests/test_cmake_build/*.log
 after_success:
+- ls
 - cd wheelhouse
 - whl=$(ls *.whl)
 - echo $whl
@@ -72,7 +73,7 @@ deploy:
     secure: FF07W49cTs+y/ypiIcdo0nBVn46LV/MKkhOd0VbEYEMuavPklIWpk0vz0V4b3VWRn7agiRr3ZWzYLML4KzhHqBONWkeuy4F6OdhfO0JxBUEqvgZo+JUaMPraiH3lnCzrOgxDC6MH+pRPqvN5TpcpLvaqE2jLcq0mxKqIN9wwekk=
 
   file_glob: true
-  file: wheelhouse/*.whl *.whl
+  file: wheelhouse/*.whl build/*.whl
   skip_cleanup: true
   on:
     tag: true

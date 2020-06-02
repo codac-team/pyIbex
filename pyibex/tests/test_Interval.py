@@ -16,6 +16,12 @@ try:
 except ImportError:
     import pickle
 
+class TestBoolInterval(unittest.TestCase):
+    def test_import(self):
+        pyibex.YES
+        pyibex.NO
+        pyibex.MAYBE
+        pyibex.EMPTY_BOOL
 
 class TestInterval(unittest.TestCase):
 

@@ -6,29 +6,41 @@ matrix:
     services:
     - docker
     env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
-    cache:
-      directories:
-      - "$HOME/ibex"
-      - "$HOME/Downloads"
-      - "$HOME/cache"
     install:
     - docker pull $DOCKER_IMAGE
     script:
     - chmod a+x script/docker_build_pyibex.sh
     - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/script/docker_build_pyibex.sh
     - ls wheelhouse
-  - os: osx
-    env: PYTHON=2.7 CPP=14 CLANG
-    install:
-    # - brew upgrade pyenv
-    - git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-    - export PYENV_ROOT="$HOME/.pyenv"
-    - export PATH="$PYENV_ROOT/bin:$PATH"
-    - bash ./script/build_Ibex4pyIbex.sh 2>&1 1> ibex-build.log
-    script:
+  - name: "Python 3.7.4 on macOS"
+    os: osx
+    osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
+    language: shell       # 'language: python' is an error on Travis CI macOS
+    cache:
+      directories:
+      - "$HOME/ibex"
+      - "$HOME/Downloads"
+      - "$HOME/cache"
+    install: pip3 install --upgrade pip
+    build:
+     - sh ./scripts/build_Ibex4pyIbex.sh
+     - mkdir build && cd build
+     - cmake -DPYTHON_EXECUTABLE=$(which python3) ..
+     - make -j2
+     - make tests
+     - make pip_package
+  # - os: osx
+  #   env: PYTHON=2.7 CPP=14 CLANG
+  #   install:
+  #   # - brew upgrade pyenv
+  #   - git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+  #   - export PYENV_ROOT="$HOME/.pyenv"
+  #   - export PATH="$PYENV_ROOT/bin:$PATH"
+  #   - bash ./script/build_Ibex4pyIbex.sh 2>&1 1> ibex-build.log
+  #   script:
 
-    - chmod a+x ./script/build_osx.sh
-    - "./script/build_osx.sh"
+  #   - chmod a+x ./script/build_osx.sh
+  #   - "./script/build_osx.sh"
 env:
   global:
   - secure: QMtC7zYxU4pPwZrQ4OX2bjgPoei+2PYZPxuTOGewgI11HlbM7xFbryhloHeIeoeKXjKgUhCSY32lUiAP4NlT1ZkQVVr30m7FF+6hZkw6/bFvernOdr9kAd99Hg3uiunHCKoce7tTkIpo/eLTGAmr1Vbcc0FTZNagAWZmNClGOIw=
@@ -60,7 +72,7 @@ deploy:
     secure: FF07W49cTs+y/ypiIcdo0nBVn46LV/MKkhOd0VbEYEMuavPklIWpk0vz0V4b3VWRn7agiRr3ZWzYLML4KzhHqBONWkeuy4F6OdhfO0JxBUEqvgZo+JUaMPraiH3lnCzrOgxDC6MH+pRPqvN5TpcpLvaqE2jLcq0mxKqIN9wwekk=
   
   file_glob: true
-  file: wheelhouse/*.whl
+  file: wheelhouse/*.whl *.whl
   skip_cleanup: true
   on:
     repo: benEnsta/pyIbex

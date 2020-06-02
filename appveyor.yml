@@ -5,6 +5,8 @@ test: off
 configuration:
     - Release
     # - Debug
+build:
+    parallel: true
 # branches:
   # only:
     # - master
@@ -13,43 +15,44 @@ environment:
   global:
     DISTUTILS_USE_SDK: 1
     MSSdk: 1
-    IBEX_VERSION: 2.6.8dev1
+    DL_IBEX_FILES_WIN32: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.8.6dev1/ibex-lib-2.8.6-win32.zip"
+    DL_IBEX_FILES_WIN64: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.8.6dev1/ibex-lib-2.8.6-win64.zip"
   matrix:
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python34"
       PYTHON_EXE: "C:\\Python34/python.exe"
-      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win32.zip"
-      IBEX_FILES: "ibex-2.8.6-win32"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN32%"
+      IBEX_FILES: "ibex-lib-2.8.6-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python35"
-      PYTHON_EXE: "C:\\Python35/python.exe"
-      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win32.zip"
-      IBEX_FILES: "ibex-2.8.6-win32"
+      PYTHON_EXE: "C:s\\Python35/python.exe"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN32%"
+      IBEX_FILES: "ibex-lib-2.8.6-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015"
       PYTHON_DIR: "C:\\Python36"
       PYTHON_EXE: "C:\\Python36/python.exe"
-      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win32.zip"
-      IBEX_FILES: "ibex-2.8.6-win32"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN32%"
+      IBEX_FILES: "ibex-lib-2.8.6-win32"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python34-x64"
       PYTHON_EXE: "C:\\Python34-x64/python.exe"
-      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
-      IBEX_FILES: "ibex-2.8.6-win64"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN64%"
+      IBEX_FILES: "ibex-lib-2.8.6-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python35-x64"
       PYTHON_EXE: "C:\\Python35-x64/python.exe"
-      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
-      IBEX_FILES: "ibex-2.8.6-win64"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN64%"
+      IBEX_FILES: "ibex-lib-2.8.6-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python36-x64"
       PYTHON_EXE: "C:\\Python36-x64/python.exe"
-      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
-      IBEX_FILES: "ibex-2.8.6-win64"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN64%"
+      IBEX_FILES: "ibex-lib-2.8.6-win64"
     - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
       PYTHON_DIR: "C:\\Python37-x64"
       PYTHON_EXE: "C:\\Python37-x64/python.exe"
-      DL_IBEX_FILES: "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-2.6.8dev1/ibex-lib-2.8.6dev1-win64.zip"
-      IBEX_FILES: "ibex-2.8.6-win64"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN64%"
+      IBEX_FILES: "ibex-lib-2.8.6-win64"
 
   USERNAME:
     secure: x/KrtKQDdjxKhvPlvfdiMQ==
@@ -61,7 +64,6 @@ environment:
 install:
   - cmd: '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
   - cmd: "%PYTHON_EXE% -m pip install --disable-pip-version-check --user --upgrade pip wheel"
-  - cmd: echo "https://github.com/benEnsta/ibex-lib/releases/download/ibex-lib-%IBEX_VERSION%/ibex-lib-$env:DL_IBEX_FILES.zip"
   - ps: >-
 
       (new-object net.webclient).DownloadFile($env:DL_IBEX_FILES, 'C:\projects\pyIbex\ibex-lib.zip')
@@ -89,9 +91,9 @@ build_script:
   - mkdir build && cd build
   - cmake -G "%CMAKE_PLATFORM%"  -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DCMAKE_PREFIX_PATH=C:\projects\pyIbex\ibex-lib\%IBEX_FILES%\share\ibex\cmake ..
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-  - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
+  # - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
   # - msbuild %MSBuildOptions% INSTALL.vcxproj
-  - cmake --build .
+  - cmake --build . --config %Configuration% -- /m /v:m /logger:%MSBuildLogger%
   - ctest -C %Configuration% -VV
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
 
@@ -107,7 +109,7 @@ build_script:
 #   artifact: pip_wheel
 
 deploy:
-  release: pyibex-v$(appveyor_build_version)
+  release: pyibex-1.8.1
   description: 'pyIbex windows build'
   provider: GitHub
   auth_token:
@@ -116,6 +118,6 @@ deploy:
   artifact: pip_wheel
   draft: true
   prerelease: false
-  # on:
+  on:
   #   branch: with_cmake      # release from master branch only
-  #   appveyor_repo_tag: false        # deploy on tag push only
+    appveyor_repo_tag: true        # deploy on tag push only

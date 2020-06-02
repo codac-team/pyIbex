@@ -4,7 +4,7 @@ find_package(Git)
 if(GIT_EXECUTABLE AND NOT DEFINED FOOBAR_VERSION)
   execute_process(
 	COMMAND 
-	${GIT_EXECUTABLE} describe --tags --dirty --match "v*"
+	${GIT_EXECUTABLE} describe --tags --abbrev=0 --match "v*"
     WORKING_DIRECTORY "${SOURCE_DIR}"
     OUTPUT_VARIABLE GIT_DESCRIBE_VERSION
     RESULT_VARIABLE GIT_DESCRIBE_ERROR_CODE

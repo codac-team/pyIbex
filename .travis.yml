@@ -5,12 +5,12 @@ matrix:
   - sudo: true
     services:
     - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+    env: DOCKER_IMAGE=benensta/pyibex-docker
     install:
     - docker pull $DOCKER_IMAGE
     script:
     - chmod a+x script/docker_build_pyibex.sh
-    - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/script/docker_build_pyibex.sh
+    - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/scripts/docker_build.sh
     - ls wheelhouse
   - name: "Python 3.7.4 on macOS"
     os: osx
@@ -22,12 +22,12 @@ matrix:
       - "$HOME/Downloads"
       - "$HOME/cache"
     install: pip3 install --upgrade pip
-    build:
-     - sh ./scripts/build_Ibex4pyIbex.sh
+    script:
+     - ./scripts/build_Ibex4pyIbex.sh
      - mkdir build && cd build
      - cmake -DPYTHON_EXECUTABLE=$(which python3) ..
      - make -j2
-     - make tests
+     - make test
      - make pip_package
   # - os: osx
   #   env: PYTHON=2.7 CPP=14 CLANG

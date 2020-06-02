@@ -73,8 +73,10 @@ deploy:
     secure: FF07W49cTs+y/ypiIcdo0nBVn46LV/MKkhOd0VbEYEMuavPklIWpk0vz0V4b3VWRn7agiRr3ZWzYLML4KzhHqBONWkeuy4F6OdhfO0JxBUEqvgZo+JUaMPraiH3lnCzrOgxDC6MH+pRPqvN5TpcpLvaqE2jLcq0mxKqIN9wwekk=
 
   file_glob: true
-  file: wheelhouse/*.whl build/*.whl
+  file: ./**/*.whl
   skip_cleanup: true
-  on:
-    tag: true
-    repo: benEnsta/pyIbex
+  draft: true
+  overwrite: true
+  # on:
+  #   tag: true
+  #   repo: benEnsta/pyIbex

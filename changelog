@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+2020-06-02 Benoit Desrochers <ben.ensta@gmail.com>
+ * [pybind11] switch to version 2.5.0
+ * [add] add BoolInterval binding
 
 2020-04-02 Benoit Desrochers <ben.ensta@gmail.com>
  * [release] 1.8.0dev1

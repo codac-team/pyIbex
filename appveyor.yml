@@ -53,6 +53,16 @@ environment:
       PYTHON_EXE: "C:\\Python37-x64/python.exe"
       DL_IBEX_FILES: "%DL_IBEX_FILES_WIN64%"
       IBEX_FILES: "ibex-lib-2.8.6-win64"
+    - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
+      PYTHON_DIR: "C:\\Python38-x64"
+      PYTHON_EXE: "C:\\Python38-x64/python.exe"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN64%"
+      IBEX_FILES: "ibex-lib-2.8.6-win64"
+    - CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
+      PYTHON_DIR: "C:\\Python38-x64"
+      PYTHON_EXE: "C:\\Python38-x64/python.exe"
+      DL_IBEX_FILES: "%DL_IBEX_FILES_WIN64%"
+      IBEX_FILES: "ibex-lib-2.8.6-win64"
 
   USERNAME:
     secure: x/KrtKQDdjxKhvPlvfdiMQ==

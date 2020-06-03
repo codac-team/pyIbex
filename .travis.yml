@@ -9,7 +9,7 @@ matrix:
     install:
     - docker pull $DOCKER_IMAGE
     script:
-    - chmod a+x scripts/docker_build.sh
+    # - chmod a+x scripts/docker_build.sh
     - docker run --rm -v `pwd`:/io $DOCKER_IMAGE /io/scripts/docker_build.sh
     - ls wheelhouse
   - name: "Python 3.7.4 on macOS"

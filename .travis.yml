@@ -69,6 +69,7 @@ after_success:
 
 deploy:
   provider: releases
+  name: pyibex-1.8.1
   api_key:
     secure: FF07W49cTs+y/ypiIcdo0nBVn46LV/MKkhOd0VbEYEMuavPklIWpk0vz0V4b3VWRn7agiRr3ZWzYLML4KzhHqBONWkeuy4F6OdhfO0JxBUEqvgZo+JUaMPraiH3lnCzrOgxDC6MH+pRPqvN5TpcpLvaqE2jLcq0mxKqIN9wwekk=
 

@@ -3,8 +3,6 @@ configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/pyIbex_Setting.h
 )
 
-
-
 # Installation process handled by setup.py
 set(PYTHON_PACKAGE_DIR "${CMAKE_CURRENT_BINARY_DIR}/python_package")
 file(MAKE_DIRECTORY ${PYTHON_PACKAGE_DIR})
@@ -25,12 +23,12 @@ configure_file(
 
 set( pip_dir "${CMAKE_CURRENT_BINARY_DIR}/pip_package")
 include_directories(.)
-include_directories(pyibexlib)
-add_subdirectory(pyibexlib)
-add_subdirectory(core)
-add_subdirectory(geometry)
-add_subdirectory(image)
-add_subdirectory(paving)
+# include_directories(pyibexlib)
+add_subdirectory(binding)
+add_subdirectory(pyibex_lib)
+# add_subdirectory(geometry)
+add_subdirectory(pyibex_image)
+add_subdirectory(pyibex_thickset)
 
 
 # install( DIRECTORY "${PYTHON_PACKAGE_DIR}/pyibex" DESTINATION "${PYTHON_INSTDIR}")
@@ -48,4 +46,4 @@ add_custom_command(TARGET install_python PRE_BUILD
     WORKING_DIRECTORY ${PYTHON_PACKAGE_DIR}
 )
 
-add_dependencies(install_python pyibex geometry image)
+# add_dependencies(install_python pyibex image)

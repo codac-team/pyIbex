@@ -208,7 +208,7 @@ class TestIntervalVector(unittest.TestCase):
 
     def test_is_strict_subset(self):
         a = IntervalVector(3, Interval(-2,3))
-        b = IntervalVector([-1.9, -1, 2]).inflate(0.1)
+        b = IntervalVector([-1.89, -1, 2]).inflate(0.1)
         self.assertTrue(b.is_strict_subset(a))
 
 

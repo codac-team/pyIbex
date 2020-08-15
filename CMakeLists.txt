@@ -33,9 +33,10 @@ option(BUILD_TESTS "Build tests" ON)
 ################################################################################
 find_package (IBEX REQUIRED)
 message (STATUS "Found Ibex version ${IBEX_VERSION}")
-message(STATUS ${IBEX_INCLUDES})
+message(STATUS "ibex includes ${IBEX_INCLUDES}")
+message(STATUS Ibex::ibex)
 ibex_init_common() # Ibex should have installed this function
-set(LIBS Ibex::ibex)
+# set(LIBS Ibex::ibex)
 
 
 ################################################################################

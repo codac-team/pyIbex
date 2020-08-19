@@ -10,8 +10,8 @@
 import unittest
 import pyibex
 from pyibex import Interval, IntervalVector, LargestFirst, Function, SepFwdBwd
-from pyibex.thickset.sepvisitor import SepToVibes
-from pyibex.thickset import *
+from pyibex.sepvisitor import SepToVibes
+from pyibex.paving import SepPaving
 import math
 from vibes import vibes
 

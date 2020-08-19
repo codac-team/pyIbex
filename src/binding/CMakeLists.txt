@@ -42,7 +42,7 @@ add_custom_command(TARGET geometry POST_BUILD
 #### PAVING MODULE
 #####################################################################################
 
-PYBIND11_ADD_MODULE(paving SHARED  ${SRCS} )
+PYBIND11_ADD_MODULE(paving SHARED pyibex_paving.cpp)
 target_link_libraries(paving PRIVATE pyibex_lib Ibex::ibex)
 
 add_custom_command(TARGET paving POST_BUILD

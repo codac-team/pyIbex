@@ -32,12 +32,12 @@ __build__
 flex.pyc
 
 # ibex generated obj
-3rd
-lib
-include
-share
-bin
-newdoc/_build
+# 3rd
+# lib
+# include
+# share
+# bin
+# newdoc/_build
 
 # build directory
 build

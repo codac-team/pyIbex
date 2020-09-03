@@ -1,3 +1,26 @@
+// This file is part of VIBes' C++ API
+//
+// Copyright (c) 2013-2015 Vincent Drevelle, Jeremy Nicola, Simon Rohou,
+//                         Benoit Desrochers
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 #include "vibes.h"
 #include <sstream>
 #include <cstdlib>
@@ -97,12 +120,12 @@ namespace vibes
           beginDrawing("vibes.json");
       }
   }
-  
+
   void beginDrawing(const std::string &fileName)
   {
     channel=fopen(fileName.c_str(),"a");
   }
-  
+
   void endDrawing()
   {
     fclose(channel);
@@ -121,7 +144,7 @@ namespace vibes
     fputs(msg.c_str(),channel);
     fflush(channel);
   }
-  
+
   void clearFigure(const std::string &figureName)
   {
     std::string msg;
@@ -167,7 +190,8 @@ namespace vibes
 
   void axisLimits(const double &x_lb, const double &x_ub, const double &y_lb, const double &y_ub, const std::string &figureName)
   {
-    setFigureProperty(figureName.empty()?current_fig:figureName, "viewbox", (Vec4d){x_lb,x_ub,y_lb,y_ub});
+  Vec4d v4d = { x_lb, x_ub, y_lb, y_ub };
+    setFigureProperty(figureName.empty()?current_fig:figureName, "viewbox", v4d);
   }
 
   void axisLabels(const std::string &x_label, const std::string &y_label, const std::string &figureName)
@@ -190,10 +214,11 @@ namespace vibes
 
   void drawBox(const double &x_lb, const double &x_ub, const double &y_lb, const double &y_ub, Params params)
   {
+  Vec4d v4d = { x_lb, x_ub, y_lb, y_ub };
     Params msg;
     msg["action"] = "draw";
     msg["figure"] = params.pop("figure",current_fig);
-    msg["shape"] = (params, "type", "box", "bounds", (Vec4d){x_lb,x_ub,y_lb,y_ub});
+    msg["shape"] = (params, "type", "box", "bounds", v4d);
 
     fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
     fflush(channel);
@@ -216,12 +241,14 @@ namespace vibes
 
   void drawEllipse(const double &cx, const double &cy, const double &a, const double &b, const double &rot, Params params)
   {
+    Vec2d vc = { cx, cy };
+    Vec2d va = {a, b};
       Params msg;
       msg["action"] = "draw";
       msg["figure"] = params.pop("figure",current_fig);
       msg["shape"] = (params, "type", "ellipse",
-                              "center", (Vec2d){cx,cy},
-                              "axis", (Vec2d){a,b},
+                              "center", vc,
+                              "axis", va,
                               "orientation", rot);
 
       fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
@@ -232,12 +259,14 @@ namespace vibes
                              const double &sxx, const double &sxy, const double &syy,
                              const double &K, Params params)
   {
+    Vec2d vc = {cx, cy};
+    Vec4d vcov = { sxx, sxy, sxy, syy };
       Params msg;
       msg["action"] = "draw";
       msg["figure"] = params.pop("figure",current_fig);
       msg["shape"] = (params, "type", "ellipse",
-                              "center", (Vec2d){cx,cy},
-                              "covariance", (Vec4d){sxx,sxy,sxy,syy},
+                              "center", vc,
+                              "covariance", vcov,
                               "sigma", K);
 
       fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
@@ -259,34 +288,79 @@ namespace vibes
       fflush(channel);
   }
 
-  void drawPie(const double &cx, const double &cy, const double &r_min, const double &r_max, 
-                  const double &theta_min, const double &theta_max, Params params)
-  {
-      // Angle need to be in degree
-      Params msg;
-      msg["action"] = "draw";
-      msg["figure"] = params.pop("figure",current_fig);
-      msg["shape"] = (params, "type", "pie",
-                              "center", (Vec2d){cx,cy},
-                              "rho", (Vec2d){r_min,r_max},
-                              "theta", (Vec2d){theta_min, theta_max});
-
-      fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
-      fflush(channel);
-  }  
-  void drawSector(const double &cx, const double &cy, const double &a, const double &b, 
+  void drawSector(const double &cx, const double &cy, const double &a, const double &b,
                   const double &startAngle, const double &endAngle, Params params)
   {
       // Angle need to be in degree
       Params msg;
+      Vec2d cxy={ cx, cy };
+      Vec2d cab = { a, b };
+      Vec2d startEnd = { startAngle, endAngle };
       msg["action"] = "draw";
       msg["figure"] = params.pop("figure",current_fig);
       msg["shape"] = (params, "type", "ellipse",
-                              "center", (Vec2d){cx,cy},
-                              "axis", (Vec2d){a,b},
+                              "center", cxy,
+                              "axis", cab,
                               "orientation", 0,
-                              "angles", (Vec2d){startAngle, endAngle});
+                              "angles", startEnd);
 
+      fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+      fflush(channel);
+  }
+
+  void drawPie(const double &cx, const double &cy, const double &r_min, const double &r_max,
+                  const double &theta_min, const double &theta_max, Params params)
+  {
+      // Angle need to be in degree
+      Params msg;
+      Vec2d cxy = { cx, cy };
+      Vec2d rMinMax = { r_min, r_max };
+      Vec2d thetaMinMax = { theta_min, theta_max };
+      msg["action"] = "draw";
+      msg["figure"] = params.pop("figure",current_fig);
+      msg["shape"] = (params, "type", "pie",
+                              "center", cxy,
+                              "rho", rMinMax,
+                              "theta", thetaMinMax);
+
+      fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+      fflush(channel);
+  }
+
+  void drawPoint(const double &cx, const double &cy, Params params)
+  {
+      Params msg;
+      Vec2d cxy = { cx, cy };
+      msg["action"]="draw";
+      msg["figure"]=params.pop("figure",current_fig);
+      msg["shape"]=(params, "type","point",
+                            "point",cxy);
+      fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+      fflush(channel);
+  }
+
+  void drawPoint(const double &cx, const double &cy, const double &radius, Params params)
+  {
+      Params msg;
+      Vec2d cxy = { cx, cy };
+      msg["action"]="draw";
+      msg["figure"]=params.pop("figure",current_fig);
+      msg["shape"]=(params, "type","point",
+                            "point",cxy,"Radius",radius);
+      fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+      fflush(channel);
+  }
+
+  void drawRing(const double &cx, const double &cy, const double &r_min, const double &r_max, Params params)
+  {
+      Params msg;
+      Vec2d cxy = { cx, cy };
+      Vec2d rMinMax = { r_min, r_max };
+      msg["action"] = "draw";
+      msg["figure"] = params.pop("figure",current_fig);
+      msg["shape"] = (params, "type", "ring",
+                              "center", cxy,
+                              "rho", rMinMax);
       fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
       fflush(channel);
   }
@@ -333,8 +407,11 @@ namespace vibes
      std::vector<Value> points;
      std::vector<double>::const_iterator itx = x.begin();
      std::vector<double>::const_iterator ity = y.begin();
+   Vec2d vp;
      while (itx != x.end() && ity != y.end()) {
-        points.push_back( (Vec2d){*itx++,*ity++} );
+    vp._data[0] = *itx++;
+    vp._data[1] = *ity++;
+        points.push_back( vp );
      }
      // Send message
      Params msg;
@@ -347,86 +424,191 @@ namespace vibes
      fflush(channel);
   }
 
-  void drawArrow(const double &xA, const double &yA, const double &xB, const double &yB, const double &tip_length, Params params)
-  {
-     // Reshape A and B into a vector of points
-     std::vector<Value> points;
-     points.push_back((Vec2d){ xA, yA} );
-     points.push_back((Vec2d){ xB, yB} );
+  //void drawPoints(const std::vector<std::vector<double> > &points, Params params)
+  //{
+  //    Params msg;
+  //    msg["action"]="draws";
+  //    msg["figure"] = params.pop("figure",current_fig);
+  //    msg["shape"] = (params, "type", "points",
+  //                           "points", points);
+  //    fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+  //    fflush(channel);
+  //}
 
+  //void drawPoints(const std::vector<std::vector<double> > &points,  const std::vector<double> &colorLevels, const std::vector<double> &radiuses, Params params)
+  //{
+  //    Params msg;
+  //    msg["action"]="draws";
+  //    msg["figure"] = params.pop("figure",current_fig);
+  //    msg["shape"] = (params, "type", "points",
+  //                           "points", points,
+  //                           "colorLevels", colorLevels,
+  //                           "radiuses", radiuses);
+  //    fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+  //    fflush(channel);
+  //}
+
+  void drawPoints(const std::vector<double> &x, const std::vector<double> &y, Params params)
+  {
+      // Reshape x and y into a vector of points
+     std::vector<Value> points;
+     std::vector<double>::const_iterator itx = x.begin();
+     std::vector<double>::const_iterator ity = y.begin();
+   Vec2d vp;
+     while (itx != x.end() && ity != y.end()) {
+    vp._data[0] = *itx++;
+    vp._data[1] = *ity++;
+        points.push_back( vp );
+     }
      // Send message
      Params msg;
      msg["action"] = "draw";
      msg["figure"] = params.pop("figure",current_fig);
-     msg["shape"] = (params, "type", "arrow",
-                             "points", points,
-                             "tip_length", tip_length);
+     msg["shape"] = (params, "type", "points",
+                             "centers", points);
 
      fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
      fflush(channel);
+  }
+
+  //void drawPoints(const std::vector<double> &x, const std::vector<double> y, const std::vector<double> &colorLevels, Params params)
+  //{
+  //    // Reshape x and y into a vector of points
+  //   std::vector<Value> points;
+  //   std::vector<double>::const_iterator itx = x.begin();
+  //   std::vector<double>::const_iterator ity = y.begin();
+//   Vec2d vp;
+  //   while (itx != x.end() && ity != y.end()) {
+//    vp._data[0] = *itx++;
+//    vp._data[1] = *ity++;
+  //      points.push_back( vp );
+  //   }
+  //   // Send message
+  //   Params msg;
+  //   msg["action"] = "draw";
+  //   msg["figure"] = params.pop("figure",current_fig);
+  //   msg["shape"] = (params, "type", "points",
+  //                           "points", points,
+  //                           "colorLevels", colorLevels);
+//
+  //   fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+  //   fflush(channel);
+  //}
+
+  //void drawPoints(const std::vector<double> &x, const std::vector<double> y, const std::vector<double> &colorLevels, const std::vector<double> &radiuses, Params params)
+  //{
+  //   // Reshape x and y into a vector of points
+  //   std::vector<Value> points;
+  //   std::vector<double>::const_iterator itx = x.begin();
+  //   std::vector<double>::const_iterator ity = y.begin();
+//   Vec2d vp;
+  //   while (itx != x.end() && ity != y.end()) {
+//    vp._data[0] = *itx++;
+//    vp._data[1] = *ity++;
+  //      points.push_back( vp );
+  //   }
+  //   // Send message
+  //   Params msg;
+  //   msg["action"] = "draw";
+  //   msg["figure"] = params.pop("figure",current_fig);
+  //   msg["shape"] = (params, "type", "points",
+  //                           "points", points,
+  //                           "colorLevels", colorLevels,
+  //                           "radiuses", radiuses);
+//
+  //   fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+  //   fflush(channel);
+  //}
+
+  void drawArrow(const double &xA, const double &yA, const double &xB, const double &yB, const double &tip_length, Params params)
+  {
+    // Reshape A and B into a vector of points
+    std::vector<Value> points;
+    Vec2d va = { xA, yA };
+    Vec2d vb = { xB, yB };
+    points.push_back(va);
+    points.push_back(vb);
+
+    // Send message
+    Params msg;
+    msg["action"] = "draw";
+    msg["figure"] = params.pop("figure",current_fig);
+    msg["shape"] = (params, "type", "arrow",
+                           "points", points,
+                           "tip_length", tip_length);
+
+    fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+    fflush(channel);
   }
 
   void drawArrow(const std::vector<std::vector<double> > &points, const double &tip_length, Params params)
   {
-     Params msg;
-     msg["action"] = "draw";
-     msg["figure"] = params.pop("figure",current_fig);
-     msg["shape"] = (params, "type", "arrow",
-                             "points", points,
-                             "tip_length", tip_length);
+    Params msg;
+    msg["action"] = "draw";
+    msg["figure"] = params.pop("figure",current_fig);
+    msg["shape"] = (params, "type", "arrow",
+                           "points", points,
+                           "tip_length", tip_length);
 
-     fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
-     fflush(channel);
+    fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+    fflush(channel);
   }
 
   void drawArrow(const std::vector<double> &x, const std::vector<double> &y, const double &tip_length, Params params)
   {
-     // Reshape x and y into a vector of points
-     std::vector<Value> points;
-     std::vector<double>::const_iterator itx = x.begin();
-     std::vector<double>::const_iterator ity = y.begin();
-     while (itx != x.end() && ity != y.end()) {
-        points.push_back( (Vec2d){*itx++,*ity++} );
-     }
-     // Send message
-     Params msg;
-     msg["action"] = "draw";
-     msg["figure"] = params.pop("figure",current_fig);
-     msg["shape"] = (params, "type", "arrow",
-                             "points", points,
-                             "tip_length", tip_length);
+    // Reshape x and y into a vector of points
+    std::vector<Value> points;
+    std::vector<double>::const_iterator itx = x.begin();
+    std::vector<double>::const_iterator ity = y.begin();
+    Vec2d vp;
+    while (itx != x.end() && ity != y.end()) {
+    vp._data[0] = *itx++;
+    vp._data[1] = *ity++;
+        points.push_back( vp );
+    }
+    // Send message
+    Params msg;
+    msg["action"] = "draw";
+    msg["figure"] = params.pop("figure",current_fig);
+    msg["shape"] = (params, "type", "arrow",
+                            "points", points,
+                            "tip_length", tip_length);
 
-     fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
-     fflush(channel);
+    fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+    fflush(channel);
   }
 
   void drawPolygon(const std::vector<double> &x, const std::vector<double> &y, Params params)
   {
-     // Reshape x and y into a vector of points
-     std::vector<Value> points;
-     std::vector<double>::const_iterator itx = x.begin();
-     std::vector<double>::const_iterator ity = y.begin();
-     while (itx != x.end() && ity != y.end()) {
-        points.push_back( (Vec2d){*itx++,*ity++} );
-     }
-     // Send message
-     Params msg;
-     msg["action"] = "draw";
-     msg["figure"] = params.pop("figure",current_fig);
-     msg["shape"] = (params, "type", "polygon",
-                             "bounds", points);
+    // Reshape x and y into a vector of points
+    std::vector<Value> points;
+    std::vector<double>::const_iterator itx = x.begin();
+    std::vector<double>::const_iterator ity = y.begin();
+    Vec2d vp;
+    while (itx != x.end() && ity != y.end()) {
+      vp._data[0] = *itx++;
+      vp._data[1] = *ity++;
+      points.push_back( vp );
+    }
+    // Send message
+    Params msg;
+    msg["action"] = "draw";
+    msg["figure"] = params.pop("figure",current_fig);
+    msg["shape"] = (params, "type", "polygon",
+                           "bounds", points);
 
-     fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
-     fflush(channel);
+    fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+    fflush(channel);
   }
 
   void drawVehicle(const double &cx, const double &cy, const double &rot, const double &length, Params params)
   {
+      Vec2d vc = { cx, cy };
       Params msg;
       msg["action"] = "draw";
       msg["figure"] = params.pop("figure",current_fig);
       msg["shape"] = (params, "type", "vehicle",
-                              "center", (Vec2d){cx,cy},
+                              "center", vc,
                               "length", length,
                               "orientation", rot);
 
@@ -436,16 +618,50 @@ namespace vibes
 
   void drawAUV(const double &cx, const double &cy, const double &rot, const double &length, Params params)
   {
+      Vec2d vc = { cx, cy };
       Params msg;
       msg["action"] = "draw";
       msg["figure"] = params.pop("figure",current_fig);
       msg["shape"] = (params, "type", "vehicle_auv",
-                              "center", (Vec2d){cx,cy},
+                              "center", vc,
                               "length", length,
                               "orientation", rot);
 
       fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
       fflush(channel);
+  }
+
+  void drawTank(const double &cx, const double &cy, const double &rot, const double &length, Params params)
+  {
+      Vec2d vc = { cx, cy };
+      Params msg;
+      msg["action"] = "draw";
+      msg["figure"] = params.pop("figure",current_fig);
+      msg["shape"] = (params, "type", "vehicle_tank",
+                              "center", vc,
+                              "length", length,
+                              "orientation", rot);
+
+      fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+      fflush(channel);
+  }
+
+  void drawRaster(const std::string& rasterFilename, const double &xlb, const double &yub, const double &xres, const double &yres, Params params)
+  {
+    Vec2d ul_corner = { xlb, yub };
+    Vec2d scale = { xres, yres };
+
+    Params msg;
+    msg["action"] = "draw";
+    msg["figure"] = params.pop("figure",current_fig);
+    msg["shape"] = (params, "type", "raster",
+                            "filename", rasterFilename,
+                            "ul_corner", ul_corner,
+                            "scale", scale
+                   );
+
+    fputs(Value(msg).toJSONString().append("\n\n").c_str(), channel);
+    fflush(channel);
   }
 
 

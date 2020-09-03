@@ -233,8 +233,8 @@ ThickPaving& ThickPaving::Reunite()
 //Afin de traiter un problème du type f-1(A) subset A, A in B
 //faire un algo récursif du type  (A Verfier l'algo)
 //Pour le Tester, inverser tout d'abord un pavage.
-std::pair<bool, ThickBoolean>  Inside(ThickPaving& Z, const IntervalVector& X,int k=0)   // returns 0, if outside, 1 if inside, empty if X is empty, and iperhaps otherwize
-{
+// std::pair<bool, ThickBoolean>  Inside(ThickPaving& Z, const IntervalVector& X,int k=0)   // returns 0, if outside, 1 if inside, empty if X is empty, and iperhaps otherwize
+// {
   //   if (X.is_empty()){
   //       return std::make_pair(false, EMPTY); // A cause de l'Union ci-dessous
   //   }
@@ -257,7 +257,7 @@ std::pair<bool, ThickBoolean>  Inside(ThickPaving& Z, const IntervalVector& X,in
   //       std::pair<bool, ThickBoolean> I2= Inside(Z,Xright,kright);
   //       return std::make_pair(I1.first | I2.first, opUnion2(I1.second,I2.second));
   //  }
-}
+// }
 
 // Function return true if the thick box [[am], [ap]] is not included in [[bm], [bp]]
 bool isThickIntersect(const IntervalVector& am, const IntervalVector& ap, const IntervalVector& bm, const IntervalVector& bp){
@@ -1304,7 +1304,7 @@ ThickPaving& ThickPaving::Sivia(FuncTest &test, double eps, BINARY_OP op )
 //------------------------------------------------------------------------------
 ThickPaving& ThickPaving::FastSivia(ThickTest &pdc, double eps, BINARY_OP op ){
 	FuncTest f = [&pdc](const IntervalVector& X)->ThickBoolean {
-    pdc.test(X);
+    return pdc.test(X);
 	};
 	return FastSivia(f, eps, op);
 }
@@ -1365,7 +1365,7 @@ ThickPaving& ThickPaving::FastSivia(FuncTest &test, double eps, BINARY_OP op )
 
 ThickBoolean ThickPaving::erode(ThickTest &pdc, double eps, BINARY_OP op ){
 	FuncTest f = [&pdc](const IntervalVector& X)->ThickBoolean {
-    pdc.test(X);
+    return pdc.test(X);
 	};
 	return erode(f, eps, op);
 }
@@ -1528,12 +1528,12 @@ ThickBoolean ThickPaving::erode(FuncTest &test, double eps, BINARY_OP op){
 //
 // }
 //----------------------------------------------------------------------
-ThickPaving  Sqcap(ThickPaving& X,ThickPaving& Y)
-{
+// ThickPaving  Sqcap(ThickPaving& X,ThickPaving& Y)
+// {
     // ThickPaving Z(X.B[0].size());
     // op_binaire(Z,X,Y,ibex::Inter);
     // return (Z);
-}
+// }
 //----------------------------------------------------------------------
 void  Set_Contractor_Inter(ThickPaving& Z,ThickPaving& X,ThickPaving& Y)   //project with respect to Z = X inter Y
 {    //op_binaire(Z,X,Y,Inter);  //Z=X inter Y

@@ -133,6 +133,7 @@ inline bool exist_t(Tube &v1_plus, Tube & v1_moins, Tube& v2){
         if(v1_moins[j].ub()<=0 && v1_plus[j].lb()>= 0 && v2[j].lb() >= 0)
             return true;
     }
+    return false;
 }
 }; //namespace ibex
 #endif // EXPLOREDAREA_H

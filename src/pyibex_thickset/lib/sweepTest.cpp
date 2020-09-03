@@ -8,7 +8,8 @@
 //============================================================================
 
 #include "sweepTest.h"
-
+#define _USE_MATH_DEFINES
+#include <cmath>
 namespace ibex {
 
 SweepTest::SweepTest(const Tube& x, const Tube& y, const Tube& ux, const Tube&uy, double _L):
@@ -29,10 +30,10 @@ ThickBoolean SweepTest::test(const IntervalVector& _X){
     // which should be the parent box.
     IntervalVector X(_X);
     vector<IntBound>limits;
-    limits.push_back( {{ 0, x.size()-1}});
+    limits.push_back( {{ 0, static_cast<int>(x.size())-1}});
     return fast_test(X,limits);
     if (this->backtrack.empty()){
-        limits.push_back( {{ 0, x.size()-1}});
+        limits.push_back( {{ 0, static_cast<int>(x.size())-1}});
     } else {
         double dim_min = std::numeric_limits<double>::max();
         std::list<Record>::iterator it_dst;

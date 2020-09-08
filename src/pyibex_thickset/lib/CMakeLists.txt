@@ -6,7 +6,7 @@ set( SRCS
 			# pyIbex_Paving2.cpp
       # PSetNode_impl.cpp
 	  vibes.cpp
-	  sweepTest.cpp
+	#   sweepTest.cpp
 
 		)
 set( HEADERS
@@ -26,9 +26,9 @@ set( HEADERS
 		ThickFunction.h
 		GeoMapper.h
 		vibes.h
-		sweepTest.h
+		# sweepTest.h
 				# sweepTest_v2.h
-		exploredAreaTools.h
+		# exploredAreaTools.h
 
 		)
 include_directories(.)

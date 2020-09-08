@@ -23,9 +23,9 @@ add_custom_command(TARGET thickimage POST_BUILD
 
 
 # explored Area
-PYBIND11_ADD_MODULE(sweeptest SHARED pyibex_TestExploredArea.cpp )
-target_link_libraries(sweeptest PRIVATE Ibex::ibex pyibex_thickset)
+# PYBIND11_ADD_MODULE(sweeptest SHARED pyibex_TestExploredArea.cpp )
+# target_link_libraries(sweeptest PRIVATE Ibex::ibex pyibex_thickset)
 
-add_custom_command(TARGET sweeptest POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:sweeptest>" "${PYTHON_PACKAGE_DIR}/pyibex/thickset"
-)
+# add_custom_command(TARGET sweeptest POST_BUILD
+# 	COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:sweeptest>" "${PYTHON_PACKAGE_DIR}/pyibex/thickset"
+# )

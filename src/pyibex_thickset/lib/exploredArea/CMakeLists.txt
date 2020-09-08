@@ -3,9 +3,9 @@ set( SRCS
 			# sweepTest_v2.cpp
 		)
 set( HEADERS
-			sweepTest.h
+			# sweepTest.h
 			# sweepTest_v2.h
-      exploredAreaTools.h
+    #   exploredAreaTools.h
 
 		)
 

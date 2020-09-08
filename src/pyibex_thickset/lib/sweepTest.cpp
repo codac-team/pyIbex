@@ -6,10 +6,10 @@
 // License     : LGPLv3, See the LICENSE file
 // Created     : Oct  1, 2016
 //============================================================================
-
-#include "sweepTest.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
+
+#include "sweepTest.h"
 namespace ibex {
 
 SweepTest::SweepTest(const Tube& x, const Tube& y, const Tube& ux, const Tube&uy, double _L):

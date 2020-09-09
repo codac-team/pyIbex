@@ -86,7 +86,7 @@ install:
 
       ls C:\projects\pyIbex\ibex-lib
 
-  # - cmd: "%PYTHON_DIR%/python.exe -m pip install twine"
+  - cmd: "%PYTHON_DIR%/python.exe -m pip install vibes"
 
 artifacts:
   - path: '**\*.whl'

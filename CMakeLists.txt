@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-project (PYIBEX VERSION 1.8.0 LANGUAGES CXX)
+project (PYIBEX VERSION 2.0.0 LANGUAGES CXX)
 set (PYIBEX_DESCRIPTION "A set of python modules for solving nonlinear problems using Interval Arithmetic tools." )
 set (PYIBEX_URL "http://benensta.github.io/pyIbex/")
 

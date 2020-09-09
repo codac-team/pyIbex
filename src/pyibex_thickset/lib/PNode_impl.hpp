@@ -11,6 +11,7 @@
  * ---------------------------------------------------------------------------- */
 
 #include <utility>
+#include <array>
 
 template <typename V>
 PNode<V>::PNode(const ibex::IntervalVector& box, V value):
@@ -216,10 +217,10 @@ PNode<V>* PNode<V>::load(std::ifstream& infile)
 	bool has_children;
 	infile.read((char*)(&value), sizeof(value));
 	infile.read((char*)(&size), sizeof(size));
-	double bounds[size][2];
-  infile.read((char*)(&bounds), 2*size*sizeof(double));
+	std::vector< std::array<double, 2> > bounds = std::vector< std::array<double, 2> >(size);
+  	infile.read((char*)(&bounds[0][0]), 2*size*sizeof(double));
 	infile.read((char*)(&has_children), sizeof(has_children));
-	PNode<V>* node = new PNode<V>(IntervalVector(size, bounds), value );
+	PNode<V>* node = new PNode<V>(IntervalVector(size, bounds[0][0]), value );
 	if (has_children) {
 		node->m_left = PNode<V>::load(infile);
 		node->m_right = PNode<V>::load(infile);

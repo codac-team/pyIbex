@@ -55,7 +55,7 @@ public:
   }
 };
 
-using ThickVisitor = PavingVisitor<ThickPaving, ThickBoolean>;
+// using ibex::ThickVisitor = PavingVisitor<ThickPaving, ThickBoolean>;
 class pyThickVisitor : public ThickVisitor {
 public:
   /* Inherit the constructors */

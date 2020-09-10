@@ -595,7 +595,7 @@ ThickPaving& ThickPaving::Sivia_visu(FuncTest &test, double eps, BINARY_OP op )
           if (n->getBox().max_diam()>eps){
             vali = UNK;
           } else {
-            std::cout << n->isLeaf() << " " << n->value() << " " << testBi << " " << vali << "\n";
+            // std::cout << n->isLeaf() << " " << n->value() << " " << testBi << " " << vali << "\n";
           }
         }
 
@@ -1178,7 +1178,7 @@ ThickPaving& ThickPaving::Sivia(FuncTest &test, double eps, BINARY_OP op )
         if  ( (vali == EMPTY) && (n->getBox().max_diam()>eps)){
             vali = UNK;
         } else {
-            std::cout << n->isLeaf() << " " << n->value() << " " << testBi << " " << vali << "\n";
+            // std::cout << n->isLeaf() << " " << n->value() << " " << testBi << " " << vali << "\n";
         }
 
 				// On bisect quand :

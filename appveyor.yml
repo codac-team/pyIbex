@@ -86,7 +86,7 @@ install:
 
       ls C:\projects\pyIbex\ibex-lib
 
-  - cmd: "%PYTHON_DIR%/python.exe -m pip install vibes"
+  - cmd: "%PYTHON_DIR%/python.exe -m pip install vibes numpy"
 
 artifacts:
   - path: '**\*.whl'

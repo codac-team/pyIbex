@@ -13,9 +13,14 @@ import pyibex
 from pyibex import *
 from pyibex.thickset.thickimage import *
 from pyibex.thickset import *
-import numpy as np
+try:
+  import numpy as np
+  has_np = True
+except ImportError:
+  print("NUMPY NOT FOUND")
+  has_np = False
 
-
+@unittest.skipUnless(has_np, "Numpy not found")
 class TestThickImage(unittest.TestCase):
 
   def setUp(self):

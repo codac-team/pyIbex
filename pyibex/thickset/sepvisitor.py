@@ -91,8 +91,8 @@ class SepToVibes(SepVisitor):
     X0 = boxIn | boxOut
     X = boxIn & boxOut
     # print(X0, boxIn, boxOut)
-    vibes.drawBoxDiff(X0, boxIn, self.color_map[str(IN)])
-    vibes.drawBoxDiff(X0, boxOut, self.color_map[str(OUT)])
+    drawBoxDiff(X0, boxIn, self.color_map[str(IN)])
+    drawBoxDiff(X0, boxOut, self.color_map[str(OUT)])
     if not X.is_empty():
       vibes.drawBox(X[0][0], X[0][1], X[1][0], X[1][1], self.color_map[str(MAYBE)])
     # time.sleep(0.5)
@@ -106,8 +106,8 @@ class SepToVibes(SepVisitor):
 
     X0 = boxIn | boxOut
     # print(X0, boxIn, boxOut)
-    vibes.drawBoxDiff(X0, boxIn, self.color_map[str(IN)])
-    vibes.drawBoxDiff(X0, boxOut, self.color_map[str(OUT)])
+    drawBoxDiff(X0, boxIn, self.color_map[str(IN)])
+    drawBoxDiff(X0, boxOut, self.color_map[str(OUT)])
 
   def post_visit(self, paving):
     vibes.axisEqual()

@@ -60,7 +60,7 @@ def drawBoxDiff(X0, X, color, use_patch=False, **kwargs):
         return
     if not X.is_empty():
         if use_patch is True:
-            vibes.drawBoxDiff(X0, X, color, **kwargs)
+            drawBoxDiff(X0, X, color, **kwargs)
             # vibes.drawBoxDiff([ X0[0].lb(), X0[0].ub(), X0[1].lb(), X0[1].ub()],
             #  [X[0].lb(), X[0].ub(), X[1].lb(), X[1].ub()], color)
         else:
@@ -94,8 +94,8 @@ class SepToVibes(SepVisitor):
         X0 = boxIn | boxOut
         X = boxIn & boxOut
         # print(X0, boxIn, boxOut)
-        vibes.drawBoxDiff(X0, boxIn, self.color_map["IN"])
-        vibes.drawBoxDiff(X0, boxOut, self.color_map["OUT"])
+        drawBoxDiff(X0, boxIn, self.color_map["IN"])
+        drawBoxDiff(X0, boxOut, self.color_map["OUT"])
         if not X.is_empty():
             for i in range(X.size()):
                 if X[i].diam() < 1e-8:
@@ -112,8 +112,8 @@ class SepToVibes(SepVisitor):
 
         X0 = boxIn | boxOut
         # print(X0, boxIn, boxOut)
-        vibes.drawBoxDiff(X0, boxIn, self.color_map["IN"])
-        vibes.drawBoxDiff(X0, boxOut, self.color_map["OUT"])
+        drawBoxDiff(X0, boxIn, self.color_map["IN"])
+        drawBoxDiff(X0, boxOut, self.color_map["OUT"])
 
     def post_visit(self, paving):
         vibes.axisEqual()

@@ -3,8 +3,8 @@
 set -e -x
 
 cd /io
-for PYBIN in /opt/python/*/bin; do
-    "${PYBIN}/python" -m pip install vibes numpy
+for PYBIN in /opt/python/*3*/bin; do
+    "${PYBIN}/python" -m pip install vibes
 
     mkdir -p build_dir && cd build_dir
     cmake3 -DPYTHON_EXECUTABLE=${PYBIN}/python ..

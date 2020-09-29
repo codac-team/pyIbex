@@ -20,7 +20,7 @@ done
 
 
 # Install packages and test
-for PYBIN in /opt/python/*/bin; do
+for PYBIN in /opt/python/*3*/bin; do
     "${PYBIN}/python" -m pip   install pyibex --no-deps --no-index -f /io/wheelhouse
     (cd "$HOME"; "${PYBIN}/python" -m unittest discover pyibex.tests)
 done

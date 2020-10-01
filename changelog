@@ -7,8 +7,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+
+2020-10-01 Benoit Desrochers <ben.ensta@gmail.com>
+ * [release] 1.9.0
+ * [add] thickset code from phd thesis (https://tel.archives-ouvertes.fr/tel-01850567)
+ * [refactoring] change folder organisation (to be continued in next release)
+ * [BREAKING] remove python 2.7 support
+
 2020-06-02 Benoit Desrochers <ben.ensta@gmail.com>
- * [release] 1.8.1s
+ * [release] 1.8.1
  * [pybind11] switch to version 2.5.0
  * [add] add BoolInterval binding
 

@@ -103,7 +103,7 @@ build_script:
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   # - set MSBuildOptions=/v:m /p:Configuration=%Configuration% /logger:%MSBuildLogger%
   # - msbuild %MSBuildOptions% INSTALL.vcxproj
-  - cmake --build . --config %Configuration% -- /m /v:m /logger:%MSBuildLogger%
+  - cmake --build . --config %Configuration% -- /m /v:m
   - ctest -C %Configuration% -VV
   - msbuild %MSBuildOptions% src/pip_package.vcxproj
 

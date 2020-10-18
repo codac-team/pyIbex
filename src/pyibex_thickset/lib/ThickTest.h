@@ -44,10 +44,10 @@ public:
 			bbox[0] = mx + Interval(-Rmax.ub(), Rmax.ub());
 			bbox[1] = my + Interval(-Rmax.ub(), Rmax.ub());;
 		};
-	ThickDisk(double& mx, double& my, double& Rmin) :
-		ThickTest(2), mx(mx), my(my), Rmin(Interval(0, Rmin*Rmin)), Rmax(Interval(0, Rmin*Rmin)), bbox(2) {
-			bbox[0] = mx + Rmax;
-			bbox[1] = my + Rmax;
+	ThickDisk(double& mx, double& my, double& rmin) :
+		ThickTest(2), mx(mx), my(my), Rmin(Interval(0, rmin*rmin)), Rmax(Interval(0, rmin*rmin)), bbox(2) {
+			bbox[0] = mx + Interval(-rmin, rmin);
+			bbox[1] = my + Interval(-rmin, rmin);
 		};
 
 	ThickBoolean test(const IntervalVector& box);

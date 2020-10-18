@@ -80,7 +80,7 @@ inline bool ThickBox::intersects(const IntervalVector& box) const {
 }
 
 inline bool ThickBox::is_not_subset(const IntervalVector& box) const {
-  bool res = true;
+  bool res = false;
   for (int i = 0; i < box.size(); i++){
     res |= itvs[i].is_not_subset(ThickInterval(box[i]));
   }

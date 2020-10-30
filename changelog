@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 2020-10-18 Benoit Desrochers <ben.ensta@gmail.com>
+ * [release] 1.9.2
+ * [fix] update ibex v2.8.9
+
+
+2020-10-18 Benoit Desrochers <ben.ensta@gmail.com>
  * [release] 1.9.1
  * [fix] minor fixes in Thickset package
  

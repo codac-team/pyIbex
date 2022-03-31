@@ -21,7 +21,7 @@ It contains core functionalities of ibex and additional modules:
     + Polar contractor and separators "CtcPolar, SepPolarXY" [article](http://www.sciencedirect.com/science/article/pii/S0952197616301129)
 
 
-See [pyibex website](http://www.ensta-bretagne.fr/desrochers/pyibex/) for more informations.
+See [pyibex website](http://codac-team.github.io/pyIbex/) for more informations.
 
 
 # Install with a precompiled version using pip
